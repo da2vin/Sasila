@@ -4,7 +4,6 @@ import sys
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import requests
-import time
 
 reload(sys)
 sys.setdefaultencoding('utf-8')

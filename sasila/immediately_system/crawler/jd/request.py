@@ -1,15 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import sys
-import requests
-from sasila.downloader.web_driver_pool import get_web_driver_pool
-from Queue import Queue
-from selenium import webdriver
-from sasila.utils import logger
-import time
-from bs4 import BeautifulSoup as bs
 import json
+import sys
+import time
 import requests
+from bs4 import BeautifulSoup as bs
+from sasila.slow_system.downloader.web_driver_pool import get_web_driver_pool
+
+from sasila.slow_system.utils import logger
 
 reload(sys)
 sys.setdefaultencoding('utf-8')

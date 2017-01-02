@@ -1,12 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import sys
-import uuid
 import datetime
 import json
-from sasila.manager.database.jd_database import *
-from sasila.imspider.jd_imspider.imspider import JdImSpider
-import base64
+import uuid
+from sasila.immediately_system.crawler.jd.request import JdImSpider
+from sasila.immediately_system.database.jd_database import *
 
 reload(sys)
 sys.setdefaultencoding('utf-8')

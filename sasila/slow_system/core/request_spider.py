@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-
 from collections import Iterator
-from sasila.downloader.http.spider_request import Request
-from sasila.downloader.requests_downloader import RequestsDownLoader
-from sasila.scheduler.queue import PriorityQueue
-from sasila.utils import logger
+from sasila.slow_system.downloader.http.spider_request import Request
+from sasila.slow_system.downloader.requests_downloader import RequestsDownLoader
+from sasila.slow_system.scheduler.queue import PriorityQueue
+
+from sasila.slow_system.utils import logger
 
 reload(sys)
 sys.setdefaultencoding('utf-8')

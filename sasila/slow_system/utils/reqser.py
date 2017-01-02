@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 import sys
 import six
-from sasila.downloader.http.spider_request import Request
-from sasila.utils.python import to_unicode, to_native_str
+from sasila.slow_system.downloader.http.spider_request import Request
+from sasila.slow_system.utils.python import to_unicode, to_native_str
 
 reload(sys)
 sys.setdefaultencoding('utf-8')

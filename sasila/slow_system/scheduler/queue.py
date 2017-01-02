@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 import sys
 import redis
-from bloom_filter import BloomFilter
 import cPickle
-from sasila.utils.reqser import request_to_dict, request_from_dict
+from bloom_filter import BloomFilter
+from sasila.slow_system.utils.reqser import request_to_dict, request_from_dict
 
 reload(sys)
 sys.setdefaultencoding('utf-8')

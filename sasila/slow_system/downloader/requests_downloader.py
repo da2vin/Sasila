@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-
+import grequests
 import requests
 from requests.adapters import HTTPAdapter
-import grequests
-from sasila.downloader.base_downloder import BaseDownLoader
-from sasila.downloader.http.spider_response import Response
-from sasila.utils import logger
+from sasila.slow_system.downloader.base_downloder import BaseDownLoader
+from sasila.slow_system.downloader.http.spider_response import Response
+
+from sasila.slow_system.utils import logger
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
