@@ -9,7 +9,7 @@ from sasila.immediately_system.manager.jd_manager import JdManager
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-im_jd = Blueprint('jd', __name__)
+im_jd = Blueprint('im_jd', __name__)
 
 jd_manager = JdManager()
 
