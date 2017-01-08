@@ -41,4 +41,4 @@ element.click()
 
 time.sleep(1)
 
-web.save_screenshot('test.png')
+web.save_screenshot('test2.png')
