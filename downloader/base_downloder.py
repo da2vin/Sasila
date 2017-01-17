@@ -7,5 +7,11 @@ sys.setdefaultencoding('utf-8')
 
 
 class BaseDownLoader(object):
+    def __init__(self):
+        self.loginer = None
+
     def download(self, url):
         pass
+
+    def set_loginer(self, loginer):
+        self.loginer = loginer
