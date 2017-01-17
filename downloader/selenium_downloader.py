@@ -10,7 +10,7 @@ sys.setdefaultencoding('utf-8')
 
 
 class SeleniumDownLoader(BaseDownLoader):
-    def download(self, url):
+    def download(self, requests):
         web = webdriver.PhantomJS()
-        web.get(url)
+        web.get(requests)
         return web.execute_script("return document.documentElement.outerHTML")

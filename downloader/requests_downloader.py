@@ -10,5 +10,5 @@ sys.setdefaultencoding('utf-8')
 
 
 class RequestsDownLoader(BaseDownLoader):
-    def download(self, url):
-        return requests.get(url).content
+    def download(self, request):
+        return requests.get(request).content
