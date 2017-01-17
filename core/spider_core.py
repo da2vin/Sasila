@@ -15,6 +15,10 @@ class SpiderCore(object):
         self._spider_name = None
         self._spider_id = None
         self._spider_type = None
+        self._spider_status = None
+
+    def process(self):
+        pass
 
     def set_spider_name(self, spider_name):
         self._spider_name = spider_name
