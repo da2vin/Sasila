@@ -8,30 +8,32 @@ sys.setdefaultencoding('utf-8')
 
 class SpiderCore(object):
     def __init__(self):
-        self.downloader = None
-        self.processor = None
-        self.scheduler = None
-        self.pipline = None
-        self.spider_name = None
-        self.spider_id = None
+        self._downloader = None
+        self._processor = None
+        self._scheduler = None
+        self._pipline = None
+        self._spider_name = None
+        self._spider_id = None
 
     def set_spider_name(self, spider_name):
-        self.spider_name = spider_name
+        self._spider_name = spider_name
+        return self
 
     def set_spider_id(self, spider_id):
-        self.spider_id = spider_id
+        self._spider_id = spider_id
+        return self
 
     def create(self, processor):
-        self.processor = processor
+        self._processor = processor
         return self
 
     def set_scheduler(self, scheduler):
-        self.scheduler = scheduler
+        self._scheduler = scheduler
         return self
 
     def set_downloader(self, downloader):
-        self.downloader = downloader
+        self._downloader = downloader
         return self
 
     def set_pipline(self, pipline):
-        self.pipline = pipline
+        self._pipline = pipline
