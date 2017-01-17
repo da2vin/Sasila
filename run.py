@@ -1,11 +1,12 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-import sys
-from PyQt4 import QtGui
+from flask import Flask
 
-app = QtGui.QApplication(sys.argv)
-widget = QtGui.QWidget()
-widget.resize(250, 150)
-widget.setWindowTitle('PyQt')
-widget.show()
-sys.exit(app.exec_())
+app = Flask(__name__)
+
+
+@app.route('/')
+def hello_world():
+    return 'Hello World!'
+
+
+if __name__ == '__main__':
+    app.run()
