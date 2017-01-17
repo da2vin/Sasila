@@ -14,6 +14,7 @@ class SpiderCore(object):
         self._pipline = None
         self._spider_name = None
         self._spider_id = None
+        self._spider_type = None
 
     def set_spider_name(self, spider_name):
         self._spider_name = spider_name
