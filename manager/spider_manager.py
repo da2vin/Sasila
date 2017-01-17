@@ -30,3 +30,6 @@ class SpiderManager(object):
 
     def get_spider_detail(self, spider_id):
         pass
+
+    def init_system(self):
+        pass
