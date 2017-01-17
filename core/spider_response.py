@@ -6,6 +6,5 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 
-class BaseProcessor(object):
-    def process(self, page):
-        pass
+class Response(object):
+    pass
