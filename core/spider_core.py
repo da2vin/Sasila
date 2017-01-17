@@ -39,3 +39,12 @@ class SpiderCore(object):
 
     def set_pipline(self, pipline):
         self._pipline = pipline
+
+    def get_status(self):
+        return self._spider_status
+
+    def init_component(self):
+        pass
+
+    def run(self):
+        pass
