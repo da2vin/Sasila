@@ -6,7 +6,14 @@ import redis
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-r = redis.Redis()
-r.set('name', 'mjw')
+r = redis.StrictRedis()
+r.sadd('aaa', 'mjw1')
+r.sadd('aaa', 'mjw2')
+r.sadd('aaa', 'mjw3')
+r.sadd('aaa', 'mjw4')
+r.sadd('aaa', 'mjw5')
 
-print r.get('name')
+print r.lpop("aaa")
+
+
+
