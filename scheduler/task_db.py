@@ -45,5 +45,4 @@ class TaskDb(object):
 
 
 if __name__ == '__main__':
-    t = TaskDb("aaa")
-    print t
+    pass
