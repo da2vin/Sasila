@@ -7,7 +7,12 @@ sys.setdefaultencoding('utf-8')
 
 
 class SpiderManager(object):
+    spider_list = []
+
     def __init__(self):
+        pass
+
+    def init_system(self):
         pass
 
     def get_all_spider(self):
@@ -31,5 +36,3 @@ class SpiderManager(object):
     def get_spider_detail(self, spider_id):
         pass
 
-    def init_system(self):
-        pass

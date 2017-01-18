@@ -8,6 +8,5 @@ sys.setdefaultencoding('utf-8')
 
 
 class BaseScheduler(object):
-    def __init__(self):
-        self.task = TaskDb
-
+    def __init__(self, task_id):
+        self.taskdb = TaskDb(task_id)
