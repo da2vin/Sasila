@@ -7,4 +7,5 @@ sys.setdefaultencoding('utf-8')
 
 
 class BasePipline(object):
-    pass
+    def process_item(self, item):
+        pass
