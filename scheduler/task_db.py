@@ -20,9 +20,20 @@ class TaskDb(object):
         if not self._filter.is_contains(request_pickle):
             self._server.lpush(self.task_id, request_pickle)
 
+    def pushf(self, request):
+        request_pickle = pickle.dumps(request)
+        if not self._filter.is_contains(request_pickle):
+            self._server.rpush(self.task_id, request_pickle)
+
     def poll(self):
-        requests_pickle = self._server.blpop(self.task_id)[1]
+        requests_pickle = self._server.brpop(self.task_id)[1]
         return pickle.loads(requests_pickle)
+
+    def despose(self):
+        self._server.delete(self.task_id)
+
+    def count(self):
+        return self._server.llen(self.task_id)
 
 
 if __name__ == '__main__':
