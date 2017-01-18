@@ -1,16 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
+from scheduler.url_scheduler import UrlScheduler
+import gevent
+import gevent.monkey
+
+# gevent.monkey.patch_all()
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 
 class SpiderCore(object):
-    def __init__(self):
+    def __init__(self, spider_id):
         self._downloader = None
         self._processor = None
-        self._scheduler = None
+        self._scheduler = UrlScheduler(spider_id)  # type: UrlScheduler
         self._pipline = None
         self._spider_name = None
         self._spider_id = None
@@ -46,5 +51,15 @@ class SpiderCore(object):
     def init_component(self):
         pass
 
-    def run(self):
+    def crawl(self, request):
+        pass
+
+    def start_by_request(self, request):
+        self._scheduler.push(request)
+        while True:
+            temp_request = self._scheduler.poll()
+            task = gevent.spawn(self.crawl, temp_request)
+            task.join()
+
+    def start_by_scheduler(self):
         pass
