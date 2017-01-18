@@ -10,16 +10,20 @@ sys.setdefaultencoding('utf-8')
 
 
 class TaskDb(object):
-    def __init__(self):
-        self.task_id = None
-        self.filter = BloomFilter(key=self.task_id)
-        self.server = redis.StrictRedis()
+    def __init__(self, task_id):
+        self.task_id = task_id
+        self._filter = BloomFilter(key=self.task_id)
+        self._server = redis.StrictRedis()
 
     def push(self, request):
         request_pickle = pickle.dumps(request)
-        if not self.filter.is_contains(request_pickle):
-            self.server.lpush(self.task_id, request_pickle)
+        if not self._filter.is_contains(request_pickle):
+            self._server.lpush(self.task_id, request_pickle)
 
     def poll(self):
-        requests_pickle = self.server.blpop(self.task_id)
-        return pickle.load(requests_pickle)[1]
+        requests_pickle = self._server.blpop(self.task_id)[1]
+        return pickle.loads(requests_pickle)
+
+
+if __name__ == '__main__':
+    pass

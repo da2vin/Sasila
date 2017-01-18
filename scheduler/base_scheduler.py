@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-from bloom_filter import BloomFilter
+from task_db import TaskDb
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -9,10 +9,5 @@ sys.setdefaultencoding('utf-8')
 
 class BaseScheduler(object):
     def __init__(self):
-        self.filter = BloomFilter()
+        self.task = TaskDb
 
-    def push(self, request):
-        pass
-
-    def poll(self):
-        pass
