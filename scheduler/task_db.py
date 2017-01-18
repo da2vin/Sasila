@@ -22,4 +22,4 @@ class TaskDb(object):
 
     def poll(self):
         requests_pickle = self.server.blpop(self.task_id)
-        return pickle.load(requests_pickle)
+        return pickle.load(requests_pickle)[1]
