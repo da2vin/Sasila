@@ -15,15 +15,23 @@ class TaskDb(object):
         self._filter = BloomFilter(key=self.task_id)
         self._server = redis.StrictRedis()
 
-    def push(self, request):
+    def push(self, request, dont_filter=True):
         request_pickle = pickle.dumps(request)
-        if not self._filter.is_contains(request_pickle):
+        if dont_filter:
             self._server.lpush(self.task_id, request_pickle)
+        else:
+            if not self._filter.is_contains(request_pickle):
+                self._server.lpush(self.task_id, request_pickle)
+                self._filter.insert(request_pickle)
 
-    def pushf(self, request):
+    def pushf(self, request, dont_filter=True):
         request_pickle = pickle.dumps(request)
-        if not self._filter.is_contains(request_pickle):
+        if dont_filter:
             self._server.rpush(self.task_id, request_pickle)
+        else:
+            if not self._filter.is_contains(request_pickle):
+                self._server.rpush(self.task_id, request_pickle)
+                self._filter.insert(request_pickle)
 
     def poll(self):
         requests_pickle = self._server.brpop(self.task_id)[1]
@@ -37,4 +45,5 @@ class TaskDb(object):
 
 
 if __name__ == '__main__':
-    pass
+    t = TaskDb("aaa")
+    print t
