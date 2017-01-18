@@ -2,10 +2,14 @@
 # -*- coding: utf-8 -*-
 import sys
 from scheduler.url_scheduler import UrlScheduler
+from downloader.requests_downloader import RequestsDownLoader
+from processor.base_processor import BaseProcessor
+from spider_request import Request
+from spider_response import Response
 import gevent
 import gevent.monkey
 
-# gevent.monkey.patch_all()
+gevent.monkey.patch_all()
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -13,9 +17,9 @@ sys.setdefaultencoding('utf-8')
 
 class SpiderCore(object):
     def __init__(self, spider_id):
-        self._downloader = None
-        self._processor = None
+        self._downloader = RequestsDownLoader()  # type:RequestsDownLoader
         self._scheduler = UrlScheduler(spider_id)  # type: UrlScheduler
+        self._processor = BaseProcessor(self._scheduler)  # type: BaseProcessor
         self._pipline = None
         self._spider_name = None
         self._spider_id = None
@@ -52,7 +56,8 @@ class SpiderCore(object):
         pass
 
     def crawl(self, request):
-        pass
+        response = self._downloader.download(request)  # type:Response
+        self._processor.process(response)
 
     def start_by_request(self, request):
         self._scheduler.push(request)
@@ -63,3 +68,8 @@ class SpiderCore(object):
 
     def start_by_scheduler(self):
         pass
+
+
+if __name__ == '__main__':
+    s = SpiderCore("test")
+    s.start_by_request(Request("http://news.163.com/"))

@@ -7,4 +7,6 @@ sys.setdefaultencoding('utf-8')
 
 
 class Response(object):
-    pass
+    def __init__(self, content=None, request=None):
+        self.content = content
+        self.request = request
