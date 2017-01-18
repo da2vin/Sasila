@@ -27,10 +27,7 @@ class BaseProcessor(object):
 
     def is_url(self, url):
         if re.match(r'^https?:/{2}\w.+$', url):
-            if 'html' in url:
-                return True
-            else:
-                return False
+            return True
         else:
             return False
 
@@ -44,5 +41,5 @@ class BaseProcessor(object):
         for a in a_list:
             if 'href' in a.attrs:
                 url = self.nice_join(page.request.url, a['href'])
-                # print url
+                print url
                 self.add_url(url)

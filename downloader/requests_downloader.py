@@ -12,6 +12,7 @@ sys.setdefaultencoding('utf-8')
 
 class RequestsDownLoader(BaseDownLoader):
     count = 0
+    # proxies = {"http": "http://127.0.0.1:8888", "https": "http://127.0.0.1:8888",}
 
     def download(self, request):
         RequestsDownLoader.count += 1

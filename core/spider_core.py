@@ -8,6 +8,7 @@ from spider_request import Request
 from spider_response import Response
 import gevent
 import gevent.monkey
+from gevent.pool import Pool
 
 gevent.monkey.patch_all()
 
@@ -25,6 +26,7 @@ class SpiderCore(object):
         self._spider_id = None
         self._spider_type = None
         self._spider_status = None
+        self.pool = Pool(10)
 
     def set_spider_name(self, spider_name):
         self._spider_name = spider_name
@@ -63,8 +65,10 @@ class SpiderCore(object):
         self._scheduler.push(request)
         while True:
             temp_request = self._scheduler.poll()
-            task = gevent.spawn(self.crawl, temp_request)
-            task.join()
+            self.pool.apply_async(self.crawl, (temp_request,))
+            self.pool.join()
+            # task = gevent.spawn(self.crawl, temp_request)
+            # task.join()
 
     def start_by_scheduler(self):
         pass
