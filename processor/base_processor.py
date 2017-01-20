@@ -41,5 +41,4 @@ class BaseProcessor(object):
         for a in a_list:
             if 'href' in a.attrs:
                 url = self.nice_join(page.request.url, a['href'])
-                print url
                 self.add_url(url)
