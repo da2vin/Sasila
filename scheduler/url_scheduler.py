@@ -15,7 +15,7 @@ class UrlScheduler(object):
         self._filter = BloomFilter(key=self.task_id)
         self._server = redis.StrictRedis()
 
-    def push(self, request, dont_filter=True):
+    def push(self, request, dont_filter=False):
         request_pickle = pickle.dumps(request)
         if dont_filter:
             self._server.lpush(self.task_id, request_pickle)
@@ -24,7 +24,7 @@ class UrlScheduler(object):
                 self._server.lpush(self.task_id, request_pickle)
                 self._filter.insert(request_pickle)
 
-    def pushf(self, request, dont_filter=True):
+    def pushf(self, request, dont_filter=False):
         request_pickle = pickle.dumps(request)
         if dont_filter:
             self._server.rpush(self.task_id, request_pickle)
