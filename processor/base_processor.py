@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import re
 import sys
-from bs4 import BeautifulSoup as bs
-
+from posixpath import normpath
 from urlparse import urljoin
 from urlparse import urlparse
 from urlparse import urlunparse
-from posixpath import normpath
-import re
-from core.spider_request import Request
-from core.spider_response import Response
+
+from bs4 import BeautifulSoup as bs
+
+from downloader.spider_request import Request
 
 reload(sys)
 sys.setdefaultencoding('utf-8')

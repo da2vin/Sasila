@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 import sys
 
-from downloader.base_downloder import BaseDownLoader
 import requests
-from core.spider_response import Response
+
+from downloader.base_downloder import BaseDownLoader
+from downloader.spider_response import Response
 
 reload(sys)
 sys.setdefaultencoding('utf-8')

@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-from scheduler.url_scheduler import UrlScheduler
-from downloader.requests_downloader import RequestsDownLoader
-from processor.base_processor import BaseProcessor
-from spider_request import Request
-from spider_response import Response
+
 import gevent
 import gevent.monkey
-from gevent.pool import Pool
+
+from downloader.requests_downloader import RequestsDownLoader
+from downloader.spider_request import Request
+from processor.base_processor import BaseProcessor
+from scheduler.url_scheduler import UrlScheduler
 
 gevent.monkey.patch_all()
 
@@ -26,7 +26,6 @@ class SpiderCore(object):
         self._spider_id = None
         self._spider_type = None
         self._spider_status = None
-        self.pool = Pool(10)
 
     def set_spider_name(self, spider_name):
         self._spider_name = spider_name
@@ -65,10 +64,8 @@ class SpiderCore(object):
         self._scheduler.push(request)
         while True:
             temp_request = self._scheduler.poll()
-            self.pool.apply_async(self.crawl, (temp_request,))
-            self.pool.join()
-            # task = gevent.spawn(self.crawl, temp_request)
-            # task.join()
+            task = gevent.spawn(self.crawl, temp_request)
+            task.join()
 
     def start_by_scheduler(self):
         pass
