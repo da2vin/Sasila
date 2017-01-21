@@ -75,7 +75,7 @@ class SpiderCore(object):
         count = 0
         while True:
             count += 1
-            if len(batch) > 20 or count > 20:
+            if len(batch) > 99 or count > 99:
                 yield batch
                 batch = []
                 count = 0
