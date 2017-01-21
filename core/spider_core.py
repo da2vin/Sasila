@@ -64,6 +64,7 @@ class SpiderCore(object):
         self._scheduler.push(request)
         for batch in self.batch_requests():
             if len(batch) > 0:
+                print 'batch:', len(batch)
                 gevent.joinall([gevent.spawn(self.crawl, r) for r in batch])
                 # while True:
                 #     temp_request = self._scheduler.poll()

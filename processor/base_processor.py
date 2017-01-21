@@ -36,9 +36,10 @@ class BaseProcessor(object):
             self.scheduler.push(Request(url))
 
     def process(self, page):
-        soup = bs(page.content)
-        a_list = soup.select('a')
-        for a in a_list:
-            if 'href' in a.attrs:
-                url = self.nice_join(page.request.url, a['href'])
-                self.add_url(url)
+        if 'download' not in page.content and '.apk' not in page.content:
+            soup = bs(page.content)
+            a_list = soup.select('a')
+            for a in a_list:
+                if 'href' in a.attrs:
+                    url = self.nice_join(page.request.url, a['href'])
+                    self.add_url(url)
