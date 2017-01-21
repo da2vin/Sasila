@@ -34,8 +34,13 @@ class UrlScheduler(object):
                 self._filter.insert(request_pickle)
 
     def poll(self):
-        requests_pickle = self._server.brpop(self.task_id)[1]
-        return pickle.loads(requests_pickle)
+        requests_pickle = self._server.rpop(self.task_id)
+        # while not requests_pickle:
+        #     requests_pickle = self._server.rpop(self.task_id)
+        if requests_pickle:
+            return pickle.loads(requests_pickle)
+        else:
+            return None
 
     def despose(self):
         self._server.delete(self.task_id)

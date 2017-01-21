@@ -62,10 +62,26 @@ class SpiderCore(object):
 
     def start_by_request(self, request):
         self._scheduler.push(request)
+        for batch in self.batch_requests():
+            if len(batch) > 0:
+                gevent.joinall([gevent.spawn(self.crawl, r) for r in batch])
+                # while True:
+                #     temp_request = self._scheduler.poll()
+                #     task = gevent.spawn(self.crawl, temp_request)
+                #     task.join()
+
+    def batch_requests(self):
+        batch = []
+        count = 0
         while True:
+            count += 1
+            if len(batch) > 20 or count > 20:
+                yield batch
+                batch = []
+                count = 0
             temp_request = self._scheduler.poll()
-            task = gevent.spawn(self.crawl, temp_request)
-            task.join()
+            if temp_request:
+                batch.append(temp_request)
 
     def start_by_scheduler(self):
         pass
