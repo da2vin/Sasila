@@ -10,7 +10,7 @@ from downloader.spider_request import Request
 from processor.base_processor import BaseProcessor
 from scheduler.url_scheduler import UrlScheduler
 
-gevent.monkey.patch_all()
+# gevent.monkey.patch_all()
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
