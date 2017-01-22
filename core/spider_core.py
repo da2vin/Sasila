@@ -66,7 +66,7 @@ class SpiderCore(object):
             if len(batch) > 0:
                 print 'batch:', len(batch)
                 gevent.joinall([gevent.spawn(self.crawl, r) for r in batch])
-                print 222
+                print 'batch end'
                 # while True:
                 #     temp_request = self._scheduler.poll()
                 #     task = gevent.spawn(self.crawl, temp_request)
@@ -77,7 +77,7 @@ class SpiderCore(object):
         count = 0
         while True:
             count += 1
-            if len(batch) > 19 or count > 19:
+            if len(batch) > 99 or count > 99:
                 yield batch
                 batch = []
                 count = 0
