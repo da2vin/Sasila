@@ -27,7 +27,7 @@ class SpiderCore(object):
         self._downloader = RequestsDownLoader()  # type:RequestsDownLoader
         self._scheduler = UrlScheduler(spider_id)  # type: UrlScheduler
         self._processor = BaseProcessor(self._scheduler)  # type: BaseProcessor
-        self._pipelines = None
+        self._pipelines = []
         self._spider_name = None
         self._spider_id = None
         self._spider_type = None
@@ -53,8 +53,8 @@ class SpiderCore(object):
         self._downloader = downloader
         return self
 
-    def set_pipeline(self, pipline):
-        self._pipelines = pipline
+    def set_pipeline(self, pipeline):
+        self._pipelines.append(pipeline)
 
     def get_status(self):
         return self._spider_status
@@ -74,7 +74,7 @@ class SpiderCore(object):
         else:
             return False
 
-    def crawl(self, request):
+    def _crawl(self, request):
         response = self._downloader.download(request)  # type:Response
         for item in self._processor.process(response):
             if isinstance(item, Request):
@@ -84,13 +84,13 @@ class SpiderCore(object):
 
     def start_by_request(self, request):
         self._scheduler.push(request)
-        for batch in self.batch_requests():
+        for batch in self._batch_requests():
             if len(batch) > 0:
                 print 'batch:', len(batch)
-                gevent.joinall([gevent.spawn(self.crawl, r) for r in batch])
+                gevent.joinall([gevent.spawn(self._crawl, r) for r in batch])
                 print 'batch end'
 
-    def batch_requests(self):
+    def _batch_requests(self):
         batch = []
         count = 0
         while True:
