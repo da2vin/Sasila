@@ -8,7 +8,9 @@ sys.setdefaultencoding('utf-8')
 
 class BaseProcessor(object):
     def __init__(self, scheduler):
-        pass
+        self._spider_name = None
+        self._spider_id = None
+        self._spider_type = None
 
     def process(self, request):
         pass
