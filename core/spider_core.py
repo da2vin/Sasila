@@ -67,10 +67,6 @@ class SpiderCore(object):
                 print 'batch:', len(batch)
                 gevent.joinall([gevent.spawn(self.crawl, r) for r in batch])
                 print 'batch end'
-                # while True:
-                #     temp_request = self._scheduler.poll()
-                #     task = gevent.spawn(self.crawl, temp_request)
-                #     task.join()
 
     def batch_requests(self):
         batch = []
