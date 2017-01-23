@@ -9,6 +9,12 @@ from downloader.requests_downloader import RequestsDownLoader
 from downloader.spider_request import Request
 from processor.base_processor import BaseProcessor
 from scheduler.url_scheduler import UrlScheduler
+from downloader.spider_response import Response
+from posixpath import normpath
+from urlparse import urljoin
+from urlparse import urlparse
+from urlparse import urlunparse
+import re
 
 gevent.monkey.patch_all()
 
@@ -56,9 +62,25 @@ class SpiderCore(object):
     def init_component(self):
         pass
 
+    def _nice_join(self, base, url):
+        url1 = urljoin(base, url)
+        arr = urlparse(url1)
+        path = normpath(arr[2])
+        return urlunparse((arr.scheme, arr.netloc, path, arr.params, arr.query, arr.fragment))
+
+    def _is_url(self, url):
+        if re.match(r'^https?:/{2}\w.+$', url):
+            return True
+        else:
+            return False
+
     def crawl(self, request):
         response = self._downloader.download(request)  # type:Response
-        self._processor.process(response)
+        for item in self._processor.process(response):
+            if isinstance(item, Request):
+                self._scheduler.push(Request)
+            else:
+                pass
 
     def start_by_request(self, request):
         self._scheduler.push(request)

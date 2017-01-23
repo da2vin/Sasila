@@ -2,10 +2,7 @@
 # -*- coding: utf-8 -*-
 import re
 import sys
-from posixpath import normpath
-from urlparse import urljoin
-from urlparse import urlparse
-from urlparse import urlunparse
+
 
 from bs4 import BeautifulSoup as bs
 
@@ -35,11 +32,13 @@ class BaseProcessor(object):
         if self.is_url(url):
             self.scheduler.push(Request(url))
 
-    def process(self, page):
-        soup = bs(page.content)
+    def process(self, request):
+        soup = bs(request.content)
         a_list = soup.select('a')
         for a in a_list:
             if 'href' in a.attrs:
-                url = self.nice_join(page.request.url, a['href'])
+                url = self.nice_join(request.request.url, a['href'])
                 if 'download' not in url and '.apk' not in url:
                     self.add_url(url)
+
+

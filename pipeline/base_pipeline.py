@@ -6,6 +6,6 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 
-class BasePipline(object):
+class BasePipeline(object):
     def process_item(self, item):
         pass
