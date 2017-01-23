@@ -27,7 +27,7 @@ class SpiderCore(object):
         self._downloader = RequestsDownLoader()  # type:RequestsDownLoader
         self._scheduler = UrlScheduler(spider_id)  # type: UrlScheduler
         self._processor = BaseProcessor(self._scheduler)  # type: BaseProcessor
-        self._pipline = None
+        self._pipelines = None
         self._spider_name = None
         self._spider_id = None
         self._spider_type = None
@@ -53,8 +53,8 @@ class SpiderCore(object):
         self._downloader = downloader
         return self
 
-    def set_pipline(self, pipline):
-        self._pipline = pipline
+    def set_pipeline(self, pipline):
+        self._pipelines = pipline
 
     def get_status(self):
         return self._spider_status
