@@ -58,11 +58,12 @@ class SpiderCore(object):
     def init_component(self):
         pass
 
-    def add_start_request(self, request):
+    def set_start_request(self, request):
         self._start_request = request
 
-    def start_by_request(self, request):
-        self._scheduler.push(request)
+    def start(self, request):
+        if self._start_request:
+            self._scheduler.push(request)
         for batch in self._batch_requests():
             if len(batch) > 0:
                 logger.info('batch:', len(batch))
