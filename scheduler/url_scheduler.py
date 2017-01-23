@@ -15,18 +15,18 @@ class UrlScheduler(object):
         self._filter = BloomFilter(key=self.task_id)
         self._server = redis.StrictRedis()
 
-    def push(self, request, dont_filter=False):
+    def push(self, request, duplicate_remove=True):
         request_pickle = pickle.dumps(request)
-        if dont_filter:
+        if not duplicate_remove:
             self._server.lpush(self.task_id, request_pickle)
         else:
             if not self._filter.is_contains(request_pickle):
                 self._server.lpush(self.task_id, request_pickle)
                 self._filter.insert(request_pickle)
 
-    def pushf(self, request, dont_filter=False):
+    def pushf(self, request, duplicate_remove=True):
         request_pickle = pickle.dumps(request)
-        if dont_filter:
+        if not duplicate_remove:
             self._server.rpush(self.task_id, request_pickle)
         else:
             if not self._filter.is_contains(request_pickle):

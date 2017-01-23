@@ -4,16 +4,12 @@ import sys
 
 import gevent
 import gevent.monkey
-import re
 import logging
 
 from downloader.requests_downloader import RequestsDownLoader
 from downloader.spider_request import Request
 from scheduler.url_scheduler import UrlScheduler
-from posixpath import normpath
-from urlparse import urljoin
-from urlparse import urlparse
-from urlparse import urlunparse
+
 
 gevent.monkey.patch_all()
 reload(sys)
@@ -22,20 +18,19 @@ logger = logging.getLogger('core')
 
 
 class SpiderCore(object):
-    def __init__(self, spider_id, processor, downloader=None, scheduler=None):
+    def __init__(self, processor, downloader=None, scheduler=None):
+        self._processor = processor
+        self._spider_status = 0
+        self._pipelines = []
+        self._spider_name = processor.spider_name
+        self._spider_id = processor.spider_id
+        self._start_request = None
+
         if not downloader:
             self._downloader = RequestsDownLoader()
 
         if not scheduler:
-            self._scheduler = UrlScheduler(spider_id)
-
-        self._processor = processor
-        self._spider_status = 0
-        self._pipelines = []
-        self._spider_name = processor._spider_name
-        self._spider_id = processor._spider_id
-        self._spider_type = processor._spider_type
-        self._start_request = None
+            self._scheduler = UrlScheduler(self._spider_id)
 
     def create(self, processor):
         self._processor = processor
@@ -60,10 +55,11 @@ class SpiderCore(object):
 
     def set_start_request(self, request):
         self._start_request = request
+        return self
 
-    def start(self, request):
+    def start(self):
         if self._start_request:
-            self._scheduler.push(request)
+            self._scheduler.push(self._start_request, False)
         for batch in self._batch_requests():
             if len(batch) > 0:
                 logger.info('batch:', len(batch))
@@ -83,31 +79,11 @@ class SpiderCore(object):
             if temp_request:
                 batch.append(temp_request)
 
-    def start_by_scheduler(self):
-        pass
-
-    def _nice_join(self, base, url):
-        url1 = urljoin(base, url)
-        arr = urlparse(url1)
-        path = normpath(arr[2])
-        return urlunparse((arr.scheme, arr.netloc, path, arr.params, arr.query, arr.fragment))
-
-    def _is_url(self, url):
-        if re.match(r'^https?:/{2}\w.+$', url):
-            return True
-        else:
-            return False
-
     def _crawl(self, request):
         response = self._downloader.download(request)
         for item in self._processor.process(response):
             if isinstance(item, Request):
-                self._scheduler.push(Request)
+                self._scheduler.push(item)
             else:
                 for pipeline in self._pipelines:
                     pipeline.process_item(item)
-
-
-if __name__ == '__main__':
-    s = SpiderCore("test")
-    s.start_by_request(Request("http://news.163.com/"))
