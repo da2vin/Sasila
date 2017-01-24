@@ -46,6 +46,7 @@ class SpiderCore(object):
 
     def set_pipeline(self, pipeline):
         self._pipelines.append(pipeline)
+        return self
 
     def get_status(self):
         return self._spider_status
@@ -59,6 +60,7 @@ class SpiderCore(object):
 
     def start(self):
         if self._start_request:
+            self._start_request.callback = self._processor.process
             self._scheduler.push(self._start_request, False)
         for batch in self._batch_requests():
             if len(batch) > 0:
@@ -81,7 +83,7 @@ class SpiderCore(object):
 
     def _crawl(self, request):
         response = self._downloader.download(request)
-        for item in self._processor.process(response):
+        for item in request.callback(response):
             if isinstance(item, Request):
                 self._scheduler.push(item)
             else:

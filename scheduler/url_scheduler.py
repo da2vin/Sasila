@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 import sys
 import redis
-import pickle
 from bloom_filter import BloomFilter
+import dill
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -16,7 +16,7 @@ class UrlScheduler(object):
         self._server = redis.StrictRedis()
 
     def push(self, request, duplicate_remove=True):
-        request_pickle = pickle.dumps(request)
+        request_pickle = dill.dumps(request)
         if not duplicate_remove:
             self._server.lpush(self.task_id, request_pickle)
         else:
@@ -25,7 +25,7 @@ class UrlScheduler(object):
                 self._filter.insert(request_pickle)
 
     def pushf(self, request, duplicate_remove=True):
-        request_pickle = pickle.dumps(request)
+        request_pickle = dill.dumps(request)
         if not duplicate_remove:
             self._server.rpush(self.task_id, request_pickle)
         else:
@@ -38,7 +38,7 @@ class UrlScheduler(object):
         # while not requests_pickle:
         #     requests_pickle = self._server.rpop(self.task_id)
         if requests_pickle:
-            return pickle.loads(requests_pickle)
+            return dill.loads(requests_pickle)
         else:
             return None
 
