@@ -60,7 +60,6 @@ class SpiderCore(object):
 
     def start(self):
         if self._start_request:
-            self._start_request.callback = self._processor.process
             self._scheduler.push(self._start_request, False)
         for batch in self._batch_requests():
             if len(batch) > 0:
@@ -82,6 +81,8 @@ class SpiderCore(object):
                 batch.append(temp_request)
 
     def _crawl(self, request):
+        if not request.callback:
+            request.callback = self._processor.process
         response = self._downloader.download(request)
         for item in request.callback(response):
             if isinstance(item, Request):
