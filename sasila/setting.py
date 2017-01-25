@@ -14,4 +14,4 @@ PHANTOMJS_PATH = 'C:/Python27/phantomjs.exe'
 #     # '--proxy-auth=username:password'
 # ]
 PHANTOMJS_SERVICE = None
-DRIVER_POOL_SIZE = 1
+DRIVER_POOL_SIZE = 5

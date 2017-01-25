@@ -82,7 +82,7 @@ class RequestSpider(object):
         response = self._downloader.download(request)
         for item in request.callback(response):
             if isinstance(item, Request):
-                logger.info("insert request...")
+                # logger.info("insert request...")
                 self._scheduler.push(item)
             else:
                 for pipeline in self._pipelines:

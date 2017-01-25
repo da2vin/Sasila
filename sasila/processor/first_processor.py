@@ -5,6 +5,7 @@ import sys
 from bs4 import BeautifulSoup as bs
 from sasila.core.request_spider import RequestSpider
 from sasila.pipeline.console_pipeline import ConsolePipeline
+from sasila.downloader.selenium_downloader import SeleniumDownLoader
 
 from base_processor import BaseProcessor
 from sasila.downloader.spider_request import Request
@@ -38,4 +39,4 @@ class FirstProcessor(BaseProcessor):
 
 
 if __name__ == '__main__':
-    spider = RequestSpider(FirstProcessor()).set_pipeline(ConsolePipeline()).set_start_request(Request(url="http://www.mzitu.com/")).start()
+    spider = RequestSpider(FirstProcessor()).set_downloader(SeleniumDownLoader()).set_pipeline(ConsolePipeline()).set_start_request(Request(url="http://www.mzitu.com/")).start()
