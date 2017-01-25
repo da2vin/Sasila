@@ -11,12 +11,15 @@ sys.setdefaultencoding('utf-8')
 
 
 class RequestsDownLoader(BaseDownLoader):
-    count = 0
-
     # proxies = {"http": "http://127.0.0.1:8888", "https": "http://127.0.0.1:8888",}
 
+    def __init__(self, loginer=None):
+        self.loginer = loginer
+        self._cookies = None
+
+    def init_loginer(self, account, password):
+        self._cookies = self.loginer.logint(account, password)
+
     def download(self, request):
-        response = Response(requests.get(request.url, verify=False, timeout=5).content, request)
-        RequestsDownLoader.count += 1
-        print RequestsDownLoader.count, request.url
+        response = Response(requests.get(request.url, verify=False, timeout=5, cookies=self._cookies).content, request)
         return response
