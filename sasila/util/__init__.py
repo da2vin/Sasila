@@ -6,10 +6,10 @@ import logging
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-logger = logging.getLogger("sasila")
+logger = logging.getLogger("SASILA")
 logger.setLevel(logging.DEBUG)
 # 建立一个filehandler来把日志记录在文件里，级别为debug以上
-fh = logging.FileHandler("sasila.log")
+fh = logging.FileHandler("SASILA.log")
 fh.setLevel(logging.ERROR)
 # 建立一个streamhandler来把日志打在CMD窗口上，级别为error以上
 ch = logging.StreamHandler()
