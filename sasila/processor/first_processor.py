@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-from base_processor import BaseProcessor
-from core.spider_core import SpiderCore
-from downloader.spider_request import Request
+
 from bs4 import BeautifulSoup as bs
-from pipeline.console_pipeline import ConsolePipeline
+from sasila.core.spider_core import SpiderCore
+from sasila.pipeline.console_pipeline import ConsolePipeline
+
+from base_processor import BaseProcessor
+from sasila.downloader.spider_request import Request
 
 reload(sys)
 sys.setdefaultencoding('utf-8')

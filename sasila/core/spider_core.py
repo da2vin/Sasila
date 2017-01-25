@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import logging
 import sys
 
 import gevent
 import gevent.monkey
-import logging
+from sasila.scheduler.url_scheduler import UrlScheduler
 
-from downloader.requests_downloader import RequestsDownLoader
-from downloader.spider_request import Request
-from scheduler.url_scheduler import UrlScheduler
+from sasila.downloader.spider_request import Request
+from sasila.downloader.requests_downloader import RequestsDownLoader
 
 
 gevent.monkey.patch_all()

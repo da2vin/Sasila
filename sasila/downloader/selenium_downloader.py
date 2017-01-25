@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 import sys
 
-from downloader.base_downloder import BaseDownLoader
 from selenium import webdriver
+
+from sasila.downloader.base_downloder import BaseDownLoader
 
 reload(sys)
 sys.setdefaultencoding('utf-8')

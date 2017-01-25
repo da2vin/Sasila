@@ -3,9 +3,9 @@
 import sys
 
 import requests
-
-from downloader.base_downloder import BaseDownLoader
 from downloader.spider_response import Response
+
+from sasila.downloader.base_downloder import BaseDownLoader
 
 reload(sys)
 sys.setdefaultencoding('utf-8')

@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-from pipeline.base_pipeline import ItemPipeline
+
+from sasila.pipeline.base_pipeline import ItemPipeline
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
