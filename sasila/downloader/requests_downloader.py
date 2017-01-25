@@ -5,6 +5,7 @@ import sys
 import requests
 from sasila.downloader.spider_response import Response
 from sasila.downloader.base_downloder import BaseDownLoader
+from sasila.util import logger
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -22,4 +23,5 @@ class RequestsDownLoader(BaseDownLoader):
 
     def download(self, request):
         response = Response(requests.get(request.url, verify=False, timeout=5, cookies=self._cookies).content, request)
+        logger.info('download success:' + request.url)
         return response

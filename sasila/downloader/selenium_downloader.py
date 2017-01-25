@@ -23,5 +23,5 @@ class SeleniumDownLoader(BaseDownLoader):
         web.get(request.url)
         response = Response(content=web.execute_script("return document.documentElement.outerHTML"), request=request)
         self.web_driver_pool.put(web)
-        logger.info("download_url:" + request.url)
+        logger.info("download success:" + request.url)
         return response
