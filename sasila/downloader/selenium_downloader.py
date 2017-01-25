@@ -6,6 +6,7 @@ from sasila.downloader.web_driver_pool import get_web_driver_pool
 from sasila.downloader.spider_response import Response
 from sasila.util import logger
 from sasila import setting
+from selenium.webdriver.phantomjs.webdriver import WebDriver
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -18,7 +19,7 @@ class SeleniumDownLoader(BaseDownLoader):
         logger.info("init web driver pool success")
 
     def download(self, request):
-        web = self.web_driver_pool.get()
+        web = self.web_driver_pool.get()  # type:WebDriver
         web.get(request.url)
         response = Response(content=web.execute_script("return document.documentElement.outerHTML"), request=request)
         self.web_driver_pool.put(web)
