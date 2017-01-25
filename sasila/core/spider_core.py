@@ -62,9 +62,7 @@ class SpiderCore(object):
             self._scheduler.push(self._start_request, False)
         for batch in self._batch_requests():
             if len(batch) > 0:
-                logger.info('batch:' + str(len(batch)))
                 gevent.joinall([gevent.spawn(self._crawl, r) for r in batch])
-                logger.info('batch end')
 
     def _batch_requests(self):
         batch = []
@@ -85,6 +83,7 @@ class SpiderCore(object):
         response = self._downloader.download(request)
         for item in request.callback(response):
             if isinstance(item, Request):
+                logger.info("insert request...")
                 self._scheduler.push(item)
             else:
                 for pipeline in self._pipelines:
