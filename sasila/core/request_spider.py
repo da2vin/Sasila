@@ -15,7 +15,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 
-class SpiderCore(object):
+class RequestSpider(object):
     def __init__(self, processor, downloader=None, scheduler=None):
         self._processor = processor
         self._spider_status = 0

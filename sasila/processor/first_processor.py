@@ -3,7 +3,7 @@
 import sys
 
 from bs4 import BeautifulSoup as bs
-from sasila.core.spider_core import SpiderCore
+from sasila.core.request_spider import RequestSpider
 from sasila.pipeline.console_pipeline import ConsolePipeline
 
 from base_processor import BaseProcessor
@@ -38,4 +38,4 @@ class FirstProcessor(BaseProcessor):
 
 
 if __name__ == '__main__':
-    spider = SpiderCore(FirstProcessor()).set_pipeline(ConsolePipeline()).set_start_request(Request(url="http://www.mzitu.com/")).start()
+    spider = RequestSpider(FirstProcessor()).set_pipeline(ConsolePipeline()).set_start_request(Request(url="http://www.mzitu.com/")).start()
