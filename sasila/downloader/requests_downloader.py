@@ -3,8 +3,7 @@
 import sys
 
 import requests
-from downloader.spider_response import Response
-
+from sasila.downloader.spider_response import Response
 from sasila.downloader.base_downloder import BaseDownLoader
 
 reload(sys)
