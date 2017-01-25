@@ -9,12 +9,11 @@ from sasila.scheduler.url_scheduler import UrlScheduler
 
 from sasila.downloader.spider_request import Request
 from sasila.downloader.requests_downloader import RequestsDownLoader
-
+from sasila.util import logger
 
 gevent.monkey.patch_all()
 reload(sys)
 sys.setdefaultencoding('utf-8')
-logger = logging.getLogger('core')
 
 
 class SpiderCore(object):
@@ -63,7 +62,7 @@ class SpiderCore(object):
             self._scheduler.push(self._start_request, False)
         for batch in self._batch_requests():
             if len(batch) > 0:
-                logger.info('batch:', len(batch))
+                logger.info('batch:' + str(len(batch)))
                 gevent.joinall([gevent.spawn(self._crawl, r) for r in batch])
                 logger.info('batch end')
 
