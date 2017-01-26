@@ -17,6 +17,7 @@ sys.setdefaultencoding('utf-8')
 class FirstProcessor(BaseProcessor):
     spider_id = 'test'
     spider_name = 'test'
+    start_requests = [Request(url="http://www.mzitu.com/")]
 
     def process(self, response):
         soup = bs(response.content, 'lxml')
@@ -39,4 +40,4 @@ class FirstProcessor(BaseProcessor):
 
 
 if __name__ == '__main__':
-    spider = RequestSpider(FirstProcessor()).set_pipeline(ConsolePipeline()).set_start_request(Request(url="http://www.mzitu.com/")).start()
+    spider = RequestSpider(FirstProcessor()).set_pipeline(ConsolePipeline()).start()

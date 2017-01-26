@@ -24,5 +24,9 @@ class BaseProcessor(object):
         else:
             return False
 
+    spider_id = None
+    spider_name = None
+    start_requests = []
+
     def process(self, response):
         raise NotImplementedError

@@ -22,7 +22,6 @@ class RequestSpider(object):
         self._pipelines = []
         self._spider_name = processor.spider_name
         self._spider_id = processor.spider_id
-        self._start_request = None
 
         if not downloader:
             self._downloader = RequestsDownLoader()
@@ -52,14 +51,11 @@ class RequestSpider(object):
     def init_component(self):
         pass
 
-    def set_start_request(self, request):
-        request.duplicate_remove = False
-        self._start_request = request
-        return self
-
     def start(self):
-        if self._start_request:
-            self._scheduler.push(self._start_request)
+        if len(self._processor.start_requests) > 0:
+            for start_request in self._processor.start_requests:
+                self._scheduler.push(start_request)
+                logger.info("start request:" + str(start_request))
         for batch in self._batch_requests():
             if len(batch) > 0:
                 gevent.joinall([gevent.spawn(self._crawl, r) for r in batch])
@@ -83,7 +79,7 @@ class RequestSpider(object):
         response = self._downloader.download(request)
         for item in request.callback(response):
             if isinstance(item, Request):
-                # logger.info("insert request...")
+                logger.info("push request to queue..." + str(item))
                 self._scheduler.push(item)
             else:
                 for pipeline in self._pipelines:
