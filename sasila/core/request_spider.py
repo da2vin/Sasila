@@ -54,6 +54,7 @@ class RequestSpider(object):
     def start(self):
         if len(self._processor.start_requests) > 0:
             for start_request in self._processor.start_requests:
+                start_request.duplicate_remove = False
                 self._scheduler.push(start_request)
                 logger.info("start request:" + str(start_request))
         for batch in self._batch_requests():
