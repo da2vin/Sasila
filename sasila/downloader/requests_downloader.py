@@ -22,6 +22,50 @@ class RequestsDownLoader(BaseDownLoader):
         self._cookies = self.loginer.logint(account, password)
 
     def download(self, request):
-        response = Response(requests.get(request.url, verify=False, timeout=5, cookies=self._cookies).content, request)
-        logger.info('request download success:' + request.url)
+        response = None
+        if request.method.upper() == "GET":
+            response = requests.get(
+                    url=request.url,
+                    headers=request.headers,
+                    cookies=self._cookies,
+                    verify=False,
+                    allow_redirects=request.allow_redirects,
+                    timeout=request.timeout
+            )
+        elif request.method.upper() == "POST":
+            response = requests.post(
+                    url=request.url,
+                    data=request.data,
+                    json=request.json,
+                    headers=request.headers,
+                    cookies=self._cookies,
+                    verify=False,
+                    allow_redirects=request.allow_redirects,
+                    timeout=request.timeout
+            )
+        else:
+            pass
+
+        response = Response(
+                text=response.text,
+                content=response.content,
+                request=request,
+                status_code=response.status_code,
+                headers=response.headers,
+                raw=response.raw,
+                url=response.url,
+                encoding=response.encoding,
+                history=response.history,
+                reason=response.reason,
+                cookies=response.cookies,
+                json=response.json,
+                links=response.links
+        )
+
+        logger.info(response)
         return response
+
+
+if __name__ == "__main__":
+    proxies = {"http": "http://127.0.0.1:8888", "https": "http://127.0.0.1:8888",}
+    requests.post(url="http://www.jd.com", data={"123": "fdsgs"})
