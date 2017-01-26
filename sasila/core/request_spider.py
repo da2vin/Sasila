@@ -4,7 +4,7 @@ import sys
 
 import gevent
 import gevent.monkey
-from sasila.scheduler.url_scheduler import UrlScheduler
+from sasila.scheduler.url_scheduler import PriorityQueue
 
 from sasila.downloader.spider_request import Request
 from sasila.downloader.requests_downloader import RequestsDownLoader
@@ -28,7 +28,7 @@ class RequestSpider(object):
             self._downloader = RequestsDownLoader()
 
         if not scheduler:
-            self._scheduler = UrlScheduler(self._spider_id)
+            self._scheduler = PriorityQueue(self._spider_id)
 
     def create(self, processor):
         self._processor = processor
@@ -53,12 +53,13 @@ class RequestSpider(object):
         pass
 
     def set_start_request(self, request):
+        request.duplicate_remove = False
         self._start_request = request
         return self
 
     def start(self):
         if self._start_request:
-            self._scheduler.push(self._start_request, False)
+            self._scheduler.push(self._start_request)
         for batch in self._batch_requests():
             if len(batch) > 0:
                 gevent.joinall([gevent.spawn(self._crawl, r) for r in batch])
@@ -72,7 +73,7 @@ class RequestSpider(object):
                 yield batch
                 batch = []
                 count = 0
-            temp_request = self._scheduler.poll()
+            temp_request = self._scheduler.pop()
             if temp_request:
                 batch.append(temp_request)
 
