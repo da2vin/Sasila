@@ -23,5 +23,5 @@ class RequestsDownLoader(BaseDownLoader):
 
     def download(self, request):
         response = Response(requests.get(request.url, verify=False, timeout=5, cookies=self._cookies).content, request)
-        logger.info('download success:' + request.url)
+        logger.info('request download success:' + request.url)
         return response
