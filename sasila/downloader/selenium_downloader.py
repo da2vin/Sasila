@@ -17,6 +17,7 @@ class SeleniumDownLoader(BaseDownLoader):
         logger.info("init web driver pool...")
         self.web_driver_pool = get_web_driver_pool(setting.DRIVER_POOL_SIZE)
         logger.info("init web driver pool success")
+        Logger.info("happh nen year~")
 
     def download(self, request):
         web = self.web_driver_pool.get()  # type:WebDriver
