@@ -8,7 +8,6 @@ import json
 import uuid
 import redis
 
-
 app = Flask(__name__)
 manager = SpiderManager()
 
@@ -18,6 +17,7 @@ class Tocken:
         self.code = None
         self.msg = None
         self.accessTocken = None
+
 
 @app.route('/')
 def hello_world():
@@ -65,28 +65,30 @@ def init_system():
 
 
 # 业务相关流程，获取accessToken
-@app.route('/getAccessTocken',methods=['POST'])
+@app.route('/getAccessTocken', methods=['POST'])
 def getAccessTocken():
     accountId = request.form['accountId']
 
-    #进行相应的数据库查询，包括账号状态，账号的预存金额是否足够等信息
+    # 进行相应的数据库查询，包括账号状态，账号的预存金额是否足够等信息
     accessTocken = str(uuid.uuid4())
-    #将accessTocken放入redis
+    # 将accessTocken放入redis
     accessRedis = redis.StrictRedis()
     accessRedis.sadd(accessTocken, '')
 
     tocken = Tocken()
-    tocken.code=1321
+    tocken.code = 1321
     tocken.accessTocken = accessTocken
-    #tocken_dict = json.dumps(tocken)
+    # tocken_dict = json.dumps(tocken)
 
     tocken_dict = tocken.__dict__
     responseMsg = json.dumps(tocken_dict)
     return responseMsg.decode('unicode-escape')
 
+
 # 获取用户名和密码
-@app.route('/getUserInfo',methods=['POST'])
+@app.route('/getUserInfo', methods=['POST'])
 def getUserInfo():
+    pass
 
 
 if __name__ == '__main__':
