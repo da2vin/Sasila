@@ -4,7 +4,7 @@ import sys
 
 import gevent
 import gevent.monkey
-
+from collections import Iterator
 from sasila.downloader.http.spider_request import Request
 from sasila.downloader.requests_downloader import RequestsDownLoader
 from sasila.scheduler.queue import PriorityQueue
@@ -78,10 +78,19 @@ class RequestSpider(object):
         if not request.callback:
             request.callback = self._processor.process
         response = self._downloader.download(request)
-        for item in request.callback(response):
-            if isinstance(item, Request):
-                logger.info("push request to queue..." + str(item))
-                self._queue.push(item)
+        back = request.callback(response)
+        if isinstance(back, Iterator):
+            for item in back:
+                if isinstance(item, Request):
+                    logger.info("push request to queue..." + str(item))
+                    self._queue.push(item)
+                else:
+                    for pipeline in self._pipelines:
+                        pipeline.process_item(item)
+        else:
+            if isinstance(back, Request):
+                logger.info("push request to queue..." + str(back))
+                self._queue.push(back)
             else:
                 for pipeline in self._pipelines:
-                    pipeline.process_item(item)
+                    pipeline.process_item(back)
