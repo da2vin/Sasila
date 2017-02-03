@@ -6,7 +6,7 @@ from sasila import setting
 from sasila.downloader.base_downloder import BaseDownLoader
 from sasila.downloader.http.spider_response import Response
 from sasila.downloader.web_driver_pool import get_web_driver_pool
-from sasila.util import logger
+from sasila.utils import logger
 
 reload(sys)
 sys.setdefaultencoding('utf-8')

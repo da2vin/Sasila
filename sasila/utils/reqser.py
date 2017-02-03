@@ -3,7 +3,7 @@
 import sys
 import six
 from sasila.downloader.http.spider_request import Request
-from sasila.util.python import to_unicode, to_native_str
+from sasila.utils.python import to_unicode, to_native_str
 
 reload(sys)
 sys.setdefaultencoding('utf-8')

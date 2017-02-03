@@ -4,7 +4,7 @@ import sys
 import redis
 from bloom_filter import BloomFilter
 import cPickle
-from sasila.util.reqser import request_to_dict, request_from_dict
+from sasila.utils.reqser import request_to_dict, request_from_dict
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
