@@ -76,7 +76,7 @@ def getAccessTocken():
     accessRedis.sadd(accessTocken, '')
 
     tocken = Tocken()
-    tocken.code=
+    tocken.code=1321
     tocken.accessTocken = accessTocken
     #tocken_dict = json.dumps(tocken)
 
