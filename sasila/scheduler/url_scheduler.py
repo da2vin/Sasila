@@ -3,7 +3,8 @@
 import sys
 import redis
 from bloom_filter import BloomFilter
-import dill
+import cPickle
+from sasila.util.reqser import request_to_dict, request_from_dict
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -12,8 +13,9 @@ sys.setdefaultencoding('utf-8')
 class Base(object):
     """Per-spider base queue class"""
 
-    def __init__(self, task_id):
+    def __init__(self, task_id, processor):
         self.task_id = task_id
+        self.processor = processor
         self._filter = BloomFilter(key=self.task_id)
         self._server = redis.StrictRedis()
 
@@ -37,7 +39,7 @@ class Base(object):
 class PriorityQueue(Base):
     def push(self, request):
         score = -request.priority
-        data = dill.dumps(request)
+        data = cPickle.dumps(request_to_dict(request, self.processor), protocol=-1)
         if not request.duplicate_remove:
             self._server.execute_command('ZADD', self.task_id, score, data)
         else:
@@ -51,7 +53,7 @@ class PriorityQueue(Base):
         pipe.zrange(self.task_id, 0, 0).zremrangebyrank(self.task_id, 0, 0)
         results, count = pipe.execute()
         if results:
-            return dill.loads(results[0])
+            return request_from_dict(cPickle.loads(results[0]), self.processor)
         else:
             return None
 

@@ -3,12 +3,11 @@
 import sys
 
 from bs4 import BeautifulSoup as bs
-from sasila.core.request_spider import RequestSpider
-from sasila.pipeline.console_pipeline import ConsolePipeline
-from sasila.downloader.selenium_downloader import SeleniumDownLoader
 
 from base_processor import BaseProcessor
-from sasila.downloader.spider_request import Request
+from sasila.core.request_spider import RequestSpider
+from sasila.downloader.http.spider_request import Request
+from sasila.pipeline.console_pipeline import ConsolePipeline
 
 reload(sys)
 sys.setdefaultencoding('utf-8')

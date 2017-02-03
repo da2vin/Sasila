@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-from sasila.downloader.base_downloder import BaseDownLoader
-from sasila.downloader.web_driver_pool import get_web_driver_pool
-from sasila.downloader.spider_response import Response
-from sasila.util import logger
+
 from sasila import setting
-from selenium.webdriver.phantomjs.webdriver import WebDriver
+from sasila.downloader.base_downloder import BaseDownLoader
+from sasila.downloader.http.spider_response import Response
+from sasila.downloader.web_driver_pool import get_web_driver_pool
+from sasila.util import logger
 
 reload(sys)
 sys.setdefaultencoding('utf-8')

@@ -3,8 +3,9 @@
 import sys
 
 import requests
-from sasila.downloader.spider_response import Response
+
 from sasila.downloader.base_downloder import BaseDownLoader
+from sasila.downloader.http.spider_response import Response
 from sasila.util import logger
 
 reload(sys)

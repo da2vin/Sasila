@@ -4,10 +4,10 @@ import sys
 
 import gevent
 import gevent.monkey
-from sasila.scheduler.url_scheduler import PriorityQueue
 
-from sasila.downloader.spider_request import Request
+from sasila.downloader.http.spider_request import Request
 from sasila.downloader.requests_downloader import RequestsDownLoader
+from sasila.scheduler.url_scheduler import PriorityQueue
 from sasila.util import logger
 
 gevent.monkey.patch_all()
@@ -27,7 +27,7 @@ class RequestSpider(object):
             self._downloader = RequestsDownLoader()
 
         if not scheduler:
-            self._scheduler = PriorityQueue(self._spider_id)
+            self._scheduler = PriorityQueue(self._spider_id, self._processor)
 
     def create(self, processor):
         self._processor = processor
