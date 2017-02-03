@@ -7,7 +7,7 @@ import gevent.monkey
 
 from sasila.downloader.http.spider_request import Request
 from sasila.downloader.requests_downloader import RequestsDownLoader
-from sasila.scheduler.url_scheduler import PriorityQueue
+from sasila.scheduler.queue import PriorityQueue
 from sasila.utils import logger
 
 gevent.monkey.patch_all()
@@ -27,14 +27,14 @@ class RequestSpider(object):
             self._downloader = RequestsDownLoader()
 
         if not scheduler:
-            self._scheduler = PriorityQueue(self._spider_id, self._processor)
+            self._queue = PriorityQueue(self._spider_id, self._processor)
 
     def create(self, processor):
         self._processor = processor
         return self
 
     def set_scheduler(self, scheduler):
-        self._scheduler = scheduler
+        self._queue = scheduler
         return self
 
     def set_downloader(self, downloader):
@@ -55,7 +55,7 @@ class RequestSpider(object):
         if len(self._processor.start_requests) > 0:
             for start_request in self._processor.start_requests:
                 start_request.duplicate_remove = False
-                self._scheduler.push(start_request)
+                self._queue.push(start_request)
                 logger.info("start request:" + str(start_request))
         for batch in self._batch_requests():
             if len(batch) > 0:
@@ -70,7 +70,7 @@ class RequestSpider(object):
                 yield batch
                 batch = []
                 count = 0
-            temp_request = self._scheduler.pop()
+            temp_request = self._queue.pop()
             if temp_request:
                 batch.append(temp_request)
 
@@ -81,7 +81,7 @@ class RequestSpider(object):
         for item in request.callback(response):
             if isinstance(item, Request):
                 logger.info("push request to queue..." + str(item))
-                self._scheduler.push(item)
+                self._queue.push(item)
             else:
                 for pipeline in self._pipelines:
                     pipeline.process_item(item)
