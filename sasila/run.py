@@ -12,7 +12,7 @@ app = Flask(__name__)
 manager = SpiderManager()
 
 
-class Tocken:
+class Token:
     def __init__(self):
         self.code = None
         self.msg = None
@@ -75,10 +75,10 @@ def getAccessTocken():
     accessRedis = redis.StrictRedis()
     accessRedis.sadd(accessTocken, '')
 
-    tocken = Tocken()
-    tocken.code = 1321
+    tocken = Token()
+    tocken.code = '0000'
+    tocken.msg = '成功'
     tocken.accessTocken = accessTocken
-    # tocken_dict = json.dumps(tocken)
 
     tocken_dict = tocken.__dict__
     responseMsg = json.dumps(tocken_dict)
