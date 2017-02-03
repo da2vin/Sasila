@@ -12,8 +12,9 @@ sys.setdefaultencoding('utf-8')
 
 class PicPipeline(ItemPipeline):
     def process_item(self, item):
-        if not os.path.exists("img"):
-            os.mkdir("img")
-        with open("img/" + str(uuid.uuid1()) + ".jpg", 'wb') as fs:
-            fs.write(item)
-            print "download success!"
+        if item is not None:
+            if not os.path.exists("img"):
+                os.mkdir("img")
+            with open("img/" + str(uuid.uuid1()) + ".jpg", 'wb') as fs:
+                fs.write(item)
+                print "download success!"
