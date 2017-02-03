@@ -21,7 +21,7 @@ class Tocken:
 
 @app.route('/')
 def hello_world():
-    return 'Hello World!'
+    return 'Hello World1!'
 
 
 @app.route('/all')
