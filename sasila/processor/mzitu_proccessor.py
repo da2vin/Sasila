@@ -40,7 +40,7 @@ class MezituProcessor(BaseProcessor):
 
     def download_pic(self, response):
         href = bs(response.content, "lxml").select_one("div.main-image img").attrs["src"]
-        yield Request(url=href, callback=self.download, priority=3)
+        yield Request(url=href, callback=self.download, priority=99)
 
     def download(self, response):
         if response.status_code == 200:

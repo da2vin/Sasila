@@ -82,14 +82,14 @@ class RequestSpider(object):
         if isinstance(back, Iterator):
             for item in back:
                 if isinstance(item, Request):
-                    logger.info("push request to queue..." + str(item))
+                    # logger.info("push request to queue..." + str(item))
                     self._queue.push(item)
                 else:
                     for pipeline in self._pipelines:
                         pipeline.process_item(item)
         else:
             if isinstance(back, Request):
-                logger.info("push request to queue..." + str(back))
+                # logger.info("push request to queue..." + str(back))
                 self._queue.push(back)
             else:
                 for pipeline in self._pipelines:

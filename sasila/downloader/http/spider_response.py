@@ -35,6 +35,6 @@ class Response(object):
         self.links = links
 
     def __str__(self):
-        return "<Response [%s] [%s]>" % (self.status_code,self.url)
+        return "<Response [%s] [%s] [%.2f KB]>" % (self.status_code, self.url, (float(len(self.content)) / 1000))
 
     __repr__ = __str__
