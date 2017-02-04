@@ -10,7 +10,7 @@ from sasila.downloader.requests_downloader import RequestsDownLoader
 from sasila.scheduler.queue import PriorityQueue
 from sasila.utils import logger
 
-# gevent.monkey.patch_all()
+gevent.monkey.patch_all()
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
