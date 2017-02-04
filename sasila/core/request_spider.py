@@ -55,9 +55,6 @@ class RequestSpider(object):
     def init_component(self):
         pass
 
-    def _priority_compare(r1, r2):
-        return r1.priority - r2.priority
-
     def start(self):
         if len(self._processor.start_requests) > 0:
             for start_request in self._processor.start_requests:
