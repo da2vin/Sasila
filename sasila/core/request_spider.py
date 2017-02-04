@@ -10,9 +10,13 @@ from sasila.downloader.requests_downloader import RequestsDownLoader
 from sasila.scheduler.queue import PriorityQueue
 from sasila.utils import logger
 
-gevent.monkey.patch_all()
+# gevent.monkey.patch_all()
 reload(sys)
 sys.setdefaultencoding('utf-8')
+
+
+def _priority_compare(r1, r2):
+    return r2.priority - r1.priority
 
 
 class RequestSpider(object):
@@ -51,6 +55,9 @@ class RequestSpider(object):
     def init_component(self):
         pass
 
+    def _priority_compare(r1, r2):
+        return r1.priority - r2.priority
+
     def start(self):
         if len(self._processor.start_requests) > 0:
             for start_request in self._processor.start_requests:
@@ -59,14 +66,16 @@ class RequestSpider(object):
                 logger.info("start request:" + str(start_request))
         for batch in self._batch_requests():
             if len(batch) > 0:
-                gevent.joinall([gevent.spawn(self._crawl, r) for r in batch])
+                tasks = [gevent.spawn(self._crawl, r) for r in batch]
+                gevent.joinall(tasks)
 
     def _batch_requests(self):
         batch = []
         count = 0
         while True:
             count += 1
-            if len(batch) > 99 or count > 99:
+            if len(batch) > 9 or count > 9:
+                batch.sort(_priority_compare)
                 yield batch
                 batch = []
                 count = 0
