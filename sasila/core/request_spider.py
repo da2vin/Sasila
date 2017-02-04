@@ -78,9 +78,9 @@ class RequestSpider(object):
         if not request.callback:
             request.callback = self._processor.process
         response = self._downloader.download(request)
-        back = request.callback(response)
-        if isinstance(back, Iterator):
-            for item in back:
+        callback = request.callback(response)
+        if isinstance(callback, Iterator):
+            for item in callback:
                 if isinstance(item, Request):
                     # logger.info("push request to queue..." + str(item))
                     self._queue.push(item)
@@ -88,9 +88,9 @@ class RequestSpider(object):
                     for pipeline in self._pipelines:
                         pipeline.process_item(item)
         else:
-            if isinstance(back, Request):
+            if isinstance(callback, Request):
                 # logger.info("push request to queue..." + str(back))
-                self._queue.push(back)
+                self._queue.push(callback)
             else:
                 for pipeline in self._pipelines:
-                    pipeline.process_item(back)
+                    pipeline.process_item(callback)
