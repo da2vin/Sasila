@@ -80,13 +80,15 @@ class RequestSpider(object):
         response = self._downloader.download(request)
         callback = request.callback(response)
         if isinstance(callback, Iterator):
+            pipe = self._queue.get_pipe()
             for item in callback:
                 if isinstance(item, Request):
                     # logger.info("push request to queue..." + str(item))
-                    self._queue.push(item)
+                    self._queue.push_pipe(item, pipe)
                 else:
                     for pipeline in self._pipelines:
                         pipeline.process_item(item)
+            pipe.execute()
         else:
             if isinstance(callback, Request):
                 # logger.info("push request to queue..." + str(back))

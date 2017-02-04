@@ -37,6 +37,19 @@ class Base(object):
 
 
 class PriorityQueue(Base):
+    def get_pipe(self):
+        return self._server.pipeline()
+
+    def push_pipe(self, request, pipe):
+        score = -request.priority
+        data = cPickle.dumps(request_to_dict(request, self.processor), protocol=-1)
+        if not request.duplicate_remove:
+            pipe.execute_command('ZADD', self.task_id, score, data)
+        else:
+            if not self._filter.is_contains(data):
+                pipe.execute_command('ZADD', self.task_id, score, data)
+                self._filter.insert(data)
+
     def push(self, request):
         score = -request.priority
         data = cPickle.dumps(request_to_dict(request, self.processor), protocol=-1)
