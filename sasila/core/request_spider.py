@@ -21,6 +21,7 @@ class RequestSpider(object):
         self._processor = processor
         self._spider_status = 0
         self._pipelines = []
+        self._batch_size = 99
         self._spider_name = processor.spider_name
         self._spider_id = processor.spider_id
 
@@ -67,7 +68,7 @@ class RequestSpider(object):
         count = 0
         while True:
             count += 1
-            if len(batch) > 99 or count > 99:
+            if len(batch) > self._batch_size or count > self._batch_size:
                 batch.sort(_priority_compare)
                 yield batch
                 batch = []
