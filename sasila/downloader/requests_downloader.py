@@ -64,22 +64,11 @@ class RequestsDownLoader(BaseDownLoader):
             pass
 
         response = Response(
-                text=response.text,
-                content=response.content,
+                m_response=response,
                 request=request,
-                status_code=response.status_code,
-                headers=response.headers,
-                raw=response.raw,
-                url=response.url,
-                encoding=response.encoding,
-                history=response.history,
-                reason=response.reason,
-                cookies=response.cookies,
-                json=response.json,
-                links=response.links
         )
 
-        logger.info(response)
+        # logger.info(response)
         return response
 
 

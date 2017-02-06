@@ -9,7 +9,7 @@ from sasila.downloader.http.spider_request import Request
 from sasila.downloader.requests_downloader import RequestsDownLoader
 from sasila.scheduler.queue import PriorityQueue
 from sasila.utils import logger
-
+import time
 gevent.monkey.patch_all()
 reload(sys)
 sys.setdefaultencoding('utf-8')
