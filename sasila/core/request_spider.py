@@ -67,7 +67,7 @@ class RequestSpider(object):
         count = 0
         while True:
             count += 1
-            if len(batch) > 19 or count > 19:
+            if len(batch) > 99 or count > 99:
                 batch.sort(_priority_compare)
                 yield batch
                 batch = []
