@@ -21,7 +21,8 @@ class RequestsDownLoader(BaseDownLoader):
         self._cookies = None
 
         self._headers = dict()
-        self._headers["User-Agent"] = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36"
+        self._headers[
+            "User-Agent"] = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36"
         self._headers["Accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
         self._headers["Accept-Encoding"] = "gzip, deflate, sdch"
         self._headers["Accept-Language"] = "zh-CN,zh;q=0.8"
@@ -67,7 +68,7 @@ class RequestsDownLoader(BaseDownLoader):
             else:
                 pass
 
-        rets = grequests.map(batch_requests)
+        rets = grequests.map(batch_requests, exception_handler=exception_handler)
 
         true_responses = []
         index = 0
@@ -82,6 +83,9 @@ class RequestsDownLoader(BaseDownLoader):
 
         return true_responses
 
+
+def exception_handler(request, exception):
+    logger.error("%s %s" % (request.url, exception))
 
 if __name__ == "__main__":
     proxies = {"http": "http://127.0.0.1:8888", "https": "http://127.0.0.1:8888",}
