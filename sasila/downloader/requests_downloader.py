@@ -4,7 +4,7 @@ import sys
 
 import requests
 from requests.adapters import HTTPAdapter
-
+import grequests
 from sasila.downloader.base_downloder import BaseDownLoader
 from sasila.downloader.http.spider_response import Response
 from sasila.utils import logger
@@ -30,46 +30,57 @@ class RequestsDownLoader(BaseDownLoader):
     def init_loginer(self, account, password):
         self._cookies = self.loginer.logint(account, password)
 
-    def download(self, request):
-        session = requests.session()
-        session.mount('https://', self._request_retry)
-        session.mount('http://', self._request_retry)
-        response = None
+    def download(self, batch):
+        batch_requests = []
 
-        if not request.headers:
-            request.headers = self._headers
-            session.headers = self._headers
+        for request in batch:
+            session = requests.session()
+            session.mount('https://', self._request_retry)
+            session.mount('http://', self._request_retry)
 
-        if request.method.upper() == "GET":
-            response = session.get(
-                    url=request.url,
-                    headers=request.headers,
-                    cookies=self._cookies,
-                    verify=False,
-                    allow_redirects=request.allow_redirects,
-                    timeout=request.timeout
+            if not request.headers:
+                request.headers = self._headers
+                session.headers = self._headers
+
+            if request.method.upper() == "GET":
+                batch_requests.append(grequests.get(
+                        session=session,
+                        url=request.url,
+                        headers=request.headers,
+                        cookies=self._cookies,
+                        verify=False,
+                        allow_redirects=request.allow_redirects,
+                        timeout=request.timeout
+                ))
+            elif request.method.upper() == "POST":
+                batch_requests.append(grequests.post(
+                        session=session,
+                        url=request.url,
+                        data=request.data,
+                        json=request.json,
+                        headers=request.headers,
+                        cookies=self._cookies,
+                        verify=False,
+                        allow_redirects=request.allow_redirects,
+                        timeout=request.timeout
+                ))
+            else:
+                pass
+
+        rets = grequests.map(batch_requests)
+
+        true_responses = []
+        index = 0
+        for ret in rets:
+            true_response = Response(
+                    m_response=ret,
+                    request=batch[index],
             )
-        elif request.method.upper() == "POST":
-            response = session.post(
-                    url=request.url,
-                    data=request.data,
-                    json=request.json,
-                    headers=request.headers,
-                    cookies=self._cookies,
-                    verify=False,
-                    allow_redirects=request.allow_redirects,
-                    timeout=request.timeout
-            )
-        else:
-            pass
+            true_responses.append(true_response)
+            logger.info(true_response)
+            index += 1
 
-        response = Response(
-                m_response=response,
-                request=request,
-        )
-
-        # logger.info(response)
-        return response
+        return true_responses
 
 
 if __name__ == "__main__":

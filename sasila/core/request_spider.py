@@ -2,15 +2,12 @@
 # -*- coding: utf-8 -*-
 import sys
 
-import gevent
-import gevent.monkey
 from collections import Iterator
 from sasila.downloader.http.spider_request import Request
 from sasila.downloader.requests_downloader import RequestsDownLoader
 from sasila.scheduler.queue import PriorityQueue
 from sasila.utils import logger
-import time
-gevent.monkey.patch_all()
+
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -63,42 +60,42 @@ class RequestSpider(object):
                 logger.info("start request:" + str(start_request))
         for batch in self._batch_requests():
             if len(batch) > 0:
-                tasks = [gevent.spawn(self._crawl, r) for r in batch]
-                gevent.joinall(tasks)
+                self._crawl(batch)
 
     def _batch_requests(self):
         batch = []
         count = 0
         while True:
             count += 1
-            if len(batch) > 99 or count > 99:
+            if len(batch) > 19 or count > 19:
                 batch.sort(_priority_compare)
                 yield batch
                 batch = []
                 count = 0
             temp_request = self._queue.pop()
             if temp_request:
+                if not temp_request.callback:
+                    temp_request.callback = self._processor.process
                 batch.append(temp_request)
 
-    def _crawl(self, request):
-        if not request.callback:
-            request.callback = self._processor.process
-        response = self._downloader.download(request)
-        callback = request.callback(response)
-        if isinstance(callback, Iterator):
-            pipe = self._queue.get_pipe()
-            for item in callback:
-                if isinstance(item, Request):
-                    # logger.info("push request to queue..." + str(item))
-                    self._queue.push_pipe(item, pipe)
+    def _crawl(self, batch):
+        responses = self._downloader.download(batch)
+        for response in responses:
+            callback = response.request.callback(response)
+            if isinstance(callback, Iterator):
+                pipe = self._queue.get_pipe()
+                for item in callback:
+                    if isinstance(item, Request):
+                        # logger.info("push request to queue..." + str(item))
+                        self._queue.push_pipe(item, pipe)
+                    else:
+                        for pipeline in self._pipelines:
+                            pipeline.process_item(item)
+                pipe.execute()
+            else:
+                if isinstance(callback, Request):
+                    # logger.info("push request to queue..." + str(back))
+                    self._queue.push(callback)
                 else:
                     for pipeline in self._pipelines:
-                        pipeline.process_item(item)
-            pipe.execute()
-        else:
-            if isinstance(callback, Request):
-                # logger.info("push request to queue..." + str(back))
-                self._queue.push(callback)
-            else:
-                for pipeline in self._pipelines:
-                    pipeline.process_item(callback)
+                        pipeline.process_item(callback)
