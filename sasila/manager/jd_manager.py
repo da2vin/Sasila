@@ -5,6 +5,7 @@ import uuid
 import datetime
 import json
 from sasila.manager.database.jd_database import *
+from sasila.imspider.jd_imspider.imspider import JdImSpider
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -25,6 +26,7 @@ class JdResponse(object):
 class JdManager(object):
     def __init__(self):
         self.database = JdDatabase()
+        self.imspider = JdImSpider()
 
     def init_process(self, company_account, name, identity_card_number, cell_phone_number, process_code):
         '''
@@ -61,7 +63,9 @@ class JdManager(object):
             pass
 
     def process_login(self, collect_token, account, password):
-        pass
+        session = self.database.create_session()
+        session.query(Process).filter(Process.collect_token == collect_token).update(
+                {Process.account: account, Process.password: password})
 
     def _validate_data(self, company_account, name, identity_card_number, cell_phone_number):
         '''
@@ -80,4 +84,6 @@ class JdManager(object):
 
 
 manager = JdManager()
-print manager.init_process("xyebank", "毛靖文", "510122198902080290", "13408415919", 0)
+# print manager.init_process("xyebank", "毛靖文", "510122198902080290", "13408415919", 0)
+
+# manager.process_login('1869ab0f-edc4-11e6-9', "13408415919", 'Float113')
