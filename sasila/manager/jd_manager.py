@@ -60,6 +60,9 @@ class JdManager(object):
         else:
             pass
 
+    def process_login(self, collect_token, account, password):
+        pass
+
     def _validate_data(self, company_account, name, identity_card_number, cell_phone_number):
         '''
         校验数据

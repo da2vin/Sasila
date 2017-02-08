@@ -28,6 +28,8 @@ class Process(Base):
     name = Column(String(20))
     identity_card_number = Column(String(20))
     cell_phone_number = Column(String(20))
+    account = Column(String(20))
+    password = Column(String(20))
 
 
 class JdDatabase(object):
