@@ -6,7 +6,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 # 导入:
-from sqlalchemy import Column, Integer, String, create_engine, MetaData
+from sqlalchemy import Column, Integer, String, DateTime, create_engine, MetaData
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -20,6 +20,10 @@ class Process(Base):
     # 表的结构:
     id = Column(Integer, primary_key=True)
     collect_token = Column(String(20))
+    process_code = Column(Integer)
+    process_cookie = Column(String(200))
+    start_time = Column(DateTime)
+    expire_time = Column(DateTime)
     company_account = Column(String(20))
     name = Column(String(20))
     identity_card_number = Column(String(20))
@@ -32,7 +36,6 @@ class JdDatabase(object):
         self.engine = create_engine('mysql+mysqlconnector://root:root@192.168.3.210:3306/jd_manager')
         # 创建DBSession类型:
         self.DBSession = sessionmaker(bind=self.engine)
-        self._drop_all()
         self._create_all()
 
     def _create_all(self):
