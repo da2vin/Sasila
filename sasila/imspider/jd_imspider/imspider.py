@@ -47,6 +47,14 @@ class JdImSpider(object):
         if not cookie:
             return True
         cookies = pickle.loads(cookie)
+
+        # cookie_dict = dict()
+        # for c in cookies:
+        #     cookie_dict[c['name']] = c['value']
+        # session = requests.Session()
+        #
+        # print session.get("https://home.jd.com/", cookies=cookie_dict).content
+
         for c in cookies:
             web.add_cookie({k: c[k] for k in ('name', 'value', 'domain', 'path', 'expiry') if k in c})
         web.get("https://home.jd.com/")
