@@ -27,6 +27,7 @@ class JdManager(object):
     def __init__(self):
         self.database = JdDatabase()
         self.imspider = JdImSpider()
+        self.imspider.init_pool()
 
     def init_process(self, company_account, name, identity_card_number, cell_phone_number, process_code):
         '''
@@ -64,8 +65,22 @@ class JdManager(object):
 
     def process_login(self, collect_token, account, password):
         session = self.database.create_session()
-        session.query(Process).filter(Process.collect_token == collect_token).update(
-                {Process.account: account, Process.password: password})
+        process = session.query(Process).filter(Process.collect_token == collect_token).first()
+        if process:
+            if datetime.datetime.now() < process.expire_time:
+                # collect_token 过期
+                pass
+            else:
+                cookies = self.imspider.login(account, password, process.process_cookie)
+                if cookies:
+                    session.query(Process).filter(Process.collect_token == collect_token).update({
+                        Process.account: account,
+                        Process.password: password,
+                        Process.process_cookie: cookies
+                    })
+        else:
+            # 没有申请collect_token
+            pass
 
     def _validate_data(self, company_account, name, identity_card_number, cell_phone_number):
         '''
@@ -84,6 +99,7 @@ class JdManager(object):
 
 
 manager = JdManager()
-# print manager.init_process("xyebank", "毛靖文", "510122198902080290", "13408415919", 0)
 
-# manager.process_login('1869ab0f-edc4-11e6-9', "13408415919", 'Float113')
+# print manager.init_process("xyebank", "毛靖文", "510122198902080290", "13408415919", 0)
+#
+manager.process_login('2be44e80-edcd-11e6-9', "13408415919", 'dElete2405')

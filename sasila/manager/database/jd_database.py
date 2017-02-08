@@ -21,7 +21,7 @@ class Process(Base):
     id = Column(Integer, primary_key=True)
     collect_token = Column(String(20))
     process_code = Column(Integer)
-    process_cookie = Column(String(200))
+    process_cookie = Column(String(20000))
     start_time = Column(DateTime)
     expire_time = Column(DateTime)
     company_account = Column(String(20))
