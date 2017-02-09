@@ -29,13 +29,13 @@ def abstract(text, start, end):
     return res
 
 
-# dcap = dict(DesiredCapabilities.PHANTOMJS)
-# dcap["phantomjs.page.settings.resourceTimeout"] = 10
-# dcap["phantomjs.page.settings.loadImages"] = True
-# dcap[
-#     "phantomjs.page.settings.userAgent"] = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36'
-# web = webdriver.PhantomJS(executable_path='C:/Python27/phantomjs.exe'
-#                           , desired_capabilities=dcap)
+dcap = dict(DesiredCapabilities.PHANTOMJS)
+dcap["phantomjs.page.settings.resourceTimeout"] = 10
+dcap["phantomjs.page.settings.loadImages"] = True
+dcap[
+    "phantomjs.page.settings.userAgent"] = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36'
+web = webdriver.PhantomJS(executable_path='C:/Python27/phantomjs.exe'
+                          , desired_capabilities=dcap)
 #
 # web.get("https://passport.jd.com/new/login.aspx?ReturnUrl=http%3A%2F%2Fhome.jd.com%2F")
 # time.sleep(10)
@@ -67,5 +67,15 @@ print ticket
 headers['X-Requested-With'] = 'XMLHttpRequest'
 response = session.get("https://passport.jd.com/uc/qrCodeTicketValidation?t=" + ticket, headers=headers)
 
+cookie_dict = session.cookies.get_dict()
+
+cookie_list = [{'name': c[0], 'value': c[1], 'path': '/', 'domain': '.jd.com'} for c in cookie_dict.items()]
+
+for c in cookie_list:
+    web.add_cookie(c)
+
+web.get('https://home.jd.com')
+
+web.save_screenshot('test.png')
 print response.headers
 print response.content
