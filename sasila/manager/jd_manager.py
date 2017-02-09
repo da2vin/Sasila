@@ -71,16 +71,30 @@ class JdManager(object):
                 # collect_token 过期
                 pass
             else:
-                cookies = self.imspider.login(account, password, process.process_cookie)
-                if cookies:
-                    session.query(Process).filter(Process.collect_token == collect_token).update({
-                        Process.account: account,
-                        Process.password: password,
-                        Process.process_cookie: cookies
-                    })
+                result = self.imspider.login(account, password, process.process_cookie)
+                if result.has_login:
+                    return '已经登录'
+                else:
+                    if result.login_success:
+                        session.query(Process).filter(Process.collect_token == collect_token).update({
+                            Process.account: account,
+                            Process.password: password,
+                            Process.process_cookie: cookies
+                        })
+                        return '登录成功'
+                    else:
+                        if result.need_sms_captch:
+                            session.query(Process).filter(Process.collect_token == collect_token).update({
+                                Process.account: account,
+                                Process.password: password,
+                                Process.process_cookie: cookies
+                            })
+                            return '需要验证码'
+                        else:
+                            return '登录失败' + result.message
         else:
             # 没有申请collect_token
-            pass
+            return 'collect_token 无效'
 
     def _validate_data(self, company_account, name, identity_card_number, cell_phone_number):
         '''
@@ -102,4 +116,4 @@ manager = JdManager()
 
 # print manager.init_process("xyebank", "毛靖文", "510122198902080290", "13408415919", 0)
 #
-manager.process_login('2be44e80-edcd-11e6-9', "13408415919", 'dElete2405')
+print manager.process_login('2be44e80-edcd-11e6-9', "13408415919", 'dElete2405')
