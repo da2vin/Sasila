@@ -7,6 +7,7 @@ from manager.spider_manager import SpiderManager
 import json
 import uuid
 import redis
+from sasila.manager.jd_manager import JdManager
 
 app = Flask(__name__)
 manager = SpiderManager()
@@ -17,6 +18,27 @@ class Token:
         self.code = None
         self.msg = None
         self.accessTocken = None
+
+
+jd_manager = JdManager()
+
+
+@app.route('/im/jd/getcollecttoken')
+def get_collect_token():
+    return jd_manager.init_process(request.args['company_account'], request.args['name'],
+                                   request.args['identity_card_number'], request.args['cell_phone_number'], 0)
+
+
+@app.route('/im/jd/qr_login')
+def qr_login():
+    pic_str = jd_manager.process_qrlogin(request.args['collect_token'], request.args['account'])
+    result = '<image src=\"data:image/png;base64,' + pic_str + '\">'
+    return result
+
+
+@app.route('/im/jd/submit_qrlogin')
+def submit_qrlogin():
+    return json.dumps(dict(jd_manager.submit_qrlogin(request.args['collect_token'])))
 
 
 @app.route('/')

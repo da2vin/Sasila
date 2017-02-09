@@ -9,9 +9,29 @@ from sasila.utils import logger
 import time
 from bs4 import BeautifulSoup as bs
 import json
+import requests
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
+
+
+def abstract(text, start, end):
+    if text is None or text == '':
+        return ''
+    res = ''
+    if start is not None and start != '':
+        if start not in text:
+            return res
+        else:
+            text = text[text.index(start) + len(start):]
+    if end is not None and end != '':
+        if end not in text:
+            return res
+        else:
+            res = text[0:text.index(end)]
+    else:
+        res = text
+    return res
 
 
 class JdMessage(object):
@@ -21,6 +41,8 @@ class JdMessage(object):
         self.success_cookies = None
         self.need_sms_captch = False
         self.message = ""
+        self.qr_captcha = None
+        self.qr_cookies = None
 
 
 class JdImSpider(object):
@@ -95,3 +117,41 @@ class JdImSpider(object):
             return False
         else:
             return True
+
+    def qr_login(self):
+        message = JdMessage()
+        headers = dict()
+        headers[
+            "User-Agent"] = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36"
+        headers["Accept"] = "*/*"
+        headers["Accept-Encoding"] = "gzip, deflate"
+        headers["Accept-Language"] = "zh-CN,en,*"
+        headers["Referer"] = "https://passport.jd.com/new/login.aspx?ReturnUrl=http%3A%2F%2Fhome.jd.com%2F"
+        session = requests.Session()
+        response = session.get("https://qr.m.jd.com/show?appid=133&size=147&t=1486614526653")
+        message.qr_captcha = response.content
+        message.qr_cookies = session.cookies.get_dict()
+        return message
+
+    def submit_qrlogin(self, cookie_dict):
+        message = JdMessage()
+        headers = dict()
+        headers[
+            "User-Agent"] = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36"
+        headers["Accept"] = "*/*"
+        headers["Accept-Encoding"] = "gzip, deflate"
+        headers["Accept-Language"] = "zh-CN,en,*"
+        headers["Referer"] = "https://passport.jd.com/new/login.aspx?ReturnUrl=http%3A%2F%2Fhome.jd.com%2F"
+        session = requests.Session()
+
+        response = session.get("https://qr.m.jd.com/check?callback=jQuery6172296&appid=133&_=1486609849337",
+                               cookies=json.loads(cookie_dict),
+                               headers=headers)
+
+        ticket = abstract(response.content, '\"ticket\" : \"', '\"')
+        print ticket
+
+        headers['X-Requested-With'] = 'XMLHttpRequest'
+        response = session.get("https://passport.jd.com/uc/qrCodeTicketValidation?t=" + ticket, headers=headers)
+
+        return response.headers

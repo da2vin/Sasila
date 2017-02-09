@@ -19,17 +19,17 @@ class Process(Base):
     __tablename__ = 'process_tbl'
     # 表的结构:
     id = Column(Integer, primary_key=True)
-    collect_token = Column(String(20))
+    collect_token = Column(String(50))
     process_code = Column(Integer)
     process_cookie = Column(String(20000))
     start_time = Column(DateTime)
     expire_time = Column(DateTime)
-    company_account = Column(String(20))
-    name = Column(String(20))
-    identity_card_number = Column(String(20))
-    cell_phone_number = Column(String(20))
-    account = Column(String(20))
-    password = Column(String(20))
+    company_account = Column(String(50))
+    name = Column(String(50))
+    identity_card_number = Column(String(50))
+    cell_phone_number = Column(String(50))
+    account = Column(String(50))
+    password = Column(String(50))
 
 
 class JdDatabase(object):

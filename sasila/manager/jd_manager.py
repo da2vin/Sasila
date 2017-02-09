@@ -6,6 +6,7 @@ import datetime
 import json
 from sasila.manager.database.jd_database import *
 from sasila.imspider.jd_imspider.imspider import JdImSpider
+import base64
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -96,6 +97,42 @@ class JdManager(object):
             # 没有申请collect_token
             return 'collect_token 无效'
 
+    def process_qrlogin(self, collect_token, account):
+        session = self.database.create_session()
+        process = session.query(Process).filter(Process.collect_token == collect_token).first()
+        if process:
+            if datetime.datetime.now() > process.expire_time:
+                # collect_token 过期
+                pass
+            else:
+                message = self.imspider.qr_login()
+                session.query(Process).filter(Process.collect_token == collect_token).update({
+                    Process.account: account,
+                    Process.process_cookie: json.dumps(message.qr_cookies).decode('unicode-escape')
+                })
+                return message.qr_captcha.encode('base64')
+        else:
+            # 没有申请collect_token
+            return 'collect_token 无效'
+
+    def submit_qrlogin(self, collect_token):
+        session = self.database.create_session()
+        process = session.query(Process).filter(Process.collect_token == collect_token).first()
+        if process:
+            if datetime.datetime.now() < process.expire_time:
+                # collect_token 过期
+                pass
+            else:
+                message = self.imspider.submit_qrlogin(process.process_cookie)
+                # session.query(Process).filter(Process.collect_token == collect_token).update({
+                #     Process.account: account,
+                #     Process.process_cookie: json.dumps(message.qr_cookies).decode('unicode-escape')
+                # })
+                return message
+        else:
+            # 没有申请collect_token
+            return 'collect_token 无效'
+
     def _validate_data(self, company_account, name, identity_card_number, cell_phone_number):
         '''
         校验数据
@@ -111,9 +148,7 @@ class JdManager(object):
         token = str(uuid.uuid1())
         return token
 
-
-manager = JdManager()
+# manager = JdManager()
 
 # print manager.init_process("xyebank", "毛靖文", "510122198902080290", "13408415919", 0)
-#
-print manager.process_login('2be44e80-edcd-11e6-9', "13408415919", 'dElete2405')
+# print manager.process_login('2be44e80-edcd-11e6-9', "13408415919", 'dElete2405')
