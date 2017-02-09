@@ -68,7 +68,7 @@ class JdManager(object):
         session = self.database.create_session()
         process = session.query(Process).filter(Process.collect_token == collect_token).first()
         if process:
-            if datetime.datetime.now() < process.expire_time:
+            if datetime.datetime.now() > process.expire_time:
                 # collect_token 过期
                 pass
             else:
@@ -119,7 +119,7 @@ class JdManager(object):
         session = self.database.create_session()
         process = session.query(Process).filter(Process.collect_token == collect_token).first()
         if process:
-            if datetime.datetime.now() < process.expire_time:
+            if datetime.datetime.now() > process.expire_time:
                 # collect_token 过期
                 pass
             else:
