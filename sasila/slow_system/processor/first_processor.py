@@ -19,23 +19,26 @@ class FirstProcessor(BaseProcessor):
     start_requests = [Request(url="http://www.mzitu.com/")]
 
     def process(self, response):
-        soup = bs(response.content, 'lxml')
+        soup = bs(response.m_response.content, 'lxml')
         a_list = soup.select("a")
         for a in a_list:
             if "href" in a.attrs:
-                url = self._nice_join(response.request.url, a["href"])
-                if self._is_url(url):
+                url = response.nice_join(a["href"])
+                if response.is_url(url):
                     yield Request(url=url, callback=self.procces2)
 
     def procces2(self, response):
-        soup = bs(response.content, 'lxml')
-        yield soup.title
-        a_list = soup.select("a")
-        for a in a_list:
-            if "href" in a.attrs:
-                url = self._nice_join(response.request.url, a["href"])
-                if self._is_url(url):
-                    yield Request(url=url, callback=self.procces2)
+        if response.m_response:
+            soup = bs(response.m_response.content, 'lxml')
+            yield soup.title
+            a_list = soup.select("a")
+            for a in a_list:
+                if "href" in a.attrs:
+                    url = response.nice_join(a["href"])
+                    if response.is_url(url):
+                        yield Request(url=url, callback=self.procces2)
+        else:
+            print response.request.url
 
 
 if __name__ == '__main__':
