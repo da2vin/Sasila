@@ -67,6 +67,8 @@ class RequestSpider(object):
         self._spider_status = 'stop'
 
     def start(self):
+        self._spider_status = 'start'
+        self._queue = PriorityQueue(self._spider_id, self._processor)
         if len(self._processor.start_requests) > 0:
             for start_request in self._processor.start_requests:
                 if self.should_follow(start_request):
@@ -83,6 +85,7 @@ class RequestSpider(object):
                 self._crawl(batch)
             if self._spider_status == 'stop':
                 break
+        logger.info("STOP SUCCESS")
 
     def _batch_requests(self):
         batch = []
