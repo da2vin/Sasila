@@ -25,8 +25,9 @@ def find_spider(spider_id):
 
 @slow_spider.route('/start')
 def start_spider():
-    manager.start_spider(request.args['spider_id'])
-    return 'success:' + request.args['spider_id']
+    spider_id = request.args['spider_id']
+    manager.start_spider(spider_id)
+    return 'success:' + spider_id
 
 
 @slow_spider.route('/restart')
