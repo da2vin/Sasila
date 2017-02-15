@@ -16,6 +16,7 @@ sys.setdefaultencoding('utf-8')
 class FirstProcessor(BaseProcessor):
     spider_id = 'test'
     spider_name = 'test'
+    allowed_domains = ['mzitu.com']
     start_requests = [Request(url="http://www.mzitu.com/")]
 
     def process(self, response):
