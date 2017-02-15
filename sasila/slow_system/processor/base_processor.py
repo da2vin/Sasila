@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import sys
 import re
+from bs4 import BeautifulSoup as bs
 from sasila.slow_system.downloader.http.spider_request import Request
 
 reload(sys)
@@ -21,11 +22,23 @@ class Rule(object):
 
 
 class LinkExtractor(object):
-    def __init__(self, regex_str=None):
-        self.regex = re.compile(regex_str)
+    def __init__(self, regex_str=None, css_str=None, process_value=None):
+        if not regex_str:
+            self.regex = re.compile(regex_str)
+        else:
+            self.regex = None
+        self.css_str = css_str
+        self.process_value = process_value
 
     def extract_links(self, response):
-        return [response.nice_join(link) for link in self.regex.findall(response.m_response.content)]
+        if self.process_value:
+            return [response.nice_join(link) for link in self.process_value(response.m_response.content)]
+        elif self.regex:
+            return [response.nice_join(link) for link in self.regex.findall(response.m_response.content)]
+        elif self.css_str:
+            soup = bs(response.m_response.content)
+            tags = soup.select(self.css_str)
+            return [response.nice_join(tag.attrs["href"]) for tag in tags]
 
 
 class BaseProcessor(object):
