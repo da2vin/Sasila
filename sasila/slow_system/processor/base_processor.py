@@ -36,7 +36,7 @@ class LinkExtractor(object):
         elif self.regex:
             return [response.nice_join(link) for link in self.regex.findall(response.m_response.content)]
         elif self.css_str:
-            soup = bs(response.m_response.content)
+            soup = bs(response.m_response.content, 'lxml')
             tags = soup.select(self.css_str)
             return [response.nice_join(tag.attrs["href"]) for tag in tags]
 
