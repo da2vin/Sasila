@@ -5,8 +5,8 @@ from collections import Iterator
 from sasila.slow_system.downloader.http.spider_request import Request
 from sasila.slow_system.downloader.requests_downloader import RequestsDownLoader
 from sasila.slow_system.scheduler.queue import PriorityQueue
-
 from sasila.slow_system.utils import logger
+import time
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -53,6 +53,15 @@ class RequestSpider(object):
     def init_component(self):
         pass
 
+    def pause(self):
+        self._spider_status = 'pause'
+
+    def conti(self):
+        self._spider_status = 'continue'
+
+    def stop(self):
+        self._spider_status = 'stop'
+
     def start(self):
         if len(self._processor.start_requests) > 0:
             for start_request in self._processor.start_requests:
@@ -60,8 +69,15 @@ class RequestSpider(object):
                 self._queue.push(start_request)
                 logger.info("start request:" + str(start_request))
         for batch in self._batch_requests():
+            if self._spider_status == 'pause':
+                while True:
+                    time.sleep(1)
+                    if self._spider_status == 'continue':
+                        break
             if len(batch) > 0:
                 self._crawl(batch)
+            if self._spider_status == 'stop':
+                break
 
     def _batch_requests(self):
         batch = []
