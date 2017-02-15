@@ -20,11 +20,11 @@ class MezituProcessor(BaseProcessor):
     start_requests = [Request(url='http://www.mzitu.com/xinggan')]
 
     rules = (
-        Rule(LinkExtractor(regex_str="http\://i\.meizitu\.net/\d{4}/\d{2}/[0-9a-z]+\.jpg"),
+        Rule(LinkExtractor(regex_str=r"http://i.meizitu.net/\d{4}/\d{2}/[0-9a-z]+.jpg"),
              callback="save", priority=3),
-        Rule(LinkExtractor(regex_str="http\://www\.mzitu\.com/\d+"), priority=1),
-        Rule(LinkExtractor(regex_str="http\://www\.mzitu\.com/\d+/\d+"), priority=2),
-        Rule(LinkExtractor(regex_str="http\://www\.mzitu\.com/xinggan/page/\d+"), priority=0),
+        Rule(LinkExtractor(regex_str=r"http://www.mzitu.com/\d+"), priority=1),
+        Rule(LinkExtractor(regex_str=r"http://www.mzitu.com/\d+/\d+"), priority=2),
+        Rule(LinkExtractor(regex_str=r"http://www.mzitu.com/xinggan/page/\d+"), priority=0),
     )
 
     def save(self, response):
