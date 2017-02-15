@@ -6,6 +6,8 @@ from sasila.slow_system.downloader.http.spider_request import Request
 from sasila.slow_system.downloader.requests_downloader import RequestsDownLoader
 from sasila.slow_system.scheduler.queue import PriorityQueue
 from sasila.slow_system.utils import logger
+from sasila.slow_system.utils.httpobj import urlparse_cached
+import re
 import time
 
 reload(sys)
@@ -19,6 +21,7 @@ def _priority_compare(r1, r2):
 class RequestSpider(object):
     def __init__(self, processor=None, downloader=None, scheduler=None):
         self._processor = processor
+        self._host_regex = self.get_host_regex()
         self._spider_status = 0
         self._pipelines = []
         self._batch_size = 99
@@ -65,9 +68,10 @@ class RequestSpider(object):
     def start(self):
         if len(self._processor.start_requests) > 0:
             for start_request in self._processor.start_requests:
-                start_request.duplicate_remove = False
-                self._queue.push(start_request)
-                logger.info("start request:" + str(start_request))
+                if self.should_follow(start_request):
+                    start_request.duplicate_remove = False
+                    self._queue.push(start_request)
+                    logger.info("start request:" + str(start_request))
         for batch in self._batch_requests():
             if self._spider_status == 'pause':
                 while True:
@@ -104,7 +108,8 @@ class RequestSpider(object):
                 for item in callback:
                     if isinstance(item, Request):
                         # logger.info("push request to queue..." + str(item))
-                        self._queue.push_pipe(item, pipe)
+                        if self.should_follow(item):
+                            self._queue.push_pipe(item, pipe)
                     else:
                         for pipeline in self._pipelines:
                             pipeline.process_item(item)
@@ -112,7 +117,22 @@ class RequestSpider(object):
             else:
                 if isinstance(callback, Request):
                     # logger.info("push request to queue..." + str(back))
-                    self._queue.push(callback)
+                    if self.should_follow(callback):
+                        self._queue.push(callback)
                 else:
                     for pipeline in self._pipelines:
                         pipeline.process_item(callback)
+
+    def should_follow(self, request):
+        regex = self._host_regex
+        # hostname can be None for wrong urls (like javascript links)
+        host = urlparse_cached(request).hostname or ''
+        return bool(regex.search(host))
+
+    def get_host_regex(self):
+        """Override this method to implement a different offsite policy"""
+        allowed_domains = getattr(self._processor, 'allowed_domains', None)
+        if not allowed_domains:
+            return re.compile('')  # allow all by default
+        regex = r'^(.*\.)?(%s)$' % '|'.join(re.escape(d) for d in allowed_domains if d is not None)
+        return re.compile(regex)

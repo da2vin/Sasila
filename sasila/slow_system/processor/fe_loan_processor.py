@@ -16,6 +16,7 @@ sys.setdefaultencoding('utf-8')
 class FeProcessor(BaseProcessor):
     spider_id = 'mzitu'
     spider_name = 'mzitu'
+    allowed_domains = ['58.com']
     start_requests = [Request(url='http://www.58.com/daikuan/changecity/')]
 
     rules = (
