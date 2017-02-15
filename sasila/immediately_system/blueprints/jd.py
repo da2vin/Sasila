@@ -14,7 +14,7 @@ im_jd = Blueprint('im_jd', __name__)
 jd_manager = JdManager()
 
 
-@im_jd.route('/getcollecttoken')
+@im_jd.route('/get_collect_token')
 def get_collect_token():
     return jd_manager.init_process(request.args['company_account'], request.args['name'],
                                    request.args['identity_card_number'], request.args['cell_phone_number'], 0)
