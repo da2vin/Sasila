@@ -23,7 +23,7 @@ class Rule(object):
 
 class LinkExtractor(object):
     def __init__(self, regex_str=None, css_str=None, process_value=None):
-        if not regex_str:
+        if regex_str:
             self.regex = re.compile(regex_str)
         else:
             self.regex = None
@@ -55,7 +55,8 @@ class BaseProcessor(object):
             rules = ()
         for rule in rules:
             links = rule.link_extractor.extract_links(response)
-            for link in links:
-                request = Request(url=link, callback=rule.callback, priority=rule.priority)
-                request = rule.process_request(request)
-                yield request
+            if links:
+                for link in links:
+                    request = Request(url=link, callback=rule.callback, priority=rule.priority)
+                    request = rule.process_request(request)
+                    yield request

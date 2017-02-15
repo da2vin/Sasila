@@ -28,7 +28,7 @@ class MezituProcessor(BaseProcessor):
     )
 
     def save(self, response):
-        if response.m_response.content:
+        if response.m_response:
             if not os.path.exists("img"):
                 os.mkdir("img")
             with open("img/" + str(uuid.uuid1()) + ".jpg", 'wb') as fs:
