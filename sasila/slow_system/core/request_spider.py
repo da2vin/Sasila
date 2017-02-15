@@ -27,6 +27,7 @@ class RequestSpider(object):
         self._batch_size = 99
         self._spider_name = processor.spider_name
         self._spider_id = processor.spider_id
+        self._process_count = 0
 
         if not downloader:
             self._downloader = RequestsDownLoader()
@@ -111,6 +112,7 @@ class RequestSpider(object):
                         if self.should_follow(item):
                             self._queue.push_pipe(item, pipe)
                     else:
+                        self._process_count += 1
                         for pipeline in self._pipelines:
                             pipeline.process_item(item)
                 pipe.execute()
@@ -120,6 +122,7 @@ class RequestSpider(object):
                     if self.should_follow(callback):
                         self._queue.push(callback)
                 else:
+                    self._process_count += 1
                     for pipeline in self._pipelines:
                         pipeline.process_item(callback)
 

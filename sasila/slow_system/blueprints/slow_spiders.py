@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-from flask import Blueprint
+from flask import Blueprint, request
 from sasila.slow_system.manager.spider_manager import SpiderManager
 import json
 
@@ -24,8 +24,9 @@ def find_spider(spider_id):
 
 
 @slow_spider.route('/start')
-def start_spider(spider_id):
-    return json.dumps(manager.start_spider(spider_id))
+def start_spider():
+    manager.start_spider(request.args['spider_id'])
+    return 'success:' + request.args['spider_id']
 
 
 @slow_spider.route('/restart')
@@ -34,18 +35,26 @@ def restart_spider(spider_id):
 
 
 @slow_spider.route('/stop')
-def stop_spider(spider_id):
-    return json.dumps(manager.stop_spider(spider_id))
+def stop_spider():
+    manager.stop_spider(request.args['spider_id'])
+    return 'success:stop'
 
 
 @slow_spider.route('/pause')
-def pause_spider(spider_id):
-    return json.dumps(manager.pause_spider(spider_id))
+def pause_spider():
+    manager.pause_spider(request.args['spider_id'])
+    return 'success:pause'
+
+
+@slow_spider.route('/coninue')
+def coninue_spider():
+    manager.continue_spider(request.args['spider_id'])
+    return 'success:coninue'
 
 
 @slow_spider.route('/detail')
-def get_spider_detail(spider_id):
-    return json.dumps(manager.get_spider_detail(spider_id))
+def get_spider_detail():
+    return manager.get_spider_detail(request.args['spider_id'])
 
 
 @slow_spider.route('/init')

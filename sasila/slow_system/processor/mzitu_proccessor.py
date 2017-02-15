@@ -53,5 +53,7 @@ class MezituProcessor(BaseProcessor):
                 yield response.m_response.content
 
 
+mzitu_spider = RequestSpider(MezituProcessor()).set_pipeline(PicPipeline())
+
 if __name__ == '__main__':
     spider = RequestSpider(MezituProcessor()).set_pipeline(PicPipeline()).start()
