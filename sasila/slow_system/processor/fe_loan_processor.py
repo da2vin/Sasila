@@ -13,7 +13,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 
-class FE_Processor(BaseProcessor):
+class FeProcessor(BaseProcessor):
     spider_id = 'mzitu'
     spider_name = 'mzitu'
     start_requests = [Request(url='http://www.58.com/daikuan/changecity/')]
@@ -26,8 +26,8 @@ class FE_Processor(BaseProcessor):
 
     def save(self, response):
         if response.m_response:
-            print bs(response.m_response.content, 'lxml').title
+            print bs(response.m_response.content, 'lxml').title.string
 
 
 if __name__ == '__main__':
-    spider = RequestSpider(FE_Processor()).set_pipeline(PicPipeline()).start()
+    spider = RequestSpider(FeProcessor()).set_pipeline(PicPipeline()).start()
