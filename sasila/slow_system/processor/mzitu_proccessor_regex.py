@@ -17,7 +17,7 @@ sys.setdefaultencoding('utf-8')
 class MezituProcessor(BaseProcessor):
     spider_id = 'mzitu'
     spider_name = 'mzitu'
-    allowed_domains = ['mzitu.com']
+    allowed_domains = ['mzitu.com', 'meizitu.net']
     start_requests = [Request(url='http://www.mzitu.com/xinggan')]
 
     rules = (
