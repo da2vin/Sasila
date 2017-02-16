@@ -43,7 +43,7 @@ class JdMessage(object):
         self.qr_cookies = None
 
 
-class JdImSpider(object):
+class JdRequest(object):
     def __init__(self):
         self.web_driver_pool = None  # type:  Queue
 

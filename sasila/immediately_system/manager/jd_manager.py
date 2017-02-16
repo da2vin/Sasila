@@ -3,7 +3,7 @@
 import datetime
 import json
 import uuid
-from sasila.immediately_system.crawler.jd.request import JdImSpider
+from sasila.immediately_system.crawler.jd.request import JdRequest
 from sasila.immediately_system.database.jd_database import *
 
 reload(sys)
@@ -25,7 +25,7 @@ class JdResponse(object):
 class JdManager(object):
     def __init__(self):
         self.database = JdDatabase()
-        self.imspider = JdImSpider()
+        self.imspider = JdRequest()
         self.imspider.init_pool()
 
     def init_process(self, company_account, name, identity_card_number, cell_phone_number, process_code):
