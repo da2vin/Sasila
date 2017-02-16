@@ -13,8 +13,8 @@ sys.setdefaultencoding('utf-8')
 class Base(object):
     """Per-spider base queue class"""
 
-    def __init__(self, task_id, processor):
-        self.task_id = task_id
+    def __init__(self, processor):
+        self.task_id = processor.spider_id
         self.processor = processor
         self._filter = BloomFilter(key=self.task_id)
         self._server = redis.StrictRedis()

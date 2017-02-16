@@ -33,7 +33,9 @@ class RequestSpider(object):
             self._downloader = RequestsDownLoader()
 
         if not scheduler:
-            self._queue = PriorityQueue(self._spider_id, self._processor)
+            self._queue = PriorityQueue(self._processor)
+        else:
+            self._queue = scheduler
 
     def create(self, processor):
         self._processor = processor
@@ -68,7 +70,7 @@ class RequestSpider(object):
 
     def start(self):
         self._spider_status = 'start'
-        self._queue = PriorityQueue(self._spider_id, self._processor)
+        self._queue = PriorityQueue(self._processor)
         if len(self._processor.start_requests) > 0:
             for start_request in self._processor.start_requests:
                 if self.should_follow(start_request):
