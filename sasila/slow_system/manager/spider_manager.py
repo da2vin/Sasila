@@ -27,7 +27,9 @@ class SpiderManager(object):
 
     def start_spider(self, spider_id):
         # Process(target=self.spider_list[spider_id].start).start()
-        threading.Thread(target=self.spider_list[spider_id].start).start()
+        thread = threading.Thread(target=self.spider_list[spider_id].start)
+        thread.setDaemon(True)
+        thread.start()
 
     def restart_spider(self, spider_id):
         pass
