@@ -45,25 +45,25 @@ class RequestsDownLoader(BaseDownLoader):
 
             if request.method.upper() == "GET":
                 batch_requests.append(grequests.get(
-                        session=session,
-                        url=request.url,
-                        headers=request.headers,
-                        cookies=self._cookies,
-                        verify=False,
-                        allow_redirects=request.allow_redirects,
-                        timeout=request.timeout
+                    session=session,
+                    url=request.url,
+                    headers=request.headers,
+                    cookies=self._cookies,
+                    verify=False,
+                    allow_redirects=request.allow_redirects,
+                    timeout=request.timeout
                 ))
             elif request.method.upper() == "POST":
                 batch_requests.append(grequests.post(
-                        session=session,
-                        url=request.url,
-                        data=request.data,
-                        json=request.json,
-                        headers=request.headers,
-                        cookies=self._cookies,
-                        verify=False,
-                        allow_redirects=request.allow_redirects,
-                        timeout=request.timeout
+                    session=session,
+                    url=request.url,
+                    data=request.data,
+                    json=request.json,
+                    headers=request.headers,
+                    cookies=self._cookies,
+                    verify=False,
+                    allow_redirects=request.allow_redirects,
+                    timeout=request.timeout
                 ))
             else:
                 pass
@@ -74,8 +74,8 @@ class RequestsDownLoader(BaseDownLoader):
         index = 0
         for ret in rets:
             true_response = Response(
-                    m_response=ret,
-                    request=batch[index],
+                m_response=ret,
+                request=batch[index],
             )
             true_responses.append(true_response)
             logger.info(true_response)
