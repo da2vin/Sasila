@@ -22,7 +22,7 @@ class RequestSpider(object):
     def __init__(self, processor=None, downloader=None, scheduler=None):
         self._processor = processor
         self._host_regex = self._get_host_regex()
-        self._spider_status = 0
+        self._spider_status = 'stop'
         self._pipelines = []
         self._batch_size = 99
         self._spider_name = processor.spider_name
