@@ -53,12 +53,6 @@ class RequestSpider(object):
         self._pipelines.append(pipeline)
         return self
 
-    def get_status(self):
-        return self._spider_status
-
-    def init_component(self):
-        pass
-
     def stop(self):
         self._spider_status = 'stop'
 
