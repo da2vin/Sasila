@@ -21,7 +21,7 @@ def _priority_compare(r1, r2):
 class RequestSpider(object):
     def __init__(self, processor=None, downloader=None, scheduler=None):
         self._processor = processor
-        self._host_regex = self.get_host_regex()
+        self._host_regex = self._get_host_regex()
         self._spider_status = 0
         self._pipelines = []
         self._batch_size = 99
@@ -73,7 +73,7 @@ class RequestSpider(object):
         self._queue = PriorityQueue(self._processor)
         if len(self._processor.start_requests) > 0:
             for start_request in self._processor.start_requests:
-                if self.should_follow(start_request):
+                if self._should_follow(start_request):
                     start_request.duplicate_remove = False
                     self._queue.push(start_request)
                     logger.info("start request:" + str(start_request))
@@ -114,7 +114,7 @@ class RequestSpider(object):
                 for item in callback:
                     if isinstance(item, Request):
                         # logger.info("push request to queue..." + str(item))
-                        if self.should_follow(item):
+                        if self._should_follow(item):
                             self._queue.push_pipe(item, pipe)
                     else:
                         self._process_count += 1
@@ -124,20 +124,20 @@ class RequestSpider(object):
             else:
                 if isinstance(callback, Request):
                     # logger.info("push request to queue..." + str(back))
-                    if self.should_follow(callback):
+                    if self._should_follow(callback):
                         self._queue.push(callback)
                 else:
                     self._process_count += 1
                     for pipeline in self._pipelines:
                         pipeline.process_item(callback)
 
-    def should_follow(self, request):
+    def _should_follow(self, request):
         regex = self._host_regex
         # hostname can be None for wrong urls (like javascript links)
         host = urlparse_cached(request).hostname or ''
         return bool(regex.search(host))
 
-    def get_host_regex(self):
+    def _get_host_regex(self):
         """Override this method to implement a different offsite policy"""
         allowed_domains = getattr(self._processor, 'allowed_domains', None)
         if not allowed_domains:
