@@ -1,40 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-import re
+from hashlib import md5
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
+str_input = "aaaaaaaaaaa"
+m5 = md5()
+m5.update(str_input)
+str_input = m5.hexdigest()
+key = "test"
+blockNum = 1235
+name = key + str(int(str_input[0:2], 16) % blockNum)
 
-def test(cls):
-    def _test():
-        clsName = re.findall('(\w+)', repr(cls))[-1]
-        print 'Call %s.__init().' % clsName
-        return cls()
-
-    return _test
-
-
-@test
-class sy(object):
-    value = 32
-
-
-def extract_by_css(css_expression):
-    def _extract_by_css(processor):
-        def __extract_by_css():
-            return 1
-        return css_expression
-    return _extract_by_css
-
-
-class Processor(object):
-    @extract_by_css('123')
-    @property
-    def title(self):
-        return self
-
-
-p = Processor()
-print p.title
+print name

@@ -22,7 +22,7 @@ class RequestSpider(object):
     def __init__(self, processor=None, downloader=None, scheduler=None):
         self._processor = processor
         self._host_regex = self._get_host_regex()
-        self._spider_status = 'stop'
+        self._spider_status = 'stopped'
         self._pipelines = []
         self._batch_size = 99
         self._spider_name = processor.spider_name
@@ -54,7 +54,16 @@ class RequestSpider(object):
         return self
 
     def stop(self):
-        self._spider_status = 'stop'
+        if self._spider_status == 'stopped':
+            logger.info("STOP %s SUCCESS" % self._spider_id)
+            return
+        elif self._spider_status == 'stopping':
+            while self._spider_status == 'stopping':
+                pass
+        elif self._spider_status == 'start':
+            self._spider_status = 'stopping'
+            while self._spider_status == 'stopping':
+                time.sleep(1)
 
     def start(self):
         logger.info("START %s SUCCESS" % self._spider_id)
@@ -69,9 +78,15 @@ class RequestSpider(object):
         for batch in self._batch_requests():
             if len(batch) > 0:
                 self._crawl(batch)
-            if self._spider_status == 'stop':
+            if self._spider_status == 'stopping':
                 break
+        self._spider_status = 'stopped'
         logger.info("STOP %s SUCCESS" % self._spider_id)
+
+    def restart(self):
+        self._queue = PriorityQueue(self._processor)
+        self._queue.clear()
+        self.start()
 
     def _batch_requests(self):
         batch = []

@@ -26,17 +26,18 @@ class SpiderManager(object):
         pass
 
     def start_spider(self, spider_id):
-        if self.spider_list[spider_id]._spider_status == "stop":
+        if self.spider_list[spider_id]._spider_status == "stopped":
             thread = threading.Thread(target=self.spider_list[spider_id].start)
             thread.setDaemon(True)
             thread.start()
 
     def restart_spider(self, spider_id):
-        pass
+        thread = threading.Thread(target=self.spider_list[spider_id].restart)
+        thread.setDaemon(True)
+        thread.start()
 
     def stop_spider(self, spider_id):
-        if self.spider_list[spider_id]._spider_status == "start":
-            self.spider_list[spider_id].stop()
+        self.spider_list[spider_id].stop()
 
     def get_spider_detail(self, spider_id):
         return str(self.spider_list[spider_id]._process_count)

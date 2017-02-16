@@ -31,9 +31,19 @@ class Base(object):
         """Pop a request"""
         raise NotImplementedError
 
+    def clear_queue(self):
+        self._server.delete(self.task_id)
+
+    def clear_filter(self):
+        keys = self._server.keys(self.task_id + '*')
+        for key in keys:
+            if key != self.task_id:
+                self._server.delete(key)
+
     def clear(self):
-        """Clear queue/stack"""
-        self.server.delete(self.key)
+        keys = self._server.keys(self.task_id + '*')
+        for key in keys:
+            self._server.delete(key)
 
 
 class PriorityQueue(Base):
@@ -69,9 +79,6 @@ class PriorityQueue(Base):
             return request_from_dict(cPickle.loads(results[0]), self.processor)
         else:
             return None
-
-    def clear(self):
-        self._server.delete(self.task_id)
 
     def __len__(self):
         return self._server.zcard(self.task_id)

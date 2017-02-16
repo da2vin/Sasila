@@ -62,10 +62,21 @@ class BloomFilter(object):
 
 
 if __name__ == '__main__':
-    """ 第一次运行时会显示 not exists!，之后再运行会显示 exists! """
-    bf = BloomFilter()
-    if bf.is_contains('http://www.baidu.com'):  # 判断字符串是否存在
-        print 'exists!'
-    else:
-        print 'not exists!'
-        bf.insert('http://www.baidu.com')
+    bf1 = BloomFilter(key='test1')
+    bf2 = BloomFilter(key='test2')
+    bf3 = BloomFilter(key='test3')
+    bf4 = BloomFilter(key='test4')
+    bf1.insert('http://www.baidu.com')
+    bf2.insert('http://www.baidu.com')
+    bf3.insert('http://www.baidu.com')
+    bf4.insert('http://www.baidu.com')
+
+    print bf1.server.keys()
+    bf1.clear()
+    print bf1.server.keys()
+    bf2.clear()
+    print bf1.server.keys()
+    bf3.clear()
+    print bf1.server.keys()
+    bf4.clear()
+    print bf1.server.keys()
