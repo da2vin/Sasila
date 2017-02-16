@@ -63,7 +63,7 @@ class RequestSpider(object):
         elif self._spider_status == 'start':
             self._spider_status = 'stopping'
             while self._spider_status == 'stopping':
-                time.sleep(1)
+                pass
 
     def start(self):
         logger.info("START %s SUCCESS" % self._spider_id)
