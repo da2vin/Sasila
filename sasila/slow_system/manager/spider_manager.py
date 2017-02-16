@@ -3,8 +3,6 @@
 import sys
 import json
 from sasila.slow_system.processor.mzitu_proccessor import mzitu_spider
-# import dill
-# from multiprocessing.process import Process
 import threading
 
 reload(sys)
@@ -26,7 +24,6 @@ class SpiderManager(object):
         pass
 
     def start_spider(self, spider_id):
-        # Process(target=self.spider_list[spider_id].start).start()
         thread = threading.Thread(target=self.spider_list[spider_id].start)
         thread.setDaemon(True)
         thread.start()
@@ -36,12 +33,6 @@ class SpiderManager(object):
 
     def stop_spider(self, spider_id):
         self.spider_list[spider_id].stop()
-
-    def pause_spider(self, spider_id):
-        self.spider_list[spider_id].pause()
-
-    def continue_spider(self, spider_id):
-        self.spider_list[spider_id].conti()
 
     def get_spider_detail(self, spider_id):
         return str(self.spider_list[spider_id]._process_count)

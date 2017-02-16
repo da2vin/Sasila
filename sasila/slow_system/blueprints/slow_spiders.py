@@ -41,18 +41,6 @@ def stop_spider():
     return 'success:stop'
 
 
-@slow_spider.route('/pause')
-def pause_spider():
-    manager.pause_spider(request.args['spider_id'])
-    return 'success:pause'
-
-
-@slow_spider.route('/coninue')
-def coninue_spider():
-    manager.continue_spider(request.args['spider_id'])
-    return 'success:coninue'
-
-
 @slow_spider.route('/detail')
 def get_spider_detail():
     return manager.get_spider_detail(request.args['spider_id'])
