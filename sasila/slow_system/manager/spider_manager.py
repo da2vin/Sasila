@@ -3,6 +3,7 @@
 import sys
 import json
 from sasila.slow_system.processor.mzitu_proccessor import mzitu_spider
+from sasila.slow_system.processor.fe_loan_processor import fe_spider
 import threading
 
 reload(sys)
@@ -13,6 +14,7 @@ class SpiderManager(object):
     def __init__(self):
         self.spider_list = dict()
         self.spider_list[mzitu_spider._spider_id] = mzitu_spider
+        self.spider_list[fe_spider._spider_id] = fe_spider
 
     def init_system(self):
         pass

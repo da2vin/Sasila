@@ -63,6 +63,7 @@ class RequestSpider(object):
         self._spider_status = 'stop'
 
     def start(self):
+        logger.info("START %s SUCCESS" % self._spider_id)
         self._spider_status = 'start'
         self._queue = PriorityQueue(self._processor)
         if len(self._processor.start_requests) > 0:
@@ -76,7 +77,7 @@ class RequestSpider(object):
                 self._crawl(batch)
             if self._spider_status == 'stop':
                 break
-        logger.info("STOP SUCCESS")
+        logger.info("STOP %s SUCCESS" % self._spider_id)
 
     def _batch_requests(self):
         batch = []
