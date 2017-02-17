@@ -84,7 +84,7 @@ class RequestSpider(object):
             self._spider_status = 'stopped'
             logger.info("STOP %s SUCCESS" % self._spider_id)
         except Exception:
-            logger.info("%s Exception -- Stopped" % self._spider_id)
+            logger.info("%s -- Exception -- Stopped" % self._spider_id)
             self._spider_status = 'stopped'
 
     def restart(self):
