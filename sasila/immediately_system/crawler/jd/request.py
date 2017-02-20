@@ -6,8 +6,9 @@ import time
 import requests
 from bs4 import BeautifulSoup as bs
 from sasila.slow_system.downloader.web_driver_pool import get_web_driver_pool
-
+from sasila.slow_system.utils.cookie import formart_cookies
 from sasila.slow_system.utils import logger
+from sasila.slow_system.utils import jd_code
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -34,13 +35,9 @@ def abstract(text, start, end):
 
 class JdMessage(object):
     def __init__(self):
-        self.has_login = False
-        self.login_success = False
-        self.success_cookies = None
-        self.need_sms_captch = False
-        self.message = ""
-        self.qr_captcha = None
-        self.qr_cookies = None
+        self.code = ""
+        self.code_description = ""
+        self.cookies = ""
 
 
 class JdRequest(object):
@@ -52,69 +49,35 @@ class JdRequest(object):
         self.web_driver_pool = get_web_driver_pool(1)
         logger.info('init web driver pool success...')
 
-    def login(self, account, password, cookie):
+    def login(self, account, password):
         message = JdMessage()
 
         web = self.web_driver_pool.get()  # type: webdriver.PhantomJS
         web.delete_all_cookies()
-        if self._validate_login(cookie):
-            web.get("https://passport.jd.com/new/login.aspx?ReturnUrl=http%3A%2F%2Fhome.jd.com%2F")
-            element = web.find_element_by_css_selector("div.login-tab.login-tab-r").find_element_by_css_selector("a")
-            element.click()
-            element = web.find_element_by_id("loginname")
-            element.clear()
-            element.send_keys(account)
-            element = web.find_element_by_id("nloginpwd")
-            element.clear()
-            element.send_keys(password)
-            element = web.find_element_by_css_selector("a#loginsubmit")
-            element.click()
-            time.sleep(5)
 
-            if '我的京东' in bs(web.execute_script("return document.documentElement.outerHTML")).title.string:
-                cookie = web.get_cookies()
-                result = json.dumps(cookie).decode('unicode-escape')
-                message.login_success = True
-                message.message = '登录成功'
-            else:
-                # 需要手机验证码
-                if True:
-                    message.need_sms_captch = True
-                    message.message = '需要手机验证码'
-                if True:
-                    message.message = '登录失败：' + '原因'
+        web.get("https://passport.jd.com/new/login.aspx?ReturnUrl=http%3A%2F%2Fhome.jd.com%2F")
+        element = web.find_element_by_css_selector("div.login-tab.login-tab-r").find_element_by_css_selector("a")
+        element.click()
+        element = web.find_element_by_id("loginname")
+        element.clear()
+        element.send_keys(account)
+        element = web.find_element_by_id("nloginpwd")
+        element.clear()
+        element.send_keys(password)
+        element = web.find_element_by_css_selector("a#loginsubmit")
+        element.click()
+        time.sleep(3)
+
+        if '我的京东' in bs(web.execute_script("return document.documentElement.outerHTML"), 'lxml').title.string:
+            message.code = jd_code.LOGIN_SUCCESS
+            message.code_description = "登录成功"
+            message.cookies = formart_cookies(web.get_cookies())
         else:
-            message.has_login = True
-            message.message = '已经登录'
+            # 需要手机验证码等等状况
+            pass
 
         self.web_driver_pool.put(web)
         return message
-
-    def _validate_login(self, cookie):
-        if not cookie:
-            return True
-        cookies = json.loads(cookie)
-        cookie_dict = dict()
-        for c in cookies:
-            cookie_dict[c['name']] = c['value']
-        headers = dict()
-        headers[
-            "User-Agent"] = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36"
-        headers["Accept"] = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8"
-        headers["Accept-Encoding"] = "gzip, deflate, sdch"
-        headers["Accept-Language"] = "zh-CN,zh;q=0.8"
-        session = requests.Session()
-        response = session.get("https://home.jd.com/", cookies=cookie_dict, headers=headers)
-
-        # for c in cookies:
-        #     web.add_cookie({k: c[k] for k in ('name', 'value', 'domain', 'path', 'expiry') if k in c})
-        # web.get("https://home.jd.com/")
-        # web.execute_script("return document.documentElement.outerHTML")
-
-        if '我的京东' in bs(response.text).title.string:
-            return False
-        else:
-            return True
 
     def qr_login(self):
         message = JdMessage()

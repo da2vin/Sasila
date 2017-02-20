@@ -14,26 +14,20 @@ Base = declarative_base()
 
 class Process(Base):
     # 表的名字:
-    __tablename__ = 'process_tbl'
+    __tablename__ = 'crawler_flow_info'
     # 表的结构:
-    id = Column(Integer, primary_key=True)
-    collect_token = Column(String(50))
-    process_code = Column(Integer)
-    process_cookie = Column(String(20000))
-    start_time = Column(DateTime)
-    expire_time = Column(DateTime)
-    company_account = Column(String(50))
-    name = Column(String(50))
-    identity_card_number = Column(String(50))
-    cell_phone_number = Column(String(50))
-    account = Column(String(50))
-    password = Column(String(50))
+    collect_token = Column(String(100), primary_key=True)
+    customer_id = Column(String(100))
+    token_valid_time = Column(Integer)
+    token_create_time = Column(Integer)
+    status = Column(String(10))
+    cookies = Column(String(5000))
 
 
 class JdDatabase(object):
     def __init__(self):
         # 初始化数据库连接:
-        self.engine = create_engine('mysql+mysqlconnector://root:root@192.168.3.210:3306/jd_manager')
+        self.engine = create_engine('mysql+mysqlconnector://root:root@192.168.3.210:3306/hiveengine')
         # 创建DBSession类型:
         self.DBSession = sessionmaker(bind=self.engine)
         self._create_all()
