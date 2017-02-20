@@ -48,3 +48,16 @@ class JdDatabase(object):
 
     def create_session(self):
         return self.DBSession()
+
+    def query_cookie(self, collect_token):
+        session = self.DBSession()
+        cookies = session.query(Process).filter(Process.collect_token == collect_token).first().cookies
+        session.close()
+        return cookies
+
+    def update_cookie(self, collect_token, cookies):
+        session = self.DBSession()
+        session.query(Process).filter(Process.collect_token == collect_token).update({
+            Process.cookies: cookies
+        })
+        session.close()

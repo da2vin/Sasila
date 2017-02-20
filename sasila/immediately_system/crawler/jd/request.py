@@ -6,7 +6,7 @@ import time
 import requests
 from bs4 import BeautifulSoup as bs
 from sasila.slow_system.downloader.web_driver_pool import get_web_driver_pool
-from sasila.slow_system.utils.cookie import formart_cookies
+from sasila.slow_system.utils.cookie import formart_selenium_cookies
 from sasila.slow_system.utils import logger
 from sasila.slow_system.utils import jd_code
 
@@ -38,6 +38,7 @@ class JdMessage(object):
         self.code = ""
         self.code_description = ""
         self.cookies = ""
+        self.qr_captcha = ""
 
 
 class JdRequest(object):
@@ -69,9 +70,9 @@ class JdRequest(object):
         time.sleep(3)
 
         if '我的京东' in bs(web.execute_script("return document.documentElement.outerHTML"), 'lxml').title.string:
-            message.code = jd_code.LOGIN_SUCCESS
+            message.code = jd_code.SUCCESS
             message.code_description = "登录成功"
-            message.cookies = formart_cookies(web.get_cookies())
+            message.cookies = formart_selenium_cookies(web.get_cookies())
         else:
             # 需要手机验证码等等状况
             pass
@@ -89,13 +90,16 @@ class JdRequest(object):
         headers["Accept-Language"] = "zh-CN,en,*"
         headers["Referer"] = "https://passport.jd.com/new/login.aspx?ReturnUrl=http%3A%2F%2Fhome.jd.com%2F"
         session = requests.Session()
-        response = session.get("https://qr.m.jd.com/show?appid=133&size=147&t=1486614526653")
-        message.qr_captcha = response.content
-        message.qr_cookies = session.cookies.get_dict()
+        response = session.get("https://qr.m.jd.com/show?appid=133&size=147&t=" + str(time.time()))
+
+        message.code = jd_code.SUCCESS
+        message.qr_captcha = response.content.encode("base64")
+        message.cookies = json.dumps(session.cookies.get_dict()).decode("unicode-escape")
         return message
 
-    def submit_qrlogin(self, cookie_dict):
+    def submit_qrlogin(self, cookies):
         message = JdMessage()
+
         headers = dict()
         headers[
             "User-Agent"] = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36"
@@ -106,13 +110,16 @@ class JdRequest(object):
         session = requests.Session()
 
         response = session.get("https://qr.m.jd.com/check?callback=jQuery6172296&appid=133&_=1486609849337",
-                               cookies=json.loads(cookie_dict),
+                               cookies=json.loads(cookies),
                                headers=headers)
 
         ticket = abstract(response.content, '\"ticket\" : \"', '\"')
-        print ticket
 
         headers['X-Requested-With'] = 'XMLHttpRequest'
         response = session.get("https://passport.jd.com/uc/qrCodeTicketValidation?t=" + ticket, headers=headers)
 
-        return response.headers
+        message.code = jd_code.SUCCESS
+        message.code_description = "登录成功"
+        message.cookies = json.dumps(session.cookies.get_dict()).decode("unicode-escape")
+
+        return message

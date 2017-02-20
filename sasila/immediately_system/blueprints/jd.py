@@ -19,13 +19,13 @@ def login():
     return jd_manager.login(request.args['collect_token'], request.args['account'], request.args['password'])
 
 
-@im_jd.route('/qr_login')
+@im_jd.route('/qrlogin')
 def qr_login():
-    pic_str = jd_manager.qrlogin(request.args['collect_token'], request.args['account'])
-    result = '<image src=\"data:image/png;base64,' + pic_str + '\">'
+    message = jd_manager.qrlogin(request.args['collect_token'])
+    result = '<image src=\"data:image/png;base64,' + json.loads(message, strict=False)["qr_captcha"] + '\"><br>' + message
     return result
 
 
 @im_jd.route('/submit_qrlogin')
 def submit_qrlogin():
-    return json.dumps(dict(jd_manager.submit_qrlogin(request.args['collect_token'])))
+    return jd_manager.submit_qrlogin(request.args['collect_token'])
