@@ -14,7 +14,8 @@ def formart_selenium_cookies(cookies):
     return json.dumps(cookie_dict).decode('unicode-escape')
 
 
-def formart_requests_cookies(cookies):
-    cookie_list = [{'name': c[0], 'value': c[1], 'path': '/', 'domain': '.jd.com'} for c in
+def selenium_add_cookies(cookies, web):
+    cookie_list = [{'name': c[0], 'value': c[1], 'path': '/', 'domain': '.jd.com', 'expiry': 4070880000} for c in
                    dict(json.loads(cookies)).items()]
-    return cookie_list
+    for c in cookie_list:
+        web.add_cookie(c)
