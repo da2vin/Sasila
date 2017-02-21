@@ -22,8 +22,9 @@ def login():
 @im_jd.route('/qrlogin')
 def qr_login():
     message = jd_manager.qrlogin(request.args['collect_token'])
-    result = '<image src=\"data:image/png;base64,' + json.loads(message, strict=False)["qr_captcha"] + '\"><br>' + message
-    return result
+    # result = '<image src=\"data:image/png;base64,' + json.loads(message, strict=False)["qr_captcha"] + '\"><br>' + message
+    # return result
+    return message
 
 
 @im_jd.route('/submit_qrlogin')
