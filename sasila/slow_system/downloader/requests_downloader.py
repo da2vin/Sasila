@@ -28,6 +28,16 @@ class RequestsDownLoader(BaseDownLoader):
         self._headers["Accept-Language"] = "zh-CN,zh;q=0.8"
         self._request_retry = HTTPAdapter(max_retries=3)
 
+        cookie_dict = dict()
+        cookie_dict["gr_user_id"] = "3c9fbeae-850c-46e7-b501-b45652836354"
+        cookie_dict["_uab_collina"] = "148783172278219810721299"
+        cookie_dict[
+            "_umdata"] = "C234BF9D3AFA6FE7C851713A473B2B014A2CC2A3397878C628BEDB744FA54C0A33735D552D46B587CD43AD3E795C914C09FE191DC821EA19E2C0CEA546FD2E0D"
+        cookie_dict["PHPSESSID"] = "ee316ojouckku1p7dvoe9ldjn5"
+        cookie_dict["CNZZDATA1254842228"] = "379250621-1487830680-%7C1487830680"
+        cookie_dict["gr_session_id_9c1eb7420511f8b2"] = "2a1c1da6-4df1-4b34-8f77-ab3cdc368365"
+        self._cookies = cookie_dict
+
     def init_loginer(self, account, password):
         self._cookies = self.loginer.logint(account, password)
 

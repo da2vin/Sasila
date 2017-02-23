@@ -9,6 +9,7 @@ from sasila.slow_system.utils import logger
 from sasila.slow_system.utils.httpobj import urlparse_cached
 import re
 import time
+import traceback
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -84,7 +85,7 @@ class RequestSpider(object):
             self._spider_status = 'stopped'
             logger.info("STOP %s SUCCESS" % self._spider_id)
         except Exception:
-            logger.info("%s -- Exception -- Stopped" % self._spider_id)
+            logger.info("%s -- Exception -- Stopped -- %s" % (self._spider_id, traceback.format_exc()))
             self._spider_status = 'stopped'
 
     def restart(self):
