@@ -5,6 +5,7 @@ import sys
 from sasila.slow_system.pipeline.kafa_pipeline import KafkaPipeline
 from sasila.slow_system.core.request_spider import RequestSpider
 from sasila.slow_system.pipeline.console_pipeline import ConsolePipeline
+from sasila.slow_system.pipeline.text_pipeline import TextPipeline
 from base_processor import BaseProcessor
 from sasila.slow_system.downloader.http.spider_request import Request
 from bs4 import BeautifulSoup as bs
@@ -140,6 +141,6 @@ class QccProcessor(BaseProcessor):
                 print traceback.format_exc()
 
 
-qcc_spider = RequestSpider(QccProcessor(), time_sleep=1).set_pipeline(KafkaPipeline()).set_pipeline(ConsolePipeline())
+qcc_spider = RequestSpider(QccProcessor(), time_sleep=1).set_pipeline(KafkaPipeline()).set_pipeline(TextPipeline()).set_pipeline(ConsolePipeline())
 if __name__ == '__main__':
     qcc_spider.start()
