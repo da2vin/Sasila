@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 import sys
 
-from sasila.slow_system.core.request_spider import RequestSpider
 from sasila.slow_system.pipeline.kafa_pipeline import KafkaPipeline
+from sasila.slow_system.core.request_spider import RequestSpider
+from sasila.slow_system.pipeline.console_pipeline import ConsolePipeline
 from base_processor import BaseProcessor
 from sasila.slow_system.downloader.http.spider_request import Request
 from bs4 import BeautifulSoup as bs
@@ -35,15 +36,6 @@ class QccProcessor(BaseProcessor):
             request.meta["province_name"] = province_name
             request.meta["province_id"] = province_id
             yield request
-
-            # province_name = "北京"
-            # province_id = "BJ"
-            # request = Request(
-            #         url="http://www.qichacha.com/search_getCityListHtml?province=" + province_id + "&q_type=1",
-            #         callback="get_city", priority=0)
-            # request.meta["province_name"] = province_name
-            # request.meta["province_id"] = province_id
-            # yield request
 
     def get_city(self, response):
         if response.m_response.content == "":
@@ -148,6 +140,6 @@ class QccProcessor(BaseProcessor):
                 print traceback.format_exc()
 
 
-qcc_spider = RequestSpider(QccProcessor(), time_sleep=1).set_pipeline(KafkaPipeline())
+qcc_spider = RequestSpider(QccProcessor(), time_sleep=1).set_pipeline(KafkaPipeline()).set_pipeline(ConsolePipeline())
 if __name__ == '__main__':
     qcc_spider.start()
