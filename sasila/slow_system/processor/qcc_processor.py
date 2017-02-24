@@ -48,7 +48,6 @@ class QccProcessor(BaseProcessor):
             request.meta["city_id"] = ""
             request.meta["province_name"] = response.request.meta["province_name"]
             request.meta["province_id"] = response.request.meta["province_id"]
-            request.meta["only_province_sign"] = "0"
             yield request
         else:
             soup = bs(response.m_response.content, "lxml")
@@ -91,7 +90,7 @@ class QccProcessor(BaseProcessor):
 
         now_page = 1
         while now_page <= total_page:
-            if "only_province_sign" in response.request.meta.keys():
+            if response.request.meta["city_id"] == "":
                 request = Request(
                         url="http://www.qichacha.com/search_index?key=%25E5%25B0%258F%25E9%25A2%259D%25E8%25B4%25B7%25E6%25AC%25BE&ajaxflag=1&province=" +
                             response.request.meta["province_id"] + "&p=" + str(now_page) + "&",
@@ -141,7 +140,7 @@ class QccProcessor(BaseProcessor):
                 print traceback.format_exc()
 
 
-qcc_spider = RequestSpider(QccProcessor(), time_sleep=6).set_pipeline(KafkaPipeline()).set_pipeline(
+qcc_spider = RequestSpider(QccProcessor(), time_sleep=1).set_pipeline(KafkaPipeline()).set_pipeline(
     TextPipeline()).set_pipeline(ConsolePipeline())
 if __name__ == '__main__':
     qcc_spider.start()
