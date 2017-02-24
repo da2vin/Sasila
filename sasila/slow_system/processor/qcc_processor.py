@@ -10,6 +10,7 @@ from base_processor import BaseProcessor
 from sasila.slow_system.downloader.http.spider_request import Request
 from bs4 import BeautifulSoup as bs
 import time
+from sasila.slow_system.utils import logger
 
 import traceback
 
@@ -23,9 +24,13 @@ class QccProcessor(BaseProcessor):
     allowed_domains = ['qichacha.com']
 
     start_requests = [
-        Request(url='http://www.qichacha.com/search?key=%E5%B0%8F%E9%A2%9D%E8%B4%B7%E6%AC%BE')]
+        Request(url='http://www.qichacha.com/search?key=%E5%B0%8F%E9%A2%9D%E8%B4%B7%E6%AC%BE')
+    ]
 
     def process(self, response):
+        if '<script>window.location.href=' in response.m_response.content:
+            logger.error(response.m_response.content + "\n" + response.request.url)
+            yield response.request
         soup = bs(response.m_response.content, "lxml")
         province_list = soup.select_one("dl#provinceOld").select("div.pull-left")[1].select("dd a")
         for province in province_list:
@@ -39,6 +44,9 @@ class QccProcessor(BaseProcessor):
             yield request
 
     def get_city(self, response):
+        if '<script>window.location.href=' in response.m_response.content:
+            logger.error(response.m_response.content + "\n" + response.request.url)
+            yield response.request
         if response.m_response.content == "":
             request = Request(
                     url="http://www.qichacha.com/search_index?key=%25E5%25B0%258F%25E9%25A2%259D%25E8%25B4%25B7%25E6%25AC%25BE&ajaxflag=1&province=" +
@@ -66,17 +74,13 @@ class QccProcessor(BaseProcessor):
                 yield request
 
     def get_all_page(self, response):
-        soup = bs(response.m_response.content, "lxml")
-        try:
-            temp_page = soup.find(lambda tag: tag.name == 'a' and '>' == tag.text).parent.findNextSibling()
-            if temp_page:
-                page = temp_page.select_one("a")
-                if page:
-                    total_page = int(page.string.strip().replace("...", ""))
-                else:
-                    total_page = 1
-            else:
-                temp_page = soup.find(lambda tag: tag.name == 'a' and '>' == tag.text).parent.findPreviousSibling()
+        if '<script>window.location.href=' in response.m_response.content:
+            logger.error(response.m_response.content + "\n" + response.request.url)
+            yield response.request
+        else:
+            soup = bs(response.m_response.content, "lxml")
+            try:
+                temp_page = soup.find(lambda tag: tag.name == 'a' and '>' == tag.text).parent.findNextSibling()
                 if temp_page:
                     page = temp_page.select_one("a")
                     if page:
@@ -84,36 +88,48 @@ class QccProcessor(BaseProcessor):
                     else:
                         total_page = 1
                 else:
-                    total_page = 1
-        except:
-            total_page = 1
+                    temp_page = soup.find(lambda tag: tag.name == 'a' and '>' == tag.text).parent.findPreviousSibling()
+                    if temp_page:
+                        page = temp_page.select_one("a")
+                        if page:
+                            total_page = int(page.string.strip().replace("...", ""))
+                        else:
+                            total_page = 1
+                    else:
+                        total_page = 1
+            except:
+                total_page = 1
 
-        now_page = 1
-        while now_page <= total_page:
-            if response.request.meta["city_id"] == "":
-                request = Request(
-                        url="http://www.qichacha.com/search_index?key=%25E5%25B0%258F%25E9%25A2%259D%25E8%25B4%25B7%25E6%25AC%25BE&ajaxflag=1&province=" +
-                            response.request.meta["province_id"] + "&p=" + str(now_page) + "&",
-                        callback="get_content", priority=2)
-                request.meta["city_name"] = response.request.meta["city_name"]
-                request.meta["city_id"] = response.request.meta["city_id"]
-                request.meta["province_name"] = response.request.meta["province_name"]
-                request.meta["province_id"] = response.request.meta["province_id"]
-                yield request
-            else:
-                request = Request(
-                        url="http://www.qichacha.com/search_index?key=%25E5%25B0%258F%25E9%25A2%259D%25E8%25B4%25B7%25E6%25AC%25BE&ajaxflag=1&&p=" + str(
-                                now_page) + "&province=" +
-                            response.request.meta["province_id"] + "&city=" + response.request.meta["city_id"] + "&",
-                        callback="get_content", priority=2)
-                request.meta["city_name"] = response.request.meta["city_name"]
-                request.meta["city_id"] = response.request.meta["city_id"]
-                request.meta["province_name"] = response.request.meta["province_name"]
-                request.meta["province_id"] = response.request.meta["province_id"]
-                yield request
-            now_page += 1
+            now_page = 1
+            while now_page <= total_page:
+                if response.request.meta["city_id"] == "":
+                    request = Request(
+                            url="http://www.qichacha.com/search_index?key=%25E5%25B0%258F%25E9%25A2%259D%25E8%25B4%25B7%25E6%25AC%25BE&ajaxflag=1&province=" +
+                                response.request.meta["province_id"] + "&p=" + str(now_page) + "&",
+                            callback="get_content", priority=2)
+                    request.meta["city_name"] = response.request.meta["city_name"]
+                    request.meta["city_id"] = response.request.meta["city_id"]
+                    request.meta["province_name"] = response.request.meta["province_name"]
+                    request.meta["province_id"] = response.request.meta["province_id"]
+                    yield request
+                else:
+                    request = Request(
+                            url="http://www.qichacha.com/search_index?key=%25E5%25B0%258F%25E9%25A2%259D%25E8%25B4%25B7%25E6%25AC%25BE&ajaxflag=1&p=" + str(
+                                    now_page) + "&province=" +
+                                response.request.meta["province_id"] + "&city=" + response.request.meta[
+                                    "city_id"] + "&",
+                            callback="get_content", priority=2)
+                    request.meta["city_name"] = response.request.meta["city_name"]
+                    request.meta["city_id"] = response.request.meta["city_id"]
+                    request.meta["province_name"] = response.request.meta["province_name"]
+                    request.meta["province_id"] = response.request.meta["province_id"]
+                    yield request
+                now_page += 1
 
     def get_content(self, response):
+        if '<script>window.location.href=' in response.m_response.content:
+            logger.error(response.m_response.content + "\n" + response.request.url)
+            yield response.request
         soup = bs(response.m_response.content, "lxml")
         content_list = soup.select("table.m_srchList tbody tr")
         for content in content_list:
@@ -141,6 +157,6 @@ class QccProcessor(BaseProcessor):
 
 
 qcc_spider = RequestSpider(QccProcessor(), time_sleep=1).set_pipeline(KafkaPipeline()).set_pipeline(
-    TextPipeline()).set_pipeline(ConsolePipeline())
+        TextPipeline()).set_pipeline(ConsolePipeline())
 if __name__ == '__main__':
     qcc_spider.start()
