@@ -34,8 +34,8 @@ class RequestsDownLoader(BaseDownLoader):
         cookie_dict[
             "_umdata"] = "C234BF9D3AFA6FE7C851713A473B2B014A2CC2A3397878C628BEDB744FA54C0A33735D552D46B587CD43AD3E795C914C09FE191DC821EA19E2C0CEA546FD2E0D"
         cookie_dict["PHPSESSID"] = "ee316ojouckku1p7dvoe9ldjn5"
-        cookie_dict["CNZZDATA1254842228"] = "379250621-1487830680-%7C1487830680"
-        cookie_dict["gr_session_id_9c1eb7420511f8b2"] = "2a1c1da6-4df1-4b34-8f77-ab3cdc368365"
+        cookie_dict["CNZZDATA1254842228"] = "379250621-1487830680-%7C1487841480"
+        cookie_dict["gr_session_id_9c1eb7420511f8b2"] = "89efd0b1-fc1c-44da-ad06-d3a1466917a5"
         self._cookies = cookie_dict
 
     def init_loginer(self, account, password):
@@ -55,25 +55,25 @@ class RequestsDownLoader(BaseDownLoader):
 
             if request.method.upper() == "GET":
                 batch_requests.append(grequests.get(
-                    session=session,
-                    url=request.url,
-                    headers=request.headers,
-                    cookies=self._cookies,
-                    verify=False,
-                    allow_redirects=request.allow_redirects,
-                    timeout=request.timeout
+                        session=session,
+                        url=request.url,
+                        headers=request.headers,
+                        cookies=self._cookies,
+                        verify=False,
+                        allow_redirects=request.allow_redirects,
+                        timeout=request.timeout
                 ))
             elif request.method.upper() == "POST":
                 batch_requests.append(grequests.post(
-                    session=session,
-                    url=request.url,
-                    data=request.data,
-                    json=request.json,
-                    headers=request.headers,
-                    cookies=self._cookies,
-                    verify=False,
-                    allow_redirects=request.allow_redirects,
-                    timeout=request.timeout
+                        session=session,
+                        url=request.url,
+                        data=request.data,
+                        json=request.json,
+                        headers=request.headers,
+                        cookies=self._cookies,
+                        verify=False,
+                        allow_redirects=request.allow_redirects,
+                        timeout=request.timeout
                 ))
             else:
                 pass
@@ -84,8 +84,8 @@ class RequestsDownLoader(BaseDownLoader):
         index = 0
         for ret in rets:
             true_response = Response(
-                m_response=ret,
-                request=batch[index],
+                    m_response=ret,
+                    request=batch[index],
             )
             true_responses.append(true_response)
             logger.info(true_response)
@@ -96,6 +96,7 @@ class RequestsDownLoader(BaseDownLoader):
 
 def exception_handler(request, exception):
     logger.error("%s %s" % (request.url, exception))
+
 
 if __name__ == "__main__":
     proxies = {"http": "http://127.0.0.1:8888", "https": "http://127.0.0.1:8888",}

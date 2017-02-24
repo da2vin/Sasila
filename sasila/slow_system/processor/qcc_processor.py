@@ -3,11 +3,13 @@
 import sys
 
 from sasila.slow_system.core.request_spider import RequestSpider
-from sasila.slow_system.pipeline.pic_pipeline import PicPipeline
-
-from base_processor import BaseProcessor, Rule, LinkExtractor
+from sasila.slow_system.pipeline.kafa_pipeline import KafkaPipeline
+from base_processor import BaseProcessor
 from sasila.slow_system.downloader.http.spider_request import Request
 from bs4 import BeautifulSoup as bs
+import time
+
+import traceback
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -29,17 +31,26 @@ class QccProcessor(BaseProcessor):
             province_id = province["data-value"].strip()
             request = Request(
                     url="http://www.qichacha.com/search_getCityListHtml?province=" + province_id + "&q_type=1",
-                    callback="get_city", priority=5)
+                    callback="get_city", priority=0)
             request.meta["province_name"] = province_name
             request.meta["province_id"] = province_id
             yield request
+
+            # province_name = "北京"
+            # province_id = "BJ"
+            # request = Request(
+            #         url="http://www.qichacha.com/search_getCityListHtml?province=" + province_id + "&q_type=1",
+            #         callback="get_city", priority=0)
+            # request.meta["province_name"] = province_name
+            # request.meta["province_id"] = province_id
+            # yield request
 
     def get_city(self, response):
         if response.m_response.content == "":
             request = Request(
                     url="http://www.qichacha.com/search_index?key=%25E5%25B0%258F%25E9%25A2%259D%25E8%25B4%25B7%25E6%25AC%25BE&ajaxflag=1&province=" +
                         response.request.meta["province_id"] + "&",
-                    callback="get_all_page", priority=4)
+                    callback="get_all_page", priority=1)
             request.meta["city_name"] = ""
             request.meta["city_id"] = ""
             request.meta["province_name"] = response.request.meta["province_name"]
@@ -55,7 +66,7 @@ class QccProcessor(BaseProcessor):
                 request = Request(
                         url="http://www.qichacha.com/search_index?key=%25E5%25B0%258F%25E9%25A2%259D%25E8%25B4%25B7%25E6%25AC%25BE&ajaxflag=1&province=" +
                             response.request.meta["province_id"] + "&city=" + city_id + "&",
-                        callback="get_all_page", priority=4)
+                        callback="get_all_page", priority=1)
                 request.meta["city_name"] = city_name
                 request.meta["city_id"] = city_id
                 request.meta["province_name"] = response.request.meta["province_name"]
@@ -65,14 +76,21 @@ class QccProcessor(BaseProcessor):
     def get_all_page(self, response):
         soup = bs(response.m_response.content, "lxml")
         try:
-            page = soup.find(lambda tag: tag.name == 'a' and '>' == tag.text).parent.findNextSibling().select_one("a")
-            if page:
-                total_page = int(page.string.strip().replace("...", ""))
-            else:
-                page = soup.find(
-                    lambda tag: tag.name == 'a' and '>' == tag.text).parent.findPreviousSibling().select_one("a")
+            temp_page = soup.find(lambda tag: tag.name == 'a' and '>' == tag.text).parent.findNextSibling()
+            if temp_page:
+                page = temp_page.select_one("a")
                 if page:
                     total_page = int(page.string.strip().replace("...", ""))
+                else:
+                    total_page = 1
+            else:
+                temp_page = soup.find(lambda tag: tag.name == 'a' and '>' == tag.text).parent.findPreviousSibling()
+                if temp_page:
+                    page = temp_page.select_one("a")
+                    if page:
+                        total_page = int(page.string.strip().replace("...", ""))
+                    else:
+                        total_page = 1
                 else:
                     total_page = 1
         except:
@@ -84,7 +102,7 @@ class QccProcessor(BaseProcessor):
                 request = Request(
                         url="http://www.qichacha.com/search_index?key=%25E5%25B0%258F%25E9%25A2%259D%25E8%25B4%25B7%25E6%25AC%25BE&ajaxflag=1&province=" +
                             response.request.meta["province_id"] + "&p=" + str(now_page) + "&",
-                        callback="get_content", priority=3)
+                        callback="get_content", priority=2)
                 request.meta["city_name"] = response.request.meta["city_name"]
                 request.meta["city_id"] = response.request.meta["city_id"]
                 request.meta["province_name"] = response.request.meta["province_name"]
@@ -95,7 +113,7 @@ class QccProcessor(BaseProcessor):
                         url="http://www.qichacha.com/search_index?key=%25E5%25B0%258F%25E9%25A2%259D%25E8%25B4%25B7%25E6%25AC%25BE&ajaxflag=1&&p=" + str(
                                 now_page) + "&province=" +
                             response.request.meta["province_id"] + "&city=" + response.request.meta["city_id"] + "&",
-                        callback="get_content", priority=3)
+                        callback="get_content", priority=2)
                 request.meta["city_name"] = response.request.meta["city_name"]
                 request.meta["city_id"] = response.request.meta["city_id"]
                 request.meta["province_name"] = response.request.meta["province_name"]
@@ -104,13 +122,28 @@ class QccProcessor(BaseProcessor):
             now_page += 1
 
     def get_content(self, response):
-        pass
-        # soup = bs(response.m_response.content, "lxml")
-        # content_list = soup.select("table.m_srchList tbody tr")
-        # for content in content_list:
-        #     print content.select_one("a").text.strip()
+        soup = bs(response.m_response.content, "lxml")
+        content_list = soup.select("table.m_srchList tbody tr")
+        for content in content_list:
+            try:
+                result_item = dict()
+                result_item["province"] = response.request.meta["province_name"]
+                result_item["city"] = response.request.meta["city_name"]
+                result_item["company_name"] = content.select("td")[1].text.split('\n')[0].strip()
+                result_item["company_man"] = content.select("td")[1].text.split('\n')[1].strip().replace("企业法人：", "")
+                result_item["company_telephone"] = content.select("td")[1].text.split('\n')[2].strip().replace("联系方式：",
+                                                                                                               "")
+                result_item["company_address"] = content.select("td")[1].text.split('\n')[3].strip().replace("地址：", "")
+                result_item["company_registered_capital"] = content.select("td")[2].text.strip()
+                result_item["company_registered_time"] = content.select("td")[3].text.strip()
+                result_item["company_status"] = content.select("td")[4].text.strip()
+                result_item["source"] = "企查查"
+                result_item["update_time"] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+                yield result_item
+            except Exception:
+                print traceback.format_exc()
 
 
-qcc_spider = RequestSpider(QccProcessor()).set_pipeline(PicPipeline())
+qcc_spider = RequestSpider(QccProcessor(), time_sleep=1).set_pipeline(KafkaPipeline())
 if __name__ == '__main__':
     qcc_spider.start()

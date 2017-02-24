@@ -20,12 +20,19 @@ def _priority_compare(r1, r2):
 
 
 class RequestSpider(object):
-    def __init__(self, processor=None, downloader=None, scheduler=None):
+    def __init__(self, processor=None, downloader=None, scheduler=None, batch_size=None, time_sleep=None):
         self._processor = processor
         self._host_regex = self._get_host_regex()
         self._spider_status = 'stopped'
         self._pipelines = []
-        self._batch_size = 99
+        self._time_sleep = time_sleep
+        if time_sleep:
+            self._batch_size = 0
+        else:
+            if batch_size:
+                self._batch_size = batch_size - 1
+            else:
+                self._batch_size = 99
         self._spider_name = processor.spider_name
         self._spider_id = processor.spider_id
         self._process_count = 0
@@ -111,6 +118,8 @@ class RequestSpider(object):
 
     def _crawl(self, batch):
         responses = self._downloader.download(batch)
+        if self._time_sleep:
+            time.sleep(self._time_sleep)
         for response in responses:
             callback = response.request.callback(response)
             if isinstance(callback, Iterator):
