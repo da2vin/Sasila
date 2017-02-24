@@ -133,7 +133,11 @@ class QccProcessor(BaseProcessor):
                 result_item["company_man"] = content.select("td")[1].text.split('\n')[1].strip().replace("企业法人：", "")
                 result_item["company_telephone"] = content.select("td")[1].text.split('\n')[2].strip().replace("联系方式：",
                                                                                                                "")
-                result_item["company_address"] = content.select("td")[1].text.split('\n')[3].strip().replace("地址：", "")
+                result_item["company_address"] = content.select("td")[1].text.split('\n')[3].strip()
+                if "地址：" in result_item["company_address"]:
+                    result_item["company_address"] = result_item["company_address"].replace("地址：", "")
+                else:
+                    result_item["company_address"] = ""
                 result_item["company_registered_capital"] = content.select("td")[2].text.strip()
                 result_item["company_registered_time"] = content.select("td")[3].text.strip()
                 result_item["company_status"] = content.select("td")[4].text.strip()
