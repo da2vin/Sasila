@@ -28,6 +28,9 @@ class QccProcessor(BaseProcessor):
     ]
 
     def process(self, response):
+        if not response.m_response:
+            logger.error(response.request.url)
+            yield response.request
         if '<script>window.location.href=' in response.m_response.content:
             logger.error(response.m_response.content + "\n" + response.request.url)
             yield response.request
@@ -44,6 +47,9 @@ class QccProcessor(BaseProcessor):
             yield request
 
     def get_city(self, response):
+        if not response.m_response:
+            logger.error(response.request.url)
+            yield response.request
         if '<script>window.location.href=' in response.m_response.content:
             logger.error(response.m_response.content + "\n" + response.request.url)
             yield response.request
@@ -74,6 +80,9 @@ class QccProcessor(BaseProcessor):
                 yield request
 
     def get_all_page(self, response):
+        if not response.m_response:
+            logger.error(response.request.url)
+            yield response.request
         if '<script>window.location.href=' in response.m_response.content:
             logger.error(response.m_response.content + "\n" + response.request.url)
             yield response.request
@@ -127,6 +136,9 @@ class QccProcessor(BaseProcessor):
                 now_page += 1
 
     def get_content(self, response):
+        if not response.m_response:
+            logger.error(response.request.url)
+            yield response.request
         if '<script>window.location.href=' in response.m_response.content:
             logger.error(response.m_response.content + "\n" + response.request.url)
             yield response.request

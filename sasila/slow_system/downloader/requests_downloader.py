@@ -29,13 +29,19 @@ class RequestsDownLoader(BaseDownLoader):
         self._request_retry = HTTPAdapter(max_retries=3)
 
         cookie_dict = dict()
+        # gr_user_id=3c9fbeae-850c-46e7-b501-b45652836354
+        # _uab_collina=148783172278219810721299
+        # _umdata=C234BF9D3AFA6FE7C851713A473B2B014A2CC2A3397878C628BEDB744FA54C0A33735D552D46B587CD43AD3E795C914C09FE191DC821EA19E2C0CEA546FD2E0D
+        # PHPSESSID=ee316ojouckku1p7dvoe9ldjn5
+        # gr_session_id_9c1eb7420511f8b2=6802da6f-8d2b-447f-8c20-e3603c2f31cf
+        # CNZZDATA1254842228=379250621-1487830680-%7C1487922482
         cookie_dict["gr_user_id"] = "3c9fbeae-850c-46e7-b501-b45652836354"
         cookie_dict["_uab_collina"] = "148783172278219810721299"
         cookie_dict[
             "_umdata"] = "C234BF9D3AFA6FE7C851713A473B2B014A2CC2A3397878C628BEDB744FA54C0A33735D552D46B587CD43AD3E795C914C09FE191DC821EA19E2C0CEA546FD2E0D"
         cookie_dict["PHPSESSID"] = "ee316ojouckku1p7dvoe9ldjn5"
-        cookie_dict["CNZZDATA1254842228"] = "379250621-1487830680-%7C1487841480"
-        cookie_dict["gr_session_id_9c1eb7420511f8b2"] = "89efd0b1-fc1c-44da-ad06-d3a1466917a5"
+        cookie_dict["CNZZDATA1254842228"] = "379250621-1487830680-%7C1487922482"
+        cookie_dict["gr_session_id_9c1eb7420511f8b2"] = "6802da6f-8d2b-447f-8c20-e3603c2f31cf"
         self._cookies = cookie_dict
 
     def init_loginer(self, account, password):
