@@ -39,6 +39,6 @@ web.save_screenshot('test.png')
 element = web.find_element_by_css_selector('button#buyingtools-add-to-cart-button')
 element.click()
 
-time.sleep(1)
+time.sleep(2)
 
 web.save_screenshot('test706.png')
