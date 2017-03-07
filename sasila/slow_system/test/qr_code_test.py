@@ -75,6 +75,6 @@ for c in cookie_list:
 
 web.get('https://home.jd.com')
 
-web.save_screenshot('test5.png')
+web.save_screenshot('test8.png')
 print response.headers
 print response.content
