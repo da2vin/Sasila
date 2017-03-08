@@ -10,12 +10,12 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 
-
 def test1():
     manager = Manager()
     localResultDict = manager.dict()
     Process(target=mzitu_spider.start).start()
     print localResultDict.keys()
+
 
 if __name__ == "__main__":
     test1()
