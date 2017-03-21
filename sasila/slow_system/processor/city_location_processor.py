@@ -41,10 +41,12 @@ class CityLocationProcessor(BaseProcessor):
                 area = name[0]
             lo = soup.select("div.cdiv p")[1].select("span")[0].string.strip()
             la = soup.select("div.cdiv p")[1].select("span")[1].string.strip()
-            with open('city.txt', 'a+') as fs:
-                data = province + ',' + city + ',' + area + ',' + lo + ',' + la
-                fs.write(data + '\n')
-                print data
+            data = province + ',' + city + ',' + area + ',' + lo + ',' + la
+            print data
+            # with open('city.txt', 'a+') as fs:
+            #     data = province + ',' + city + ',' + area + ',' + lo + ',' + la
+            #     fs.write(data + '\n')
+            #     print data
 
 
 fe_spider = RequestSpider(CityLocationProcessor())
