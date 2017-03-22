@@ -20,7 +20,7 @@ class CityLocationProcessor(BaseProcessor):
 
     rules = (
         Rule(LinkExtractor(regex_str=r"kongzi\.asp\?id=\d+"), priority=0),
-        Rule(LinkExtractor(regex_str=r"mengzi\.asp\?id=\d+"), priority=1, callback='save'),
+        Rule(LinkExtractor(regex_str=r"mengzi\.asp\?id=\d+"), priority=1, only_first=True, callback='save'),
     )
 
     def save(self, response):
@@ -43,10 +43,10 @@ class CityLocationProcessor(BaseProcessor):
             la = soup.select("div.cdiv p")[1].select("span")[1].string.strip()
             data = province + ',' + city + ',' + area + ',' + lo + ',' + la
             print data
-            # with open('city.txt', 'a+') as fs:
-            #     data = province + ',' + city + ',' + area + ',' + lo + ',' + la
-            #     fs.write(data + '\n')
-            #     print data
+            with open('city.txt', 'a+') as fs:
+                data = province + ',' + city + ',' + area + ',' + lo + ',' + la
+                fs.write(data + '\n')
+                print data
 
 
 fe_spider = RequestSpider(CityLocationProcessor())

@@ -14,11 +14,12 @@ def identity(x):
 
 
 class Rule(object):
-    def __init__(self, link_extractor, callback=None, process_request=identity, priority=0):
+    def __init__(self, link_extractor, callback=None, process_request=identity, priority=0, only_first=False):
         self.link_extractor = link_extractor
         self.callback = callback
         self.process_request = process_request
         self.priority = priority
+        self.only_first = only_first
 
 
 class LinkExtractor(object):
@@ -60,3 +61,5 @@ class BaseProcessor(object):
                     request = Request(url=link, callback=rule.callback, priority=rule.priority)
                     request = rule.process_request(request)
                     yield request
+                    if rule.only_first:
+                        break
