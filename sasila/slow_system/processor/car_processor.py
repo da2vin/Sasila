@@ -19,9 +19,6 @@ class Car_Processor(BaseProcessor):
     spider_id = 'car_spider'
     spider_name = 'car_spider'
     allowed_domains = ['che168.com']
-    # start_requests = [Request(url='http://www.che168.com/{}/list/'.format(v), priority=0) for (k, v) in
-    #                   car_area.areaData.items()]
-
     start_requests = [Request(url='http://www.che168.com', priority=0)]
 
     def process(self, response):
@@ -31,7 +28,6 @@ class Car_Processor(BaseProcessor):
             province_name = province_div.select('span.capital a')[0].text
             city_list = province_div.select('div.city a')
             for city in city_list:
-                url = response.nice_join(city['href'])
                 city_name = city.text
                 request = Request(
                         url='http://www.che168.com/handler/usedcarlistv5.ashx?action=brandlist&area=%s' % Pinyin().get_pinyin(
