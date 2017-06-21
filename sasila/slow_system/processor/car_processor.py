@@ -10,6 +10,7 @@ from base_processor import BaseProcessor
 from sasila.slow_system.downloader.http.spider_request import Request
 from xpinyin import Pinyin
 import json
+import time
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -84,7 +85,31 @@ class Car_Processor(BaseProcessor):
 
     def process_page_4(self, response):
         soup = bs(response.m_response.content, 'lxml')
-        print 1
+        car = soup.select('div.car-title h2')[0].text
+        detail_list = soup.select('div.details li')
+        mileage = detail_list[0].select('span')[0].text.replace('万公里', '')
+        first_borad_date = detail_list[1].select('span')[0].text
+        gear = detail_list[2].select('span')[0].text.split('／')[0]
+        displacement = detail_list[2].select('span')[0].text.split('／')[1]
+        price = soup.select('div.car-price ins')[0].text.replace('￥', '')
+        crawl_date = time.strftime('%Y-%m-%d', time.localtime(time.time()))
+
+        item = dict()
+        item['car'] = car
+        item['mileage'] = mileage
+        item['first_borad_date'] = first_borad_date
+        item['gear'] = gear
+        item['displacement'] = displacement
+        item['price'] = price
+        item['crawl_date'] = crawl_date
+
+        item['province'] = response.request.meta['province']
+        item['city'] = response.request.meta['city']
+        item['brand'] = response.request.meta['brand']
+        item['cars_line'] = response.request.meta['cars_line']
+
+        yield item
+
 
 if __name__ == '__main__':
     spider = RequestSpider(Car_Processor(), batch_size=1).set_pipeline(ConsolePipeline()).start()
