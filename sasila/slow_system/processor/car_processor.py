@@ -107,7 +107,6 @@ class Car_Processor(BaseProcessor):
         item['city'] = response.request.meta['city']
         item['brand'] = response.request.meta['brand']
         item['cars_line'] = response.request.meta['cars_line']
-        print 1
         yield item
 
 
