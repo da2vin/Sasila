@@ -8,8 +8,6 @@ from sasila.slow_system.pipeline.console_pipeline import ConsolePipeline
 
 from base_processor import BaseProcessor
 from sasila.slow_system.downloader.http.spider_request import Request
-from xpinyin import Pinyin
-import json
 import time
 from sasila.slow_system.utils.decorator import testResponse
 
