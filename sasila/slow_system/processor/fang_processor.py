@@ -21,50 +21,41 @@ class Fang_Processor(BaseProcessor):
     spider_id = 'fang_spider'
     spider_name = 'fang_spider'
     allowed_domains = ['fang.com']
-    start_requests = [Request(url='http://fang.com/SoufunFamily.htm', priority=0)]
+    start_requests = [Request(url='http://esf.gz.fang.com/newsecond/esfcities.aspx', priority=0)]
 
     @testResponse
     def process(self, response):
         soup = bs(response.m_response.content, 'lxml')
-        province_div_list = soup.select('div.city-list div.cap-city > div.fn-clear')
+        province_div_list = soup.select('div#c02 ul li')
         for province_div in province_div_list:
-            province_name = province_div.select('span.capital a')[0].text
-            city_list = province_div.select('div.city a')
+            province_name = province_div.select('strong')[0].text
+            city_list = province_div.select('a')
             for city in city_list:
                 city_name = city.text
-                request = Request(
-                        url='http://www.che168.com/handler/usedcarlistv5.ashx?action=brandlist&area=%s' % Pinyin().get_pinyin(
-                                city_name, splitter=''), priority=1, callback=self.process_page_1)
+                url = city['href']
+                request = Request(url=url, priority=1, callback=self.process_page_1)
                 request.meta['province'] = province_name
                 request.meta['city'] = city_name
                 yield request
 
     @testResponse
     def process_page_1(self, response):
-        brand_list = list(json.loads(response.m_response.content.decode('gb2312')))
-        for brand in brand_list:
-            brand_dict = dict(brand)
-            brand_name = brand_dict['name']
-            url = response.nice_join(brand_dict['url']) + '/'
+        soup = bs(response.m_response.content, 'lxml')
+        district_list = soup.select('div.qxName a')
+        district_list.pop(0)
+        for district in district_list:
+            district_name = district.text
+            url = response.request.url + district['href']
             request = Request(url=url, priority=2, callback=self.process_page_2)
             request.meta['province'] = response.request.meta['province']
             request.meta['city'] = response.request.meta['city']
-            request.meta['brand'] = brand_name
+            request.meta['district'] = district_name
             yield request
 
     @testResponse
     def process_page_2(self, response):
         soup = bs(response.m_response.content, 'lxml')
-        cars_line_list = soup.select('div#series div.content-area dl.model-list dd a')
-        for cars_line in cars_line_list:
-            cars_line_name = cars_line.text
-            url = 'http://www.che168.com' + cars_line['href']
-            request = Request(url=url, priority=3, callback=self.process_page_3)
-            request.meta['province'] = response.request.meta['province']
-            request.meta['city'] = response.request.meta['city']
-            request.meta['brand'] = response.request.meta['brand']
-            request.meta['cars_line'] = cars_line_name
-            yield request
+
 
     @testResponse
     def process_page_3(self, response):
@@ -117,4 +108,4 @@ class Fang_Processor(BaseProcessor):
 
 
 if __name__ == '__main__':
-    spider = RequestSpider(Fang_Processor()).set_pipeline(ConsolePipeline()).start()
+    spider = RequestSpider(Fang_Processor(), batch_size=1).set_pipeline(ConsolePipeline()).start()

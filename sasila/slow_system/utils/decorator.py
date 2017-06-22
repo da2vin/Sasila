@@ -12,7 +12,8 @@ def testResponse(func):
             logger.error('response.m_response is None and url : ' + response.request.url)
         else:
             process = func(self, response)
-            for callback in process:
-                yield callback
+            if process is not None:
+                for callback in process:
+                    yield callback
 
     return wrapper
