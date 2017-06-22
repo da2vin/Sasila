@@ -29,14 +29,15 @@ class Fang_Processor(BaseProcessor):
         province_div_list = soup.select('div#c02 ul li')
         for province_div in province_div_list:
             province_name = province_div.select('strong')[0].text
-            city_list = province_div.select('a')
-            for city in city_list:
-                city_name = city.text
-                url = city['href']
-                request = Request(url=url, priority=1, callback=self.process_page_1)
-                request.meta['province'] = province_name
-                request.meta['city'] = city_name
-                yield request
+            if province_name != '其他':
+                city_list = province_div.select('a')
+                for city in city_list:
+                    city_name = city.text
+                    url = city['href']
+                    request = Request(url=url, priority=1, callback=self.process_page_1)
+                    request.meta['province'] = province_name
+                    request.meta['city'] = city_name
+                    yield request
 
     @testResponse
     def process_page_1(self, response):
@@ -55,56 +56,41 @@ class Fang_Processor(BaseProcessor):
     @testResponse
     def process_page_2(self, response):
         soup = bs(response.m_response.content, 'lxml')
+        avg_price_list = soup.select('div.newcardR dl')
+        if len(avg_price_list) > 0:
+            avg_price = avg_price_list[1].select('dd b')[0].text
+        else:
+            avg_price = '未知'
+        detail_list = soup.select('div.houseList dl')
+        for detail in detail_list:
+            if len(detail.select('p.mt10 a span')) != 0:
+                estate = detail.select('p.mt10 a span')[0].text
+                area = detail.select('div.area p')[0].text.replace('㎡', '')
+                layout = detail.select('p.mt12')[0].text.split('|')[0].strip()
+                total_price = detail.select('div.moreInfo p.mt5 span.price')[0].text
+                crawl_date = time.strftime('%Y-%m-%d', time.localtime(time.time()))
+                item = dict()
+                item['avg_price'] = avg_price
+                item['estate'] = estate
+                item['area'] = area
+                item['layout'] = layout
+                item['total_price'] = total_price
+                item['crawl_date'] = crawl_date
 
+                item['province'] = response.request.meta['province']
+                item['city'] = response.request.meta['city']
+                item['district'] = response.request.meta['district']
+                yield item
 
-    @testResponse
-    def process_page_3(self, response):
-        soup = bs(response.m_response.content, 'lxml')
-        car_info_list = soup.select('div#a2 ul#viewlist_ul li a.carinfo')
-        for car_info in car_info_list:
-            url = 'http://www.che168.com' + car_info['href']
-            request = Request(url=url, priority=4, callback=self.process_page_4)
+        next_page = soup.select('a#PageControl1_hlk_next')
+        if len(next_page) > 0:
+            url = response.nice_join(next_page[0]['href'])
+            print url
+            request = Request(url=url, priority=2, callback=self.process_page_2)
             request.meta['province'] = response.request.meta['province']
             request.meta['city'] = response.request.meta['city']
-            request.meta['brand'] = response.request.meta['brand']
-            request.meta['cars_line'] = response.request.meta['cars_line']
+            request.meta['district'] = response.request.meta['district']
             yield request
-        next_page = soup.find(lambda tag: tag.name == 'a' and '下一页' in tag.text)
-        if next_page:
-            url = 'http://www.che168.com' + next_page['href']
-            request = Request(url=url, priority=3, callback=self.process_page_3)
-            request.meta['province'] = response.request.meta['province']
-            request.meta['city'] = response.request.meta['city']
-            request.meta['brand'] = response.request.meta['brand']
-            request.meta['cars_line'] = response.request.meta['cars_line']
-            yield request
-
-    @testResponse
-    def process_page_4(self, response):
-        soup = bs(response.m_response.content, 'lxml')
-        car = soup.select('div.car-title h2')[0].text
-        detail_list = soup.select('div.details li')
-        mileage = detail_list[0].select('span')[0].text.replace('万公里', '')
-        first_borad_date = detail_list[1].select('span')[0].text
-        gear = detail_list[2].select('span')[0].text.split('／')[0]
-        displacement = detail_list[2].select('span')[0].text.split('／')[1]
-        price = soup.select('div.car-price ins')[0].text.replace('￥', '')
-        crawl_date = time.strftime('%Y-%m-%d', time.localtime(time.time()))
-
-        item = dict()
-        item['car'] = car
-        item['mileage'] = mileage
-        item['first_borad_date'] = first_borad_date
-        item['gear'] = gear
-        item['displacement'] = displacement
-        item['price'] = price
-        item['crawl_date'] = crawl_date
-
-        item['province'] = response.request.meta['province']
-        item['city'] = response.request.meta['city']
-        item['brand'] = response.request.meta['brand']
-        item['cars_line'] = response.request.meta['cars_line']
-        yield item
 
 
 if __name__ == '__main__':
