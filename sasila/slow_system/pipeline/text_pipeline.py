@@ -28,17 +28,33 @@ class TextPipeline(ItemPipeline):
 
 class TextPipelineCar(ItemPipeline):
     def process_item(self, item):
-        with codecs.open("result.csv", 'a', item['encoding']) as f:
-            f.write(
-                    item["province"] + ',' +
-                    item["city"] + ',' +
-                    item["brand"] + ',' +
-                    item["cars_line"] + ',' +
-                    item["car"] + ',' +
-                    item["mileage"] + ',' +
-                    item["first_borad_date"] + ',' +
-                    item["gear"] + ',' +
-                    item["displacement"] + ',' +
-                    item["price"] + ',' +
-                    item["crawl_date"] + "\n"
-            )
+        try:
+            with codecs.open("result.csv", 'a', 'gb2312') as f:
+                f.write(
+                        item["province"] + ',' +
+                        item["city"] + ',' +
+                        item["brand"] + ',' +
+                        item["cars_line"] + ',' +
+                        item["car"] + ',' +
+                        item["mileage"] + ',' +
+                        item["first_borad_date"] + ',' +
+                        item["gear"] + ',' +
+                        item["displacement"] + ',' +
+                        item["price"] + ',' +
+                        item["crawl_date"] + "\n"
+                )
+        except:
+            with codecs.open("result.csv", 'a', 'utf8') as f:
+                f.write(
+                        item["province"] + ',' +
+                        item["city"] + ',' +
+                        item["brand"] + ',' +
+                        item["cars_line"] + ',' +
+                        item["car"] + ',' +
+                        item["mileage"] + ',' +
+                        item["first_borad_date"] + ',' +
+                        item["gear"] + ',' +
+                        item["displacement"] + ',' +
+                        item["price"] + ',' +
+                        item["crawl_date"] + "\n"
+                )
