@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 import sys
 from sasila.slow_system.pipeline.base_pipeline import ItemPipeline
+from sasila.slow_system.utils import logger
+import traceback
 import codecs
 
 reload(sys)
@@ -29,11 +31,11 @@ class TextPipeline(ItemPipeline):
 class TextPipelineCar(ItemPipeline):
     def process_item(self, item):
         try:
-            with codecs.open("result.csv", 'a', 'gb2312') as f:
+            with codecs.open("result.csv", 'a', 'gbk') as f:
                 f.write(
                         item["province"] + ',' +
                         item["city"] + ',' +
-                        item["brand"] + ',' +
+                        item["brand"].replace(u'\u30fb', '·') + ',' +
                         item["cars_line"] + ',' +
                         item["car"] + ',' +
                         item["mileage"] + ',' +
@@ -44,17 +46,4 @@ class TextPipelineCar(ItemPipeline):
                         item["crawl_date"] + "\n"
                 )
         except:
-            with codecs.open("result.csv", 'a', 'utf8') as f:
-                f.write(
-                        item["province"] + ',' +
-                        item["city"] + ',' +
-                        item["brand"] + ',' +
-                        item["cars_line"] + ',' +
-                        item["car"] + ',' +
-                        item["mileage"] + ',' +
-                        item["first_borad_date"] + ',' +
-                        item["gear"] + ',' +
-                        item["displacement"] + ',' +
-                        item["price"] + ',' +
-                        item["crawl_date"] + "\n"
-                )
+            logger.error(traceback.format_exc())
