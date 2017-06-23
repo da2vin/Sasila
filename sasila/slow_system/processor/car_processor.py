@@ -13,6 +13,7 @@ from xpinyin import Pinyin
 import json
 import time
 from sasila.slow_system.utils.decorator import testResponse
+import chardet
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -95,6 +96,7 @@ class Car_Processor(BaseProcessor):
         # <html><head><title>Object moved</title></head><body>
         # <h2>Object moved to <a href="/CarDetail/wrong.aspx?errorcode=5&amp;backurl=/&amp;infoid=21415515">here</a>.</h2>
         # </body></html>
+        encoding = chardet.detect(response.m_response.content)['encoding']
         if len(soup.select('div.car-title h2')) != 0:
             car = soup.select('div.car-title h2')[0].text
             detail_list = soup.select('div.details li')
@@ -118,6 +120,7 @@ class Car_Processor(BaseProcessor):
             item['city'] = response.request.meta['city']
             item['brand'] = response.request.meta['brand']
             item['cars_line'] = response.request.meta['cars_line']
+            item['encoding'] = encoding
             yield item
 
 

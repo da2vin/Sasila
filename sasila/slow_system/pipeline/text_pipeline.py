@@ -3,6 +3,7 @@
 import sys
 from sasila.slow_system.pipeline.base_pipeline import ItemPipeline
 import codecs
+import chardet
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -28,7 +29,7 @@ class TextPipeline(ItemPipeline):
 
 class TextPipelineCar(ItemPipeline):
     def process_item(self, item):
-        with codecs.open("result.csv", 'a', 'gbk') as f:
+        with codecs.open("result.csv", 'a', item['encoding']) as f:
             f.write(
                     item["province"] + ',' +
                     item["city"] + ',' +
