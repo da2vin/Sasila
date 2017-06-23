@@ -3,7 +3,6 @@
 import sys
 from sasila.slow_system.pipeline.base_pipeline import ItemPipeline
 import codecs
-import chardet
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
