@@ -85,7 +85,6 @@ class Fang_Processor(BaseProcessor):
         next_page = soup.select('a#PageControl1_hlk_next')
         if len(next_page) > 0:
             url = response.nice_join(next_page[0]['href'])
-            print url
             request = Request(url=url, priority=2, callback=self.process_page_2)
             request.meta['province'] = response.request.meta['province']
             request.meta['city'] = response.request.meta['city']
@@ -94,4 +93,4 @@ class Fang_Processor(BaseProcessor):
 
 
 if __name__ == '__main__':
-    spider = RequestSpider(Fang_Processor(), batch_size=1).set_pipeline(ConsolePipeline()).set_pipeline(TextPipelineFang()).start()
+    spider = RequestSpider(Fang_Processor()).set_pipeline(ConsolePipeline()).set_pipeline(TextPipelineFang()).start()

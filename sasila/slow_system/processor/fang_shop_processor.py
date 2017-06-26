@@ -123,6 +123,5 @@ class Fang_Shop_Processor(BaseProcessor):
             request.meta['district'] = response.request.meta['district']
             yield request
 
-
 if __name__ == '__main__':
     spider = RequestSpider(Fang_Shop_Processor()).set_pipeline(ConsolePipeline()).set_pipeline(TextPipelineFangShop()).start()
