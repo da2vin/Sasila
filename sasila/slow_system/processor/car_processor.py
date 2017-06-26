@@ -101,6 +101,9 @@ class Car_Processor(BaseProcessor):
             if len(soup.select('div.car-title h2')) != 0:
                 car = soup.select('div.car-title h2')[0].text
                 detail_list = soup.select('div.details li')
+                if len(detail_list) == 0:
+                    soup = bs(response.m_response.content, 'html5lib')
+                    detail_list = soup.select('div.details li')
                 mileage = detail_list[0].select('span')[0].text.replace('万公里', '')
                 first_borad_date = detail_list[1].select('span')[0].text
                 gear = detail_list[2].select('span')[0].text.split('／')[0]

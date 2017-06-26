@@ -19,23 +19,38 @@ class Fang_Shop_Processor(BaseProcessor):
     spider_id = 'fang_shop_spider'
     spider_name = 'fang_shop_spider'
     allowed_domains = ['fang.com']
-    start_requests = [Request(url='http://shop.fang.com/', priority=0)]
+    start_requests = [Request(url='http://shop.fang.com', priority=0)]
 
     @testResponse
     def process(self, response):
-        soup = bs(response.m_response.content, 'lxml')
-        province_div_list = soup.select('div#c02 ul li')
-        for province_div in province_div_list:
-            province_name = province_div.select('strong')[0].text
-            if province_name != '其他':
-                city_list = province_div.select('a')
-                for city in city_list:
-                    city_name = city.text
-                    url = city['href']
-                    request = Request(url=url, priority=1, callback=self.process_page_1)
-                    request.meta['province'] = province_name
-                    request.meta['city'] = city_name
-                    yield request
+        soup = bs('''<a href="http://shop1.fang.com/" style="width:40px;padding:4px 0 4px 8px;">北京</a>
+                     <a href="http://shop.sh.fang.com/" style="width:40px;padding:4px 0 4px 8px;">上海</a>
+                     <a href="http://shop.gz.fang.com/" style="width:40px;padding:4px 0 4px 8px;">广州</a>
+                     <a href="http://shop.sz.fang.com/" style="width:40px;padding:4px 0 4px 8px;">深圳</a>
+                     <a href="http://shop.tj.fang.com/" style="width:40px;padding:4px 0 4px 8px;">天津</a>
+                     <a href="http://shop.cq.fang.com/" style="width:40px;padding:4px 0 4px 8px;">重庆</a>
+                     <a href="http://shop.cd.fang.com/" style="width:40px;padding:4px 0 4px 8px;">成都</a>
+                     <a href="http://shop.suzhou.fang.com/" style="width:40px;padding:4px 0 4px 8px;">苏州</a>
+                     <a href="http://shop.wuhan.fang.com/" style="width:40px;padding:4px 0 4px 8px;">武汉</a>
+                     <a href="http://shop.xian.fang.com/" style="width:40px;padding:4px 0 4px 8px;">西安</a>
+                     <a href="http://shop.dg.fang.com/" style="width:40px;padding:4px 0 4px 8px;">东莞</a>
+                     <a href="http://shop.km.fang.com/" style="width:40px;padding:4px 0 4px 8px;">昆明</a>
+                     <a href="http://shop.hz.fang.com/" style="width:40px;padding:4px 0 4px 8px;">杭州</a>
+                     <a href="http://shop.jn.fang.com/" style="width:40px;padding:4px 0 4px 8px;">济南</a>
+                     <a href="http://shop.wuxi.fang.com/" style="width:40px;padding:4px 0 4px 8px;">无锡</a>
+                     <a href="http://shop.zz.fang.com/" style="width:40px;padding:4px 0 4px 8px;">郑州</a>
+                     <a href="http://shop.nc.fang.com/" style="width:40px;padding:4px 0 4px 8px;">南昌</a>
+                     <a href="http://shop.qd.fang.com/" style="width:40px;padding:4px 0 4px 8px;">青岛</a>
+                     <a href="http://shop.sjz.fang.com/" style="width:40px;padding:4px 0 4px 8px;">石家庄</a>
+                     <a href="http://shop.nanjing.fang.com/" style="width:40px;padding:4px 0 4px 8px;">南京</a>
+                     <a href="http://shop.dl.fang.com/" style="width:40px;padding:4px 0 4px 8px;">大连</a>''', 'lxml')
+        city__list = soup.select('a')
+        for city in city__list:
+            city_name = city.text
+            url = city['href']
+            request = Request(url=url, priority=1, callback=self.process_page_1)
+            request.meta['city'] = city_name
+            yield request
 
     @testResponse
     def process_page_1(self, response):
@@ -46,7 +61,6 @@ class Fang_Shop_Processor(BaseProcessor):
             district_name = district.text
             url = response.request.url + district['href']
             request = Request(url=url, priority=2, callback=self.process_page_2)
-            request.meta['province'] = response.request.meta['province']
             request.meta['city'] = response.request.meta['city']
             request.meta['district'] = district_name
             yield request
@@ -54,38 +68,46 @@ class Fang_Shop_Processor(BaseProcessor):
     @testResponse
     def process_page_2(self, response):
         soup = bs(response.m_response.content, 'lxml')
-        avg_price_list = soup.select('div.newcardR dl')
-        if len(avg_price_list) > 0:
-            avg_price = avg_price_list[1].select('dd b')[0].text
-        else:
-            avg_price = '未知'
         detail_list = soup.select('div.houseList dl')
         for detail in detail_list:
-            if len(detail.select('p.mt10 a span')) != 0:
-                estate = detail.select('p.mt10 a span')[0].text
-                area = detail.select('div.area p')[0].text.replace('㎡', '')
-                layout = detail.select('p.mt12')[0].text.split('|')[0].strip()
-                total_price = detail.select('div.moreInfo p.mt5 span.price')[0].text
-                crawl_date = time.strftime('%Y-%m-%d', time.localtime(time.time()))
-                item = dict()
-                item['avg_price'] = avg_price
-                item['estate'] = estate
-                item['area'] = area
-                item['layout'] = layout
-                item['total_price'] = total_price
-                item['crawl_date'] = crawl_date
+            estate = detail.select('p.mt15 span.spName')[0].text
+            temp_list = detail.select('p.mt10')[0].text.split('/')
+            if len(temp_list) == 3:
+                floor = temp_list[1]
+                total_floor = temp_list[2].replace('层', '')
+                m_type = temp_list[0].replace('类型：', '')
+            elif len(temp_list) == 4:
+                floor = temp_list[2]
+                total_floor = temp_list[3].replace('层', '')
+                m_type = temp_list[0].replace('类型：', '') + temp_list[1]
+            elif len(temp_list) == 1:
+                # http://shop.hz.fang.com//shou/house-a0160/
+                m_type = temp_list[0].strip().replace('类型：', '')
+                floor = '未知'
+                total_floor = '未知'
+            else:
+                print 1
+            area = detail.select('div.area')[0].text.replace('㎡', '').replace('建筑面积', '')
+            total_price = detail.select('div.moreInfo p.mt5 span.price')[0].text
+            crawl_date = time.strftime('%Y-%m-%d', time.localtime(time.time()))
 
-                item['province'] = response.request.meta['province']
-                item['city'] = response.request.meta['city']
-                item['district'] = response.request.meta['district']
-                yield item
+            item = dict()
+            item['estate'] = estate
+            item['floor'] = floor
+            item['total_floor'] = total_floor
+            item['type'] = m_type
+            item['area'] = area
+            item['total_price'] = total_price
+            item['crawl_date'] = crawl_date
+
+            item['city'] = response.request.meta['city']
+            item['district'] = response.request.meta['district']
+            yield item
 
         next_page = soup.select('a#PageControl1_hlk_next')
         if len(next_page) > 0:
             url = response.nice_join(next_page[0]['href'])
-            print url
             request = Request(url=url, priority=2, callback=self.process_page_2)
-            request.meta['province'] = response.request.meta['province']
             request.meta['city'] = response.request.meta['city']
             request.meta['district'] = response.request.meta['district']
             yield request

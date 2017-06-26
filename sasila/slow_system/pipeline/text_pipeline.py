@@ -47,3 +47,41 @@ class TextPipelineCar(ItemPipeline):
                 )
         except:
             logger.error(traceback.format_exc())
+
+
+class TextPipelineFang(ItemPipeline):
+    def process_item(self, item):
+        try:
+            with codecs.open("fang.csv", 'a', 'gbk') as f:
+                f.write(
+                        item["province"] + ',' +
+                        item["city"] + ',' +
+                        item["district"] + ',' +
+                        item["avg_price"] + ',' +
+                        item["estate"] + ',' +
+                        item["area"] + ',' +
+                        item["layout"] + ',' +
+                        item["total_price"] + ',' +
+                        item["crawl_date"] + "\n"
+                )
+        except:
+            logger.error(traceback.format_exc())
+
+
+class TextPipelineFangShop(ItemPipeline):
+    def process_item(self, item):
+        try:
+            with codecs.open("fang_shop.csv", 'a', 'gbk') as f:
+                f.write(
+                        item["city"] + ',' +
+                        item["district"] + ',' +
+                        item["estate"] + ',' +
+                        item["floor"] + ',' +
+                        item["total_floor"] + ',' +
+                        item["type"] + ',' +
+                        item["area"] + ',' +
+                        item["total_price"] + ',' +
+                        item["crawl_date"] + "\n"
+                )
+        except:
+            logger.error(traceback.format_exc())
