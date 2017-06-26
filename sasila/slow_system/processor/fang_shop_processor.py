@@ -5,6 +5,7 @@ import sys
 from bs4 import BeautifulSoup as bs
 from sasila.slow_system.core.request_spider import RequestSpider
 from sasila.slow_system.pipeline.console_pipeline import ConsolePipeline
+from sasila.slow_system.pipeline.text_pipeline import TextPipelineFangShop
 
 from base_processor import BaseProcessor
 from sasila.slow_system.downloader.http.spider_request import Request
@@ -111,6 +112,7 @@ class Fang_Shop_Processor(BaseProcessor):
 
             item['city'] = response.request.meta['city']
             item['district'] = response.request.meta['district']
+            item['url'] = response.request.url
             yield item
 
         next_page = soup.select('a#PageControl1_hlk_next')
@@ -123,4 +125,4 @@ class Fang_Shop_Processor(BaseProcessor):
 
 
 if __name__ == '__main__':
-    spider = RequestSpider(Fang_Shop_Processor()).set_pipeline(ConsolePipeline()).start()
+    spider = RequestSpider(Fang_Shop_Processor()).set_pipeline(ConsolePipeline()).set_pipeline(TextPipelineFangShop()).start()
