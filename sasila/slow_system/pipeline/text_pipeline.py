@@ -58,7 +58,7 @@ class TextPipelineFang(ItemPipeline):
                         item["city"] + ',' +
                         item["district"] + ',' +
                         item["avg_price"] + ',' +
-                        item["estate"] + ',' +
+                        item["estate"].replace(',', '，') + ',' +
                         item["area"] + ',' +
                         item["layout"] + ',' +
                         item["total_price"] + ',' +
