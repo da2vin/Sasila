@@ -95,7 +95,6 @@ class Car_Processor(BaseProcessor):
         # <html><head><title>Object moved</title></head><body>
         # <h2>Object moved to <a href="/CarDetail/wrong.aspx?errorcode=5&amp;backurl=/&amp;infoid=21415515">here</a>.</h2>
         # </body></html>
-        soup.original_encoding
         if len(soup.select('div.car-title h2')) != 0:
             car = soup.select('div.car-title h2')[0].text
             detail_list = soup.select('div.details li')
