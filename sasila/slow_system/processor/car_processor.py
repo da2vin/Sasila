@@ -123,7 +123,8 @@ class Car_Processor(BaseProcessor):
                 item['cars_line'] = response.request.meta['cars_line']
                 yield item
         except Exception:
-            logger.error('process error: ' + response.request.url + '\r\n' + traceback.format_exc())
+            logger.error(
+                'process error: ' + response.request.url + '\r\n' + response.m_response.content + '\r\n' + traceback.format_exc())
 
 
 if __name__ == '__main__':
