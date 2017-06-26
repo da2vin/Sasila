@@ -43,8 +43,7 @@ class TextPipelineCar(ItemPipeline):
                         item["gear"] + ',' +
                         item["displacement"] + ',' +
                         item["price"] + ',' +
-                        item["crawl_date"] + ',' +
-                        item["url"] + "\n"
+                        item["crawl_date"] + "\n"
                 )
         except:
             logger.error(traceback.format_exc())
@@ -83,7 +82,8 @@ class TextPipelineFangShop(ItemPipeline):
                         item["type"] + ',' +
                         item["area"] + ',' +
                         item["total_price"] + ',' +
-                        item["crawl_date"] + "\n"
+                        item["crawl_date"] + ',' +
+                        item["url"] + "\n"
                 )
         except:
             logger.error(traceback.format_exc())
