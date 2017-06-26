@@ -36,8 +36,8 @@ class TextPipelineCar(ItemPipeline):
                         item["province"] + ',' +
                         item["city"] + ',' +
                         item["brand"].replace(u'\u30fb', '·') + ',' +
-                        item["cars_line"] + ',' +
-                        item["car"] + ',' +
+                        item["cars_line"].replace(u'\u30fb', '·') + ',' +
+                        item["car"].replace(u'\u30fb', '·') + ',' +
                         item["mileage"] + ',' +
                         item["first_borad_date"] + ',' +
                         item["gear"] + ',' +
