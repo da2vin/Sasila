@@ -10,6 +10,7 @@ from base_processor import BaseProcessor
 from sasila.slow_system.downloader.http.spider_request import Request
 import time
 from sasila.slow_system.utils.decorator import testResponse
+from sasila.slow_system.utils import logger
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -71,22 +72,30 @@ class Fang_Shop_Processor(BaseProcessor):
         detail_list = soup.select('div.houseList dl')
         for detail in detail_list:
             estate = detail.select('p.mt15 span.spName')[0].text
+            detail_str = detail.select('p.mt10')[0].text
+
             temp_list = detail.select('p.mt10')[0].text.split('/')
-            if len(temp_list) == 3:
+            temp_list = [temp.strip() for temp in temp_list]
+
+            if '购物中心/百货' not in detail_str and '层' in detail_str:
+                m_type = temp_list[0].replace('类型：', '')
                 floor = temp_list[1]
                 total_floor = temp_list[2].replace('层', '')
-                m_type = temp_list[0].replace('类型：', '')
-            elif len(temp_list) == 4:
-                floor = temp_list[2]
-                total_floor = temp_list[3].replace('层', '')
-                m_type = temp_list[0].replace('类型：', '') + temp_list[1]
-            elif len(temp_list) == 1:
-                # http://shop.hz.fang.com//shou/house-a0160/
+            elif '购物中心/百货' not in detail_str and '层' not in detail_str:
                 m_type = temp_list[0].strip().replace('类型：', '')
                 floor = '未知'
                 total_floor = '未知'
+            elif '购物中心/百货' in detail_str and '层' not in detail_str:
+                m_type = temp_list[0].replace('类型：', '') + temp_list[1]
+                floor = '未知'
+                total_floor = '未知'
+            elif '购物中心/百货' in detail_str and '层' in detail_str:
+                m_type = temp_list[0].replace('类型：', '') + temp_list[1]
+                floor = temp_list[2]
+                total_floor = temp_list[3].replace('层', '')
             else:
-                print 1
+                logger.error('unexpective detail_str: ' + detail_str.strip())
+
             area = detail.select('div.area')[0].text.replace('㎡', '').replace('建筑面积', '')
             total_price = detail.select('div.moreInfo p.mt5 span.price')[0].text
             crawl_date = time.strftime('%Y-%m-%d', time.localtime(time.time()))
@@ -114,4 +123,4 @@ class Fang_Shop_Processor(BaseProcessor):
 
 
 if __name__ == '__main__':
-    spider = RequestSpider(Fang_Shop_Processor(), batch_size=1).set_pipeline(ConsolePipeline()).start()
+    spider = RequestSpider(Fang_Shop_Processor()).set_pipeline(ConsolePipeline()).start()
