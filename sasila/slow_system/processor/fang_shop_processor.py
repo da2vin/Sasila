@@ -106,7 +106,7 @@ class Fang_Shop_Processor(BaseProcessor):
 
         next_page = soup.select('a#PageControl1_hlk_next')
         if len(next_page) > 0:
-            url = response.nice_join(next_page[0]['href'])
+            url = response.nice_join(next_page[0]['href']) + '/'
             request = Request(url=url, priority=2, callback=self.process_page_2)
             request.meta['city'] = response.request.meta['city']
             request.meta['district'] = response.request.meta['district']
