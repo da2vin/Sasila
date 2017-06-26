@@ -76,7 +76,7 @@ class TextPipelineFangShop(ItemPipeline):
                 f.write(
                         item["city"] + ',' +
                         item["district"] + ',' +
-                        item["estate"] + ',' +
+                        item["estate"].replace(',', '，') + ',' +
                         item["floor"] + ',' +
                         item["total_floor"] + ',' +
                         item["type"] + ',' +
