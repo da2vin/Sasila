@@ -91,8 +91,6 @@ class Car_Processor(BaseProcessor):
 
     @testResponse
     def process_page_4(self, response):
-        with open('test.txt', 'a') as f:
-            f.write(response.m_response.content)
         soup = bs(response.m_response.content, 'lxml')
         # <html><head><title>Object moved</title></head><body>
         # <h2>Object moved to <a href="/CarDetail/wrong.aspx?errorcode=5&amp;backurl=/&amp;infoid=21415515">here</a>.</h2>
