@@ -27,6 +27,28 @@ def testResponse(func):
     return wrapper
 
 
+def testResponseWithTime(func):
+    @functools.wraps(func)
+    def wrapper(self, response):
+        if response.m_response is None:
+            yield response.request
+            logger.error(
+                    'response.m_response is None and url : ' + response.request.url + ' and request has been push to queue again!')
+        else:
+            process = func(self, response)
+            if process is not None:
+                try:
+                    start = time.clock()
+                    for callback in process:
+                        yield callback
+                    logger.info(func.__name__ + ' run time: ' + '{:.9f}'.format(time.clock() - start))
+                except Exception:
+                    logger.error(
+                            'process error: ' + response.request.url + '\r\n' + response.m_response.content + '\r\n' + traceback.format_exc())
+
+    return wrapper
+
+
 def timeit(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
