@@ -2,28 +2,22 @@
 # -*- coding: utf-8 -*-
 
 
-import functools
+from functools import wraps
 
 
-def testResponse(func):
-    @functools.wraps(func)
-    def wrapper(self, response):
-        if response is None:
-            print 'response is None'
-        elif response.m_response is None:
-            print 'response.m_response is None'
-        else:
-            process = func(self, response)
-            for callback in process:
-                yield callback
-    return wrapper
+def logged(func):
+    @wraps(func)
+    def with_logging(*args, **kwargs):
+        print func.__name__ + " was called"
+        return func(*args, **kwargs)
+
+    return with_logging
 
 
-@testResponse
-def test(a, b):
-    for i in range(10):
-        yield i
+@logged
+def f(x):
+    """does some math"""
+    return x + x * x
 
-
-for item in test(1, None):
-    print item
+print f.__name__
+print f.__doc__
