@@ -13,8 +13,6 @@ from xpinyin import Pinyin
 import json
 import time
 from sasila.slow_system.utils.decorator import testResponse
-from sasila.slow_system.utils import logger
-import traceback
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
