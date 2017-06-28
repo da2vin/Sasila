@@ -7,7 +7,7 @@ import traceback
 import time
 
 
-def testResponse(func):
+def checkResponse(func):
     @functools.wraps(func)
     def wrapper(self, response):
         if response.m_response is None:
@@ -27,7 +27,7 @@ def testResponse(func):
     return wrapper
 
 
-def testResponseWithTime(func):
+def checkResponseWithTime(func):
     @functools.wraps(func)
     def wrapper(self, response):
         if response.m_response is None:

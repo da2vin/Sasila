@@ -11,7 +11,7 @@ from base_processor import BaseProcessor
 from sasila.slow_system.downloader.http.spider_request import Request
 import json
 import time
-from sasila.slow_system.utils.decorator import testResponse
+from sasila.slow_system.utils.decorator import checkResponse
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -23,7 +23,7 @@ class Car_Processor(BaseProcessor):
     allowed_domains = ['che168.com']
     start_requests = [Request(url='http://www.che168.com', priority=0)]
 
-    @testResponse
+    @checkResponse
     def process(self, response):
         soup = bs(response.m_response.content, 'lxml')
         province_div_list = soup.select('div.city-list div.cap-city > div.fn-clear')
@@ -40,7 +40,7 @@ class Car_Processor(BaseProcessor):
                 request.meta['city'] = city_name
                 yield request
 
-    @testResponse
+    @checkResponse
     def process_page_1(self, response):
         brand_list = list(json.loads(response.m_response.content.decode('gb2312')))
         for brand in brand_list:
@@ -53,7 +53,7 @@ class Car_Processor(BaseProcessor):
             request.meta['brand'] = brand_name
             yield request
 
-    @testResponse
+    @checkResponse
     def process_page_2(self, response):
         soup = bs(response.m_response.content, 'lxml')
         cars_line_list = soup.select('div#series div.content-area dl.model-list dd a')
@@ -67,7 +67,7 @@ class Car_Processor(BaseProcessor):
             request.meta['cars_line'] = cars_line_name
             yield request
 
-    @testResponse
+    @checkResponse
     def process_page_3(self, response):
         soup = bs(response.m_response.content, 'lxml')
         car_info_list = soup.select('div#a2 ul#viewlist_ul li a.carinfo')
@@ -89,7 +89,7 @@ class Car_Processor(BaseProcessor):
             request.meta['cars_line'] = response.request.meta['cars_line']
             yield request
 
-    @testResponse
+    @checkResponse
     def process_page_4(self, response):
         soup = bs(response.m_response.content, 'lxml')
         # <html><head><title>Object moved</title></head><body>

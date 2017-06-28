@@ -10,7 +10,7 @@ from sasila.slow_system.pipeline.text_pipeline import TextPipelineFangShop
 from base_processor import BaseProcessor
 from sasila.slow_system.downloader.http.spider_request import Request
 import time
-from sasila.slow_system.utils.decorator import testResponse
+from sasila.slow_system.utils.decorator import checkResponse
 from sasila.slow_system.utils import logger
 
 reload(sys)
@@ -23,7 +23,7 @@ class Fang_Shop_Processor(BaseProcessor):
     allowed_domains = ['fang.com']
     start_requests = [Request(url='http://shop.fang.com', priority=0)]
 
-    @testResponse
+    @checkResponse
     def process(self, response):
         soup = bs('''<a href="http://shop1.fang.com/" style="width:40px;padding:4px 0 4px 8px;">北京</a>
                      <a href="http://shop.sh.fang.com/" style="width:40px;padding:4px 0 4px 8px;">上海</a>
@@ -54,7 +54,7 @@ class Fang_Shop_Processor(BaseProcessor):
             request.meta['city'] = city_name
             yield request
 
-    @testResponse
+    @checkResponse
     def process_page_1(self, response):
         soup = bs(response.m_response.content, 'lxml')
         district_list = soup.select('div.qxName a')
@@ -67,7 +67,7 @@ class Fang_Shop_Processor(BaseProcessor):
             request.meta['district'] = district_name
             yield request
 
-    @testResponse
+    @checkResponse
     def process_page_2(self, response):
         soup = bs(response.m_response.content, 'lxml')
         detail_list = soup.select('div.houseList dl')

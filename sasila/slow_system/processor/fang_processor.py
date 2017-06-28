@@ -10,7 +10,7 @@ from sasila.slow_system.pipeline.text_pipeline import TextPipelineFang
 from base_processor import BaseProcessor
 from sasila.slow_system.downloader.http.spider_request import Request
 import time
-from sasila.slow_system.utils.decorator import testResponse
+from sasila.slow_system.utils.decorator import checkResponse
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -22,7 +22,7 @@ class Fang_Processor(BaseProcessor):
     allowed_domains = ['fang.com']
     start_requests = [Request(url='http://esf.gz.fang.com/newsecond/esfcities.aspx', priority=0)]
 
-    @testResponse
+    @checkResponse
     def process(self, response):
         soup = bs(response.m_response.content, 'lxml')
         province_div_list = soup.select('div#c02 ul li')
@@ -38,7 +38,7 @@ class Fang_Processor(BaseProcessor):
                     request.meta['city'] = city_name
                     yield request
 
-    @testResponse
+    @checkResponse
     def process_page_1(self, response):
         soup = bs(response.m_response.content, 'lxml')
         district_list = soup.select('div.qxName a')
@@ -52,7 +52,7 @@ class Fang_Processor(BaseProcessor):
             request.meta['district'] = district_name
             yield request
 
-    @testResponse
+    @checkResponse
     def process_page_2(self, response):
         soup = bs(response.m_response.content, 'lxml')
         avg_price_list = soup.select('div.newcardR dl')
