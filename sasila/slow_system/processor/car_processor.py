@@ -11,7 +11,7 @@ from base_processor import BaseProcessor
 from sasila.slow_system.downloader.http.spider_request import Request
 import json
 import time
-from sasila.slow_system.utils.decorator import testResponse, timeit_generator
+from sasila.slow_system.utils.decorator import testResponse
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
