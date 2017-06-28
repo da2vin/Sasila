@@ -9,10 +9,9 @@ from sasila.slow_system.pipeline.text_pipeline import TextPipelineCar
 
 from base_processor import BaseProcessor
 from sasila.slow_system.downloader.http.spider_request import Request
-from xpinyin import Pinyin
 import json
 import time
-from sasila.slow_system.utils.decorator import testResponse
+from sasila.slow_system.utils.decorator import testResponse, timeit_generator
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -35,7 +34,8 @@ class Car_Processor(BaseProcessor):
                 city_name = city.text
                 pinyin = city['href'].strip('/').split('/')[0]
                 request = Request(
-                        url='http://www.che168.com/handler/usedcarlistv5.ashx?action=brandlist&area=%s' % pinyin, priority=1, callback=self.process_page_1)
+                        url='http://www.che168.com/handler/usedcarlistv5.ashx?action=brandlist&area=%s' % pinyin,
+                        priority=1, callback=self.process_page_1)
                 request.meta['province'] = province_name
                 request.meta['city'] = city_name
                 yield request
@@ -89,6 +89,7 @@ class Car_Processor(BaseProcessor):
             request.meta['cars_line'] = response.request.meta['cars_line']
             yield request
 
+    @timeit_generator
     @testResponse
     def process_page_4(self, response):
         soup = bs(response.m_response.content, 'lxml')

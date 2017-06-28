@@ -58,3 +58,15 @@ def timeit(func):
         return ret
 
     return wrapper
+
+
+def timeit_generator(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        rets = func(*args, **kwargs)
+        start = time.clock()
+        for ret in rets:
+            yield ret
+        logger.info(func.__name__ + ' run time: ' + '{:.9f}'.format(time.clock() - start))
+
+    return wrapper
