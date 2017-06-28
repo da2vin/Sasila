@@ -33,9 +33,9 @@ class Car_Processor(BaseProcessor):
             city_list = province_div.select('div.city a')
             for city in city_list:
                 city_name = city.text
+                pinyin = city['href'].strip('/').split('/')[0]
                 request = Request(
-                        url='http://www.che168.com/handler/usedcarlistv5.ashx?action=brandlist&area=%s' % Pinyin().get_pinyin(
-                                city_name, splitter=''), priority=1, callback=self.process_page_1)
+                        url='http://www.che168.com/handler/usedcarlistv5.ashx?action=brandlist&area=%s' % pinyin, priority=1, callback=self.process_page_1)
                 request.meta['province'] = province_name
                 request.meta['city'] = city_name
                 yield request
