@@ -89,7 +89,6 @@ class Car_Processor(BaseProcessor):
             request.meta['cars_line'] = response.request.meta['cars_line']
             yield request
 
-    @timeit_generator
     @testResponse
     def process_page_4(self, response):
         soup = bs(response.m_response.content, 'lxml')
