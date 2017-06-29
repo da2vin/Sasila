@@ -11,14 +11,14 @@ def checkResponse(func):
     @functools.wraps(func)
     def wrapper(self, response):
         if not response.m_response:
-            yield response.request
             if response.m_response is None:
                 logger.error(
                         'response.m_response is None and url : ' + response.request.url + ' and request has been push to queue again!')
             else:
                 logger.error(
                         'response.m_response is failed 【' + str(
-                            response.m_response.status_code) + '】 and url : ' + response.request.url + ' content:' + response.m_response.content + ' and request has been push to queue again!')
+                                response.m_response.status_code) + '】 and url : ' + response.request.url + ' content:' + response.m_response.content + ' and request has been push to queue again!')
+            yield response.request
         else:
             process = func(self, response)
             if process is not None:
@@ -36,14 +36,14 @@ def checkResponseWithTime(func):
     @functools.wraps(func)
     def wrapper(self, response):
         if not response.m_response:
-            yield response.request
             if response.m_response is None:
                 logger.error(
                         'response.m_response is None and url : ' + response.request.url + ' and request has been push to queue again!')
             else:
                 logger.error(
                         'response.m_response is failed 【' + str(
-                            response.m_response.status_code) + '】 and url : ' + response.request.url + ' content:' + response.m_response.content + ' and request has been push to queue again!')
+                                response.m_response.status_code) + '】 and url : ' + response.request.url + ' content:' + response.m_response.content + ' and request has been push to queue again!')
+            yield response.request
         else:
             process = func(self, response)
             if process is not None:
