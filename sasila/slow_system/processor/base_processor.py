@@ -4,6 +4,7 @@ import sys
 import re
 from bs4 import BeautifulSoup as bs
 from sasila.slow_system.downloader.http.spider_request import Request
+from sasila.slow_system.utils.decorator import checkResponse
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -31,6 +32,7 @@ class LinkExtractor(object):
         self.css_str = css_str
         self.process_value = process_value
 
+    @checkResponse
     def extract_links(self, response):
         if self.process_value:
             return [response.nice_join(link) for link in self.process_value(response.m_response.content)]
@@ -49,6 +51,7 @@ class BaseProcessor(object):
     rules = ()
     allowed_domains = []
 
+    @checkResponse
     def process(self, response):
         if hasattr(self, 'rules'):
             rules = getattr(self, 'rules', None)

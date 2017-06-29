@@ -18,7 +18,7 @@ class MezituProcessor(BaseProcessor):
     spider_id = 'mzitu'
     spider_name = 'mzitu'
     allowed_domains = ['mzitu.com', 'meizitu.net']
-    start_requests = [Request(url='http://www.mzitu.com/xinggan')]
+    start_requests = [Request(url='http://www.mzitu.com/xinggan/')]
 
     rules = (
         Rule(LinkExtractor(regex_str=r"http://i.meizitu.net/\d{4}/\d{2}/[0-9a-z]+.jpg"),
