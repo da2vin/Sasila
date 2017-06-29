@@ -80,3 +80,28 @@ def timeit_generator(func):
         logger.info(func.__name__ + ' run time: ' + '{:.9f}'.format(time.clock() - start))
 
     return wrapper
+
+
+def tryCatch(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            ret = func(*args, **kwargs)
+            return ret
+        except Exception:
+            logger.info('【%s】error:%s' % (func.__name__, traceback.format_exc()))
+
+    return wrapper
+
+
+def tryCatch_generator(func):
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            rets = func(*args, **kwargs)
+            for ret in rets:
+                yield ret
+        except Exception:
+            logger.info('【%s】error:%s' % (func.__name__, traceback.format_exc()))
+
+    return wrapper
