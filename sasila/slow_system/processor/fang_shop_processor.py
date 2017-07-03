@@ -25,6 +25,7 @@ class Fang_Shop_Processor(BaseProcessor):
 
     @checkResponse
     def process(self, response):
+        city_crawl_list = {'成都', '南京', '苏州', '无锡', '南昌', '济南','青岛', '广州', '东莞', '山西'}
         soup = bs('''<a href="http://shop1.fang.com/" style="width:40px;padding:4px 0 4px 8px;">北京</a>
                      <a href="http://shop.sh.fang.com/" style="width:40px;padding:4px 0 4px 8px;">上海</a>
                      <a href="http://shop.gz.fang.com/" style="width:40px;padding:4px 0 4px 8px;">广州</a>
@@ -49,10 +50,11 @@ class Fang_Shop_Processor(BaseProcessor):
         city__list = soup.select('a')
         for city in city__list:
             city_name = city.text
-            url = city['href']
-            request = Request(url=url, priority=1, callback=self.process_page_1)
-            request.meta['city'] = city_name
-            yield request
+            if city_name in city_crawl_list:
+                url = city['href']
+                request = Request(url=url, priority=1, callback=self.process_page_1)
+                request.meta['city'] = city_name
+                yield request
 
     @checkResponse
     def process_page_1(self, response):
@@ -123,5 +125,7 @@ class Fang_Shop_Processor(BaseProcessor):
             request.meta['district'] = response.request.meta['district']
             yield request
 
+
 if __name__ == '__main__':
-    spider = RequestSpider(Fang_Shop_Processor()).set_pipeline(ConsolePipeline()).set_pipeline(TextPipelineFangShop()).start()
+    spider = RequestSpider(Fang_Shop_Processor()).set_pipeline(ConsolePipeline()).set_pipeline(
+            TextPipelineFangShop()).start()
