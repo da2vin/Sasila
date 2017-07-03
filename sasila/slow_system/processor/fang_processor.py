@@ -22,7 +22,7 @@ class Fang_Processor(BaseProcessor):
     allowed_domains = ['fang.com']
     start_requests = [Request(url='http://esf.gz.fang.com/newsecond/esfcities.aspx', priority=0)]
 
-
+    @checkResponse
     def process(self, response):
         soup = bs(response.m_response.content, 'lxml')
         province_list = {u'四川', u'江苏', u'江西', u'山东', u'广东', u'山西'}
