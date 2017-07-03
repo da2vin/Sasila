@@ -25,18 +25,20 @@ class Fang_Processor(BaseProcessor):
     @checkResponse
     def process(self, response):
         soup = bs(response.m_response.content, 'lxml')
+        province_list = {'四川', '江苏', '江西', '山东', '广东', '山西'}
         province_div_list = soup.select('div#c02 ul li')
         for province_div in province_div_list:
             province_name = province_div.select('strong')[0].text
             if province_name != '其他':
-                city_list = province_div.select('a')
-                for city in city_list:
-                    city_name = city.text
-                    url = city['href']
-                    request = Request(url=url, priority=1, callback=self.process_page_1)
-                    request.meta['province'] = province_name
-                    request.meta['city'] = city_name
-                    yield request
+                if province_name in province_list:
+                    city_list = province_div.select('a')
+                    for city in city_list:
+                        city_name = city.text
+                        url = city['href']
+                        request = Request(url=url, priority=1, callback=self.process_page_1)
+                        request.meta['province'] = province_name
+                        request.meta['city'] = city_name
+                        yield request
 
     @checkResponse
     def process_page_1(self, response):
