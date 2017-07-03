@@ -25,7 +25,7 @@ class Fang_Processor(BaseProcessor):
     @checkResponse
     def process(self, response):
         soup = bs(response.m_response.content, 'lxml')
-        province_list = {'四川', '江苏', '江西', '山东', '广东', '山西'}
+        province_list = {u'四川', u'江苏', u'江西', u'山东', u'广东', u'山西'}
         province_div_list = soup.select('div#c02 ul li')
         for province_div in province_div_list:
             province_name = province_div.select('strong')[0].text

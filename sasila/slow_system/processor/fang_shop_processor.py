@@ -25,7 +25,7 @@ class Fang_Shop_Processor(BaseProcessor):
 
     @checkResponse
     def process(self, response):
-        city_crawl_list = {'成都', '南京', '苏州', '无锡', '南昌', '济南','青岛', '广州', '东莞', '山西'}
+        city_crawl_list = {u'成都', u'南京', u'苏州', u'无锡', u'南昌', u'济南', u'青岛', u'广州', u'东莞', u'山西'}
         soup = bs('''<a href="http://shop1.fang.com/" style="width:40px;padding:4px 0 4px 8px;">北京</a>
                      <a href="http://shop.sh.fang.com/" style="width:40px;padding:4px 0 4px 8px;">上海</a>
                      <a href="http://shop.gz.fang.com/" style="width:40px;padding:4px 0 4px 8px;">广州</a>
