@@ -6,6 +6,7 @@ import requests
 from requests.adapters import HTTPAdapter
 from sasila.slow_system.downloader.base_downloder import BaseDownLoader
 from sasila.slow_system.downloader.http.spider_response import Response
+from sasila.slow_system.downloader.proxy.proxy_pool import ProxyPool
 
 from sasila.slow_system.utils import logger
 
@@ -16,8 +17,13 @@ sys.setdefaultencoding('utf-8')
 class RequestsDownLoader(BaseDownLoader):
     # proxies = {"http": "http://127.0.0.1:8888", "https": "http://127.0.0.1:8888",}
 
-    def __init__(self, loginer=None):
+    def __init__(self, loginer=None, use_proxy=False):
         self.loginer = loginer
+        self.use_proxy = use_proxy
+        if use_proxy:
+            self.proxy_pool = ProxyPool()
+            if len(self.proxy_pool) == 0:
+                self.use_proxy = False
         self._cookies = None
 
         self._headers = dict()
@@ -47,27 +53,55 @@ class RequestsDownLoader(BaseDownLoader):
                 session.headers = self._headers
 
             if request.method.upper() == "GET":
-                batch_requests.append(grequests.get(
-                        session=session,
-                        url=request.url,
-                        headers=request.headers,
-                        cookies=self._cookies,
-                        verify=False,
-                        allow_redirects=request.allow_redirects,
-                        timeout=request.timeout
-                ))
+                if self.use_proxy:
+                    m_proxies = self.proxy_pool.getProxy()
+                    batch_requests.append(grequests.get(
+                            session=session,
+                            url=request.url,
+                            headers=request.headers,
+                            cookies=self._cookies,
+                            verify=False,
+                            allow_redirects=request.allow_redirects,
+                            timeout=request.timeout,
+                            proxies=m_proxies
+                    ))
+                else:
+                    batch_requests.append(grequests.get(
+                            session=session,
+                            url=request.url,
+                            headers=request.headers,
+                            cookies=self._cookies,
+                            verify=False,
+                            allow_redirects=request.allow_redirects,
+                            timeout=request.timeout
+                    ))
             elif request.method.upper() == "POST":
-                batch_requests.append(grequests.post(
-                        session=session,
-                        url=request.url,
-                        data=request.data,
-                        json=request.json,
-                        headers=request.headers,
-                        cookies=self._cookies,
-                        verify=False,
-                        allow_redirects=request.allow_redirects,
-                        timeout=request.timeout
-                ))
+                if self.use_proxy:
+                    m_proxies = self.proxy_pool.getProxy()
+                    batch_requests.append(grequests.post(
+                            session=session,
+                            url=request.url,
+                            data=request.data,
+                            json=request.json,
+                            headers=request.headers,
+                            cookies=self._cookies,
+                            verify=False,
+                            allow_redirects=request.allow_redirects,
+                            timeout=request.timeout,
+                            proxies=m_proxies
+                    ))
+                else:
+                    batch_requests.append(grequests.post(
+                            session=session,
+                            url=request.url,
+                            data=request.data,
+                            json=request.json,
+                            headers=request.headers,
+                            cookies=self._cookies,
+                            verify=False,
+                            allow_redirects=request.allow_redirects,
+                            timeout=request.timeout
+                    ))
             else:
                 pass
 

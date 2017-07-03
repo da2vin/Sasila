@@ -20,7 +20,8 @@ def _priority_compare(r1, r2):
 
 
 class RequestSpider(object):
-    def __init__(self, processor=None, downloader=None, scheduler=None, batch_size=None, time_sleep=None):
+    def __init__(self, processor=None, downloader=None, use_proxy=False, scheduler=None, batch_size=None,
+                 time_sleep=None):
         self._processor = processor
         self._host_regex = self._get_host_regex()
         self._spider_status = 'stopped'
@@ -38,7 +39,7 @@ class RequestSpider(object):
         self._process_count = 0
 
         if not downloader:
-            self._downloader = RequestsDownLoader()
+            self._downloader = RequestsDownLoader(use_proxy=use_proxy)
 
         if not scheduler:
             self._queue = PriorityQueue(self._processor)
