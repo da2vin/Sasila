@@ -42,7 +42,7 @@ class Fang_Processor(BaseProcessor):
 
     @checkResponse
     def process_page_1(self, response):
-        soup = bs(response.m_response.content, 'html5lib')
+        soup = bs(response.m_response.content, 'lxml')
         district_list = soup.select('div.qxName a')
         district_list.pop(0)
         for district in district_list:
@@ -56,7 +56,7 @@ class Fang_Processor(BaseProcessor):
 
     @checkResponse
     def process_page_2(self, response):
-        soup = bs(response.m_response.content, 'html5lib')
+        soup = bs(response.m_response.content, 'lxml')
         avg_price_list = soup.select('div.newcardR dl')
         if len(avg_price_list) > 0:
             avg_price = avg_price_list[1].select('dd b')[0].text
