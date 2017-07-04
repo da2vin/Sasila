@@ -1,0 +1,22 @@
+Metadata-Version: 1.1
+Name: sasila
+Version: 0.0.1
+Summary: a simple spider system
+Home-page: https://github.com/DarkSand/Sasila
+Author: DaVinciDW
+Author-email: darkwings_love@163.com
+License: MIT License
+Description: ##Sasila
+        ###a simple spider system
+Platform: all
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Text Processing :: Indexing
+Classifier: Topic :: Utilities
+Classifier: Topic :: Internet
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
