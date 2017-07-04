@@ -171,5 +171,5 @@ then start your spider in your browser::
 
 you can stop spider::
 
-    http://127.0.0.1:5000/slow_spider/start?spider_id=car_spider
+    http://127.0.0.1:5000/slow_spider/stop?spider_id=car_spider
 
