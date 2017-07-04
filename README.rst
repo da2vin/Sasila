@@ -21,7 +21,8 @@ The quick way::
 
 Tutorial
 =======
-``
+car_processor.py::
+
     #!/usr/bin/env python
     # -*- coding: utf-8 -*-
     from sasila.slow_system.core.request_spider import RequestSpider
@@ -145,7 +146,7 @@ Tutorial
                 item["brand"] = response.request.meta["brand"]
                 item["cars_line"] = response.request.meta["cars_line"]
                 yield item
-``
+
 main.py::
 
     #!/usr/bin/env python
