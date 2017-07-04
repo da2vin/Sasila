@@ -21,4 +21,6 @@ DRIVER_POOL_SIZE = 5
 
 PROXY_PATH_REQUEST = os.path.join(BASE_DIR, 'proxy.txt')
 
-TEST = False
+# REDIS_HOST = 'localhost'
+# REDIS_PORT = 6379
+
