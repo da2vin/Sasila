@@ -3,7 +3,7 @@
 import Queue
 import sys
 
-from sasila.settings import PROXY_PATH_REQUEST
+from sasila.settings.default_settings import PROXY_PATH_REQUEST
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
