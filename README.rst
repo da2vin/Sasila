@@ -1,11 +1,11 @@
 Sasila
 ======
 .. image:: https://img.shields.io/badge/sasila-v0.0.1-green.svg
-   :target: https://pypi.python.org/pypi/Sasia
+   :target: https://pypi.python.org/pypi/Sasila
    :alt: PyPI Version
 
 .. image:: https://img.shields.io/badge/pypi-v1.4.0-green.svg
-   :target: https://pypi.python.org/pypi/Sasia
+   :target: https://pypi.python.org/pypi/Sasila
    :alt: Wheel Status
 
 Overview
