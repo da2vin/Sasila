@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
         name='sasila',
@@ -14,7 +14,7 @@ setup(
         maintainer='DaVinciDW',
         maintainer_email='darkwings_love@163.com',
         license='MIT License',
-        packages=['sasila'],
+        packages=find_packages(),
         platforms=["all"],
         url='https://github.com/DarkSand/Sasila',
         install_requires=[
