@@ -11,3 +11,10 @@ Sasila
 Overview
 ========
 sasila is a simple spider system
+
+Install
+=======
+
+The quick way::
+
+    pip install sasila
