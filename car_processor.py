@@ -127,6 +127,4 @@ class Car_Processor(BaseProcessor):
 
 if __name__ == '__main__':
     spider = RequestSpider(Car_Processor()).set_pipeline(ConsolePipeline()).set_pipeline(
-            TextPipelineCar())
-    manager.set_spider(spider)
-    sasila.start()
+            TextPipelineCar()).start()
