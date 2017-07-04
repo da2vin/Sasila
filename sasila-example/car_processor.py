@@ -6,8 +6,6 @@ from sasila.slow_system.pipeline.text_pipeline import TextPipelineCar
 from sasila.slow_system.processor.base_processor import BaseProcessor
 from sasila.slow_system.downloader.http.spider_request import Request
 from sasila.slow_system.utils.decorator import checkResponse
-from sasila.slow_system.manager import manager
-import sasila
 
 from bs4 import BeautifulSoup as bs
 import json

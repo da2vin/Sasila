@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.getcwd()))
+
 from car_processor import Car_Processor
 from fang_processor import Fang_Processor
 from sasila.slow_system.pipeline.console_pipeline import ConsolePipeline
