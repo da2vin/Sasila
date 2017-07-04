@@ -5,6 +5,7 @@ import redis
 import cPickle
 from bloom_filter import BloomFilter
 from sasila.slow_system.utils.reqser import request_to_dict, request_from_dict
+from sasila.settings import default_settings
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -17,7 +18,7 @@ class Base(object):
         self.task_id = processor.spider_id
         self.processor = processor
         self._filter = BloomFilter(key=self.task_id)
-        self._server = redis.StrictRedis()
+        self._server = redis.StrictRedis(host=default_settings.REDIS_HOST, port=default_settings.REDIS_PORT)
 
     def __len__(self):
         """Return the length of the queue"""

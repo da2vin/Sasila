@@ -3,6 +3,7 @@
 import sys
 import redis
 from hashlib import md5
+from sasila.settings import default_settings
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -21,7 +22,7 @@ class SimpleHash(object):
 
 
 class BloomFilter(object):
-    def __init__(self, host='localhost', port=6379, db=0, block_num=1, key='bloomfilter'):
+    def __init__(self, host=default_settings.REDIS_HOST, port=default_settings.REDIS_PORT, db=0, block_num=1, key='bloomfilter'):
         """
         :param host: the host of Redis
         :param port: the port of Redis
