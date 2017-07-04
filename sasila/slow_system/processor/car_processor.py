@@ -9,9 +9,9 @@ from sasila.slow_system.pipeline.text_pipeline import TextPipelineCar
 
 from base_processor import BaseProcessor
 from sasila.slow_system.downloader.http.spider_request import Request
+from sasila.slow_system.utils.decorator import checkResponse
 import json
 import time
-from sasila.slow_system.utils.decorator import checkResponse
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
