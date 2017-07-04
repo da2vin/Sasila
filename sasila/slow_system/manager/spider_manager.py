@@ -16,7 +16,7 @@ class SpiderManager(object):
         self.spider_list[spider._spider_id] = spider
 
     def del_spider(self, spider_id):
-        if self.spider_list.has_key(spider_id):
+        if spider_id in self.spider_list.keys():
             self.spider_list[spider_id].stop()
             del self.spider_list[spider_id]
 
