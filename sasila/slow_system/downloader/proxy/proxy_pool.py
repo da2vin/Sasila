@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import sys
 import Queue
-from sasila.slow_system.settings import PROXY_PATH_REQUEST
+import sys
+
+from sasila.settings import PROXY_PATH_REQUEST
 
 reload(sys)
 sys.setdefaultencoding('utf-8')

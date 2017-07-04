@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import Queue
 import sys
+
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-from sasila.slow_system import settings
-import Queue
+
+from sasila.settings import default_settings
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -13,15 +15,15 @@ sys.setdefaultencoding('utf-8')
 dcap = dict(DesiredCapabilities.PHANTOMJS)
 dcap["phantomjs.page.settings.resourceTimeout"] = 10
 dcap["phantomjs.page.settings.loadImages"] = True
-dcap["phantomjs.page.settings.userAgent"] = settings.USER_AGENT
+dcap["phantomjs.page.settings.userAgent"] = default_settings.USER_AGENT
 
 
 def _get_base_ali_driver():
-    if settings.PHANTOMJS_SERVICE:
-        web = webdriver.PhantomJS(service_args=settings.PHANTOMJS_SERVICE, executable_path=settings.PHANTOMJS_PATH
+    if default_settings.PHANTOMJS_SERVICE:
+        web = webdriver.PhantomJS(service_args=default_settings.PHANTOMJS_SERVICE, executable_path=default_settings.PHANTOMJS_PATH
                                   , desired_capabilities=dcap)
     else:
-        web = webdriver.PhantomJS(executable_path=settings.PHANTOMJS_PATH
+        web = webdriver.PhantomJS(executable_path=default_settings.PHANTOMJS_PATH
                                   , desired_capabilities=dcap)
     return web
 

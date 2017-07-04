@@ -18,6 +18,5 @@ PHANTOMJS_PATH = 'C:/Python27/phantomjs.exe'
 # ]
 PHANTOMJS_SERVICE = None
 DRIVER_POOL_SIZE = 5
-PROXY_PATH_REQUEST = 'proxy'
 
 PROXY_PATH_REQUEST = os.path.join(BASE_DIR, 'proxy.txt')

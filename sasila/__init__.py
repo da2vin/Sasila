@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
+import settings
 from flask import Flask
 from slow_system.blueprints.slow_spiders import slow_spider
+
 # from immediately_system.blueprints.jd import im_jd
 reload(sys)
 sys.setdefaultencoding('utf-8')
