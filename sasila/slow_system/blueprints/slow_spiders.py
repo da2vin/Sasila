@@ -2,15 +2,13 @@
 # -*- coding: utf-8 -*-
 import sys
 from flask import Blueprint, request
-from sasila.slow_system.manager.spider_manager import SpiderManager
+from sasila.slow_system.manager import manager
 import json
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 slow_spider = Blueprint('slow_spider', __name__)
-
-manager = SpiderManager()
 
 
 @slow_spider.route('/all')

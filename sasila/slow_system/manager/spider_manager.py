@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 import sys
 import json
-from sasila.slow_system.processor.mzitu_proccessor import mzitu_spider
-from sasila.slow_system.processor.fe_loan_processor import fe_spider
 import threading
 
 reload(sys)
@@ -13,8 +11,14 @@ sys.setdefaultencoding('utf-8')
 class SpiderManager(object):
     def __init__(self):
         self.spider_list = dict()
-        self.spider_list[mzitu_spider._spider_id] = mzitu_spider
-        self.spider_list[fe_spider._spider_id] = fe_spider
+
+    def set_spider(self, spider):
+        self.spider_list[spider._spider_id] = spider
+
+    def del_spider(self, spider_id):
+        if self.spider_list.has_key(spider_id):
+            self.spider_list[spider_id].stop()
+            del self.spider_list[spider_id]
 
     def init_system(self):
         pass
