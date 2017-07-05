@@ -8,7 +8,7 @@ setup(
         description=(
             'a simple spider system'
         ),
-        long_description=open('README.rst').read(),
+        long_description=open('README-SETUP.rst').read(),
         author='DaVinciDW',
         author_email='darkwings_love@163.com',
         maintainer='DaVinciDW',
