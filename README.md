@@ -23,7 +23,13 @@
 ```
 pip install sasila
 ```
-
+## **准备**
+* 请准备好您的redis服务器进行调度。
+* 并在settings.py文件中 写入您的redis服务器地址
+```python
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+```
 ## **构建processor(解析器)**
 ```python
 #!/usr/bin/env python
@@ -49,11 +55,11 @@ class Mzi_Processor(BaseProcessor):
 ```
 写法与scrapy几乎一样
 
-* 所有的解析器都继承自BaseProcessor，默认入口解析函数为def process(self, response)。
+* 所有的解析器都继承自 *BaseProcessor* ，默认入口解析函数为def process(self, response)。
 * 为该解析器设置spider_id和spider_name,以及限定域名。
-* 初始爬取请求为start_requests，构建Request对象，该对象支持GET、POST方法，支持优先级，设置回调函数等等所有构建request对象的一切属性。默认回调函数为*process*。
-* 可以使用* @checkResponse *装饰器对返回的response进行校验并记录异常日志。
-* 解析函数因为使用yield关键字，所以是一个生成器。当yield返回Request对象，则会将Request对象推入调度器等待调度继续进行爬取。若yield不是返回Request对象则会进入*pipeline*，*pipeline*将对数据进行清洗入库等操作。
+* 初始爬取请求为 *start_requests*，构建Request对象，该对象支持GET、POST方法，支持优先级，设置回调函数等等所有构建request对象的一切属性。默认回调函数为 *process*。
+* 可以使用@checkResponse装饰器对返回的 *response* 进行校验并记录异常日志。你也可以定义自己的装饰器。
+* 解析函数因为使用 *yield* 关键字，所以是一个生成器。当 *yield* 返回 *Request* 对象，则会将 *Request* 对象推入调度器等待调度继续进行爬取。若 *yield* 不是返回 *Request* 对象则会进入 *pipeline* ， *pipeline* 将对数据进行清洗入库等操作。
 
 ## **构建pipeline**
 ```python
@@ -64,18 +70,22 @@ class ConsolePipeline(ItemPipeline):
         print json.dumps(item).decode("unicode-escape")
 ```
 ## **构建spider(爬虫对象）**
-* 通过注入*processor*生成spider对象
+* 通过注入 *processor* 生成spider对象
 ```python
 from sasila.slow_system.core.request_spider import RequestSpider
 
 spider = RequestSpider(Mzi_Processor())
 ```
-* RequestSpider对象包含批下载数量*batch_size*，下载间隔*time_sleep*，使用代理*use_proxy*等一切必要的属性
+* RequestSpider对象包含批下载数量 *batch_size*，下载间隔 *time_sleep*，使用代理 *use_proxy* 等一切必要的属性
 ```python
 RequestSpider(processor=None, downloader=None, use_proxy=False,scheduler=None,batch_size=None,time_sleep=None)
 ```
-* RequestSpider已经默认设置好了*downloader*和*scheduler*，如果不满意，可以自己进行定制。
-* 可以为spider设置*downloader*和*pipeline*甚至*scheduler*
+* 本项目集成使用代理IP的功能，只要在构建RequestSpider时将  *use_proxy* 设置为 *True*,并在脚本同级目录下放置proxy.txt文件即可。你也可以在settings.py文件中写入代理IP文件路径。
+```python
+PROXY_PATH_REQUEST = 'proxy/path'
+```
+* RequestSpider已经默认设置好了 *downloader* 和 *scheduler*，如果不满意，可以自己进行定制。
+* 可以为spider设置 *downloader* 和 *pipeline* 甚至 *scheduler*
 ```python
  spider = spider.set_pipeline(ConsolePipeline())
 ```
@@ -121,7 +131,7 @@ sasila.start()
 ![feijishi](https://github.com/DarkSand/Sasila/blob/master/pic/feijishi.png)
 
 ## **即时爬虫**
-即时爬虫是可以通过api调用，传入需要爬取的页面或者需求，即时爬取数据并返回结果。现阶段开发并不完善。仅提供思路参考。
+即时爬虫是可以通过api调用，传入需要爬取的页面或者需求，即时爬取数据并返回结果。现阶段开发并不完善。仅提供思路参考。示例核心代码在 *sasila.immediately_system* 中。
 
 * 即时爬虫-获取数据流程图
 
