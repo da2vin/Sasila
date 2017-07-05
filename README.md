@@ -1,6 +1,6 @@
 # Sasila [![version](https://img.shields.io/badge/version-0.0.1-green.svg)](https://pypi.python.org/pypi/Sasila)
 
-&emsp;&emsp;在爬虫工作中，我接触过较多的爬虫框架，比如[**scrapy**](https://github.com/scrapy/scrapy)、[**webmagic**](https://github.com/code4craft/webmagic)、[**pyspider**](https://github.com/binux/pyspider)，也经常直接通过[**requests**](https://github.com/requests/requests)+[**beautifulsoup**](https://github.com/il-vladislav/BeautifulSoup4)来写一些个性化的小型爬虫脚本。但是在实际爬取过程当中，仍然不能完全满足实际需要。所以我开发了这套**小型的**、**灵活的**、**功能完善的**爬虫框架。
+&emsp;&emsp;现在有较多的爬虫框架，比如[**scrapy**](https://github.com/scrapy/scrapy)、[**webmagic**](https://github.com/code4craft/webmagic)、[**pyspider**](https://github.com/binux/pyspider)，也经常直接通过[**requests**](https://github.com/requests/requests)+[**beautifulsoup**](https://github.com/il-vladislav/BeautifulSoup4)来写一些个性化的小型爬虫脚本。但是在实际爬取过程当中，仍然不能完全满足实际需要。所以我开发了这套**小型的**、**灵活的**、**功能完善的**爬虫框架。
 
 ![jiagou](https://github.com/DarkSand/Sasila/blob/master/pic/jigou.png)
 
@@ -52,6 +52,7 @@ class Mzi_Processor(BaseProcessor):
 * 所有的解析器都继承自BaseProcessor，默认入口解析函数为def process(self, response)。
 * 为该解析器设置spider_id和spider_name,以及限定域名。
 * 初始爬取请求为start_requests，构建Request对象，该对象支持GET、POST方法，支持优先级，设置回调函数等等所有构建request对象的一切属性。默认回调函数为*process*。
+* 可以使用*@checkResponse*装饰器对返回的response进行校验并记录异常日志。
 * 解析函数因为使用yield关键字，所以是一个生成器。当yield返回Request对象，则会将Request对象推入调度器等待调度继续进行爬取。若yield不是返回Request对象则会进入*pipeline*，*pipeline*将对数据进行清洗入库等操作。
 
 ## **构建pipeline**
@@ -98,9 +99,29 @@ sasila.start()
 ## **架构**
 ![jichu](https://github.com/DarkSand/Sasila/blob/master/pic/jichu.png)
 
-* 任务由 scheduler 发起调度，fetcher 抓取网页内容， processor 执行预先编写的py脚本，输出结果或产生新的提链任务（发往 scheduler），形成闭环。
+* 任务由 scheduler 发起调度，downloader 抓取网页内容， processor 执行预先编写的py脚本，输出结果或产生新的提链任务（发往 scheduler），形成闭环。
 * 每个脚本被认为是一个spider，spiderid确定一个任务。
 * downloader
 1. method, header, cookie, proxy,timeout 等等抓取调度控制。
 2. 可以通过适配类似 phantomjs 的webkit引擎支持渲染。
-3. 流量控制
+* processor
+1. 灵活运用pyquery，beautifulsoup等解析页面。
+2. 在脚本中完全控制调度抓取的各项参数。
+3. 可以向后链传递信息。
+4. 异常捕获。
+* scheduler
+1. 任务优先级。
+2. 对任务进行监控。
+3. 对任务进行去重等操作。
+4. 支持增量。
+* webApi
+1. 对爬虫进行增删改查等操作。
+* 非及时爬虫流程图
+![feijishi](https://github.com/DarkSand/Sasila/blob/master/pic/feijishi.png)
+## **即时爬虫**
+即时爬虫是可以通过api调用，传入需要爬取的页面或者需求，即时爬取数据并返回结果。现阶段开发并不完善。仅提供思路参考。
+* 即时爬虫-获取数据流程图
+![huoqushuju](https://github.com/DarkSand/Sasila/blob/master/pic/jishi-huoqushuju.png)
+* 即时爬虫-授权流程图
+![shouquan](https://github.com/DarkSand/Sasila/blob/master/pic/jishi-shouquan.png)
+
