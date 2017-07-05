@@ -1,7 +1,7 @@
 # Sasila [![version](https://img.shields.io/badge/version-0.0.1-green.svg)](https://pypi.python.org/pypi/Sasila)
 
 ## **介绍**
-&emsp;&emsp;在爬虫工作中，我接触过较多的爬虫框架，比如[**scrapy**](https://github.com/scrapy/scrapy)、[**webmagic**](https://github.com/code4craft/webmagic)、[**pyspider**](https://github.com/binux/pyspider)，都是其中的佼佼者。也经常直接通过[**requests**](https://github.com/requests/requests)+[**beautifulsoup**](https://github.com/il-vladislav/BeautifulSoup4)来写一些个性化的小型爬虫脚本。但是在实际爬取过程当中，仍然不能完全满足实际需要。所以我开发了这套**小型的**、**灵活的**、**功能完善的**爬虫框架。
+&emsp;&emsp;在爬虫工作中，我接触过较多的爬虫框架，比如[**scrapy**](https://github.com/scrapy/scrapy)、[**webmagic**](https://github.com/code4craft/webmagic)、[**pyspider**](https://github.com/binux/pyspider)，也经常直接通过[**requests**](https://github.com/requests/requests)+[**beautifulsoup**](https://github.com/il-vladislav/BeautifulSoup4)来写一些个性化的小型爬虫脚本。但是在实际爬取过程当中，仍然不能完全满足实际需要。所以我开发了这套**小型的**、**灵活的**、**功能完善的**爬虫框架。
 
 ![jichu](https://github.com/DarkSand/Sasila/blob/master/pic/jigou.png)
 
