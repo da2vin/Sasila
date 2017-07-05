@@ -16,7 +16,7 @@
 * 支持爬取js动态渲染的页面。
 * 提供http接口对爬虫进行管理、监控。
 * 提供即时爬虫的集成思路和结构。
----
+***
 ## **结构**
 ### **爬虫基础结构**
 ![jichu](https://github.com/DarkSand/Sasila/blob/master/pic/jichu.png)
