@@ -93,8 +93,8 @@ sasila.start()
 ```
 
 >访问 http://127.0.0.1:5000/slow_spider/start?spider_id=mzi_spider 来启动爬虫。
->访问 http://127.0.0.1:5000/slow_spider/stop?spider_id=mzi_spider 来停止爬虫。
->访问 http://127.0.0.1:5000/slow_spider/detail?spider_id=mzi_spider 来查看爬虫详细信息。
+访问 http://127.0.0.1:5000/slow_spider/stop?spider_id=mzi_spider 来停止爬虫。
+访问 http://127.0.0.1:5000/slow_spider/detail?spider_id=mzi_spider 来查看爬虫详细信息。
 
 ## **架构**
 ![jichu](https://github.com/DarkSand/Sasila/blob/master/pic/jichu.png)
