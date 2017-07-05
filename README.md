@@ -52,7 +52,7 @@ class Mzi_Processor(BaseProcessor):
 * 所有的解析器都继承自BaseProcessor，默认入口解析函数为def process(self, response)。
 * 为该解析器设置spider_id和spider_name,以及限定域名。
 * 初始爬取请求为start_requests，构建Request对象，该对象支持GET、POST方法，支持优先级，设置回调函数等等所有构建request对象的一切属性。默认回调函数为*process*。
-* 可以使用*@checkResponse*装饰器对返回的response进行校验并记录异常日志。
+* 可以使用* @checkResponse *装饰器对返回的response进行校验并记录异常日志。
 * 解析函数因为使用yield关键字，所以是一个生成器。当yield返回Request对象，则会将Request对象推入调度器等待调度继续进行爬取。若yield不是返回Request对象则会进入*pipeline*，*pipeline*将对数据进行清洗入库等操作。
 
 ## **构建pipeline**
