@@ -1,12 +1,12 @@
 # Sasila [![version](https://img.shields.io/badge/version-0.0.1-green.svg)](https://pypi.python.org/pypi/Sasila)
 
-&emsp;&emsp;现在有较多的爬虫框架，比如[**scrapy**](https://github.com/scrapy/scrapy)、[**webmagic**](https://github.com/code4craft/webmagic)、[**pyspider**](https://github.com/binux/pyspider)，也经常直接通过[**requests**](https://github.com/requests/requests)+[**beautifulsoup**](https://github.com/il-vladislav/BeautifulSoup4)来写一些个性化的小型爬虫脚本。但是在实际爬取过程当中，仍然不能完全满足实际需要。所以我开发了这套**小型的**、**灵活的**、**功能完善的**爬虫框架。
+&emsp;&emsp;现在有很多爬虫框架，比如[**scrapy**](https://github.com/scrapy/scrapy)、[**webmagic**](https://github.com/code4craft/webmagic)、[**pyspider**](https://github.com/binux/pyspider)，也可以直接通过[**requests**](https://github.com/requests/requests)+[**beautifulsoup**](https://github.com/il-vladislav/BeautifulSoup4)来写一些个性化的小型爬虫脚本。但是在实际爬取过程当中，仍然不能完全满足实际需要。所以我搭配gevent开发了这套轻量级爬虫框架。
 
 ![jiagou](https://github.com/DarkSand/Sasila/blob/master/pic/jigou.png)
 
 ## **主要特点**
 
-* 框架代码结构简单易用，易于修改。
+* 框架代码结构简单易用，易于修改。例如针对出现验证码的处理方法。
 * 采用gevent实现并发操作，与scrapy的twisted相比，代码更容易理解。
 * 完全模块化的设计，强大的可扩展性。
 * 使用方式和结构参考了[**scrapy**](https://github.com/scrapy/scrapy)和[**webmagic**](https://github.com/code4craft/webmagic)。对有接触过这两个框架的朋友非常友好。
@@ -106,6 +106,10 @@ sasila.start()
 访问 http://127.0.0.1:5000/slow_spider/stop?spider_id=mzi_spider 来停止爬虫。
 访问 http://127.0.0.1:5000/slow_spider/detail?spider_id=mzi_spider 来查看爬虫详细信息。
 
+## **针对需要登录才能爬取的处理办法**
+* 可以为downloader加载登录器(loginer),在使用downloader的时候使用loginer进行登录获取cookies,再进行爬取
+* 也可以自己定义一个cookie池，批量进行登录并将登录成功的cookies放进cookie池中随时进行取用。项目中暂时没有这些功能。欢迎pull request~
+
 ## **架构**
 ![jichu](https://github.com/DarkSand/Sasila/blob/master/pic/jichu.png)
 
@@ -140,4 +144,8 @@ sasila.start()
 * 即时爬虫-授权流程图
 
 ![shouquan](https://github.com/DarkSand/Sasila/blob/master/pic/jishi-shouquan.png)
+
+## **为啥叫Sasila**
+
+作为一个wower,你可以猜到吗ヾ(￣▽￣)
 
