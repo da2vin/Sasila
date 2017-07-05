@@ -29,7 +29,7 @@ pip install sasila
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from bs4 import BeautifulSoup as bs
-from base_processor import BaseProcessor
+from sasila.slow_system.base_processor import BaseProcessor
 from sasila.slow_system.downloader.http.spider_request import Request
 from sasila.slow_system.core.request_spider import RequestSpider
 
