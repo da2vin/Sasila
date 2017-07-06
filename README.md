@@ -53,7 +53,7 @@ class Mzi_Processor(BaseProcessor):
         for href in href_list:
             yield Request(url=response.nice_join(href['href']))
 ```
-写法与scrapy几乎一样
+**写法与scrapy几乎一样**
 
 * 所有的解析器都继承自 *BaseProcessor* ，默认入口解析函数为def process(self, response)。
 * 为该解析器设置spider_id和spider_name,以及限定域名。
