@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
         name='sasila',
-        version='0.0.1',
+        version='0.0.2',
         description=(
             'a simple spider system'
         ),
@@ -23,13 +23,10 @@ setup(
             'requests>=2.13.0',
             'six>=1.10.0',
             'SQLAlchemy>=1.1.4',
-            'kafka_python>=1.3.1',
             'grequests>=0.3.0',
-            'dill>=0.2.5',
             'selenium>=2.53.6',
             'lxml>=3.7.2',
             'beautifulsoup4>=4.6.0',
-            'kafka>=1.3.3',
         ],
         classifiers=[
             'Development Status :: 2 - Pre-Alpha',

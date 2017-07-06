@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-import dill
 from multiprocessing.process import Process
 from multiprocessing import Manager
 from sasila.slow_system.processor.mzitu_proccessor import mzitu_spider
