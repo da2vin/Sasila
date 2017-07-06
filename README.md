@@ -1,6 +1,6 @@
 # Sasila [![version](https://img.shields.io/badge/version-0.0.1-green.svg)](https://pypi.python.org/pypi/Sasila)
 
-&emsp;&emsp;现在有很多爬虫框架，比如[**scrapy**](https://github.com/scrapy/scrapy)、[**webmagic**](https://github.com/code4craft/webmagic)、[**pyspider**](https://github.com/binux/pyspider)，也可以直接通过[**requests**](https://github.com/requests/requests)+[**beautifulsoup**](https://github.com/il-vladislav/BeautifulSoup4)来写一些个性化的小型爬虫脚本。但是在实际爬取过程当中，仍然不能完全满足实际需要。所以我搭配gevent开发了这套轻量级爬虫框架。
+&emsp;&emsp;现在有很多爬虫框架，比如[**scrapy**](https://github.com/scrapy/scrapy)、[**webmagic**](https://github.com/code4craft/webmagic)、[**pyspider**](https://github.com/binux/pyspider)，也可以直接通过[**requests**](https://github.com/requests/requests)+[**beautifulsoup**](https://github.com/il-vladislav/BeautifulSoup4)来写一些个性化的小型爬虫脚本。但是在实际爬取过程当中，爬虫框架各自有各自的优势和缺陷。所以我模仿这些爬虫框架的优势，搭配gevent(实际上是grequests)开发了这套轻量级爬虫框架。
 
 ![jiagou](https://github.com/DarkSand/Sasila/blob/master/pic/jigou.png)
 
