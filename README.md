@@ -61,7 +61,7 @@ class Mzi_Processor(BaseProcessor):
 * 可以使用@checkResponse装饰器对返回的 *response* 进行校验并记录异常日志。你也可以定义自己的装饰器。
 * 解析函数因为使用 *yield* 关键字，所以是一个生成器。当 *yield* 返回 *Request* 对象，则会将 *Request* 对象推入调度器等待调度继续进行爬取。若 *yield* 不是返回 *Request* 对象则会进入 *pipeline* ， *pipeline* 将对数据进行清洗入库等操作。
 
-**与scrapy相似，sasila同样提供LinkExtractor的方式来提取链接，以下是用LinkExtractor的方式构造processor下载妹子图的示例**
+**与scrapy相似，sasila同样提供*LinkExtractor的*方式来提取链接，以下是用*LinkExtractor*的方式构造*processor*下载妹子图的示例**
 
 ```python
 #!/usr/bin/env python
@@ -80,8 +80,7 @@ class MezituProcessor(BaseProcessor):
     start_requests = [Request(url='http://www.mzitu.com/xinggan/')]
 
     rules = (
-        Rule(LinkExtractor(regex_str=r"http://i.meizitu.net/\d{4}/\d{2}/[0-9a-z]+.jpg"),
-             callback="save", priority=3),
+        Rule(LinkExtractor(regex_str=r"http://i.meizitu.net/\d{4}/\d{2}/[0-9a-z]+.jpg"),callback="save", priority=3),
         Rule(LinkExtractor(regex_str=r"http://www.mzitu.com/\d+"), priority=1),
         Rule(LinkExtractor(regex_str=r"http://www.mzitu.com/\d+/\d+"), priority=2),
         Rule(LinkExtractor(regex_str=r"http://www.mzitu.com/xinggan/page/\d+"), priority=0),
@@ -102,9 +101,10 @@ class MezituProcessor(BaseProcessor):
 LinkExtractor(regex_str=None, css_str=None, process_value=None)
 ```
 
-* 提供正则表达式提取方式：regex_str
-* 提供css选择器提取方式：css_str
-* 也可以自定义process_value来提取链接，其中process_value是一个生成器
+* 提供正则表达式提取方式：*regex_str*
+* 提供css选择器提取方式：*css_str*
+* 也可以自定义*process_value*来提取链接，其中*process_value*是一个生成器
+* 若使用此方式构造*processor*，请不要定义默认入口函数def process(self, response)
 
 
 ## **构建pipeline**
