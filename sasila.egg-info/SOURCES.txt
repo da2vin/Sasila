@@ -1,4 +1,3 @@
-README.rst
 setup.py
 sasila/__init__.py
 sasila.egg-info/PKG-INFO
