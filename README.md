@@ -61,6 +61,52 @@ class Mzi_Processor(BaseProcessor):
 * 可以使用@checkResponse装饰器对返回的 *response* 进行校验并记录异常日志。你也可以定义自己的装饰器。
 * 解析函数因为使用 *yield* 关键字，所以是一个生成器。当 *yield* 返回 *Request* 对象，则会将 *Request* 对象推入调度器等待调度继续进行爬取。若 *yield* 不是返回 *Request* 对象则会进入 *pipeline* ， *pipeline* 将对数据进行清洗入库等操作。
 
+**与scrapy相似，sasila同样提供LinkExtractor的方式来提取链接，以下是用LinkExtractor的方式构造processor下载妹子图的示例**
+
+```python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+from sasila.slow_system.core.request_spider import RequestSpider
+from sasila.slow_system.pipeline.pic_pipeline import PicPipeline
+from base_processor import BaseProcessor, Rule, LinkExtractor
+from sasila.slow_system.downloader.http.spider_request import Request
+import os
+import uuid
+
+class MezituProcessor(BaseProcessor):
+    spider_id = 'mzitu'
+    spider_name = 'mzitu'
+    allowed_domains = ['mzitu.com', 'meizitu.net']
+    start_requests = [Request(url='http://www.mzitu.com/xinggan/')]
+
+    rules = (
+        Rule(LinkExtractor(regex_str=r"http://i.meizitu.net/\d{4}/\d{2}/[0-9a-z]+.jpg"),
+             callback="save", priority=3),
+        Rule(LinkExtractor(regex_str=r"http://www.mzitu.com/\d+"), priority=1),
+        Rule(LinkExtractor(regex_str=r"http://www.mzitu.com/\d+/\d+"), priority=2),
+        Rule(LinkExtractor(regex_str=r"http://www.mzitu.com/xinggan/page/\d+"), priority=0),
+    )
+
+    def save(self, response):
+        if response.m_response:
+            if not os.path.exists("img"):
+                os.mkdir("img")
+            with open("img/" + str(uuid.uuid1()) + ".jpg", 'wb') as fs:
+                fs.write(response.m_response.content)
+                print("download success!")
+```
+
+**LinkExtractor的构造方式为**
+
+```python
+LinkExtractor(regex_str=None, css_str=None, process_value=None)
+```
+
+* 提供正则表达式提取方式：regex_str
+* 提供css选择器提取方式：css_str
+* 也可以自定义process_value来提取链接，其中process_value是一个生成器
+
+
 ## **构建pipeline**
 ```python
 from sasila.slow_system.pipeline.base_pipeline import ItemPipeline
