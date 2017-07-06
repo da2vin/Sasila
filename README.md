@@ -12,7 +12,7 @@
 * 使用方式和结构参考了[**scrapy**](https://github.com/scrapy/scrapy)和[**webmagic**](https://github.com/code4craft/webmagic)。对有接触过这两个框架的朋友非常友好。
 * 对数据的解析模块并没有集成，可以自由使用[**beautifulsoup**](https://github.com/il-vladislav/BeautifulSoup4)、[**lxml**](https://github.com/lxml/lxml)、[**pyquery**](https://github.com/gawel/pyquery)、[**html5lib**](https://github.com/html5lib/html5lib-python)等等各种解析器进行数据抽取。
 * 集成代理换IP功能。
-* 支持多线程。
+* 支持高并发抓取数据。
 * 支持分布式。
 * 支持增量爬取。
 * 支持爬取js动态渲染的页面。
