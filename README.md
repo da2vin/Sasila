@@ -68,7 +68,7 @@ class Mzi_Processor(BaseProcessor):
 # -*- coding: utf-8 -*-
 from sasila.slow_system.core.request_spider import RequestSpider
 from sasila.slow_system.pipeline.pic_pipeline import PicPipeline
-from base_processor import BaseProcessor, Rule, LinkExtractor
+from sasila.slow_system.processor.base_processor import BaseProcessor, Rule, LinkExtractor
 from sasila.slow_system.downloader.http.spider_request import Request
 import os
 import uuid
