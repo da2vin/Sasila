@@ -6,9 +6,9 @@
 # sys.path.append(os.path.dirname(os.getcwd()))
 from car_processor import Car_Processor
 from fang_processor import Fang_Processor
-from sasila.slow_system.pipeline.console_pipeline import ConsolePipeline
-from sasila.slow_system.core.request_spider import RequestSpider
-from sasila.slow_system.manager import manager
+from sasila.system_normal.pipeline.console_pipeline import ConsolePipeline
+from sasila.system_normal.spider.request_spider import RequestSpider
+from sasila.system_normal.manager import manager
 import sasila
 
 spider_car = RequestSpider(Car_Processor()).set_pipeline(ConsolePipeline())

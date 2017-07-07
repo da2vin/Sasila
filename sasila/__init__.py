@@ -3,7 +3,7 @@
 import sys
 import settings
 from flask import Flask
-from slow_system.blueprints.slow_spiders import slow_spider
+from system_normal.blueprints.slow_spiders import slow_spider
 
 reload(sys)
 sys.setdefaultencoding('utf-8')

@@ -3,14 +3,14 @@
 import sys
 
 from bs4 import BeautifulSoup as bs
-from sasila.slow_system.core.request_spider import RequestSpider
-from sasila.slow_system.pipeline.console_pipeline import ConsolePipeline
-from sasila.slow_system.pipeline.text_pipeline import TextPipelineFang
+from sasila.system_normal.spider.request_spider import RequestSpider
+from sasila.system_normal.pipeline.console_pipeline import ConsolePipeline
+from sasila.system_normal.pipeline.text_pipeline import TextPipelineFang
 
-from sasila.slow_system.processor.base_processor import BaseProcessor
-from sasila.slow_system.downloader.http.spider_request import Request
+from sasila.system_normal.processor.base_processor import BaseProcessor
+from sasila.system_normal.downloader.http.spider_request import Request
 import time
-from sasila.slow_system.utils.decorator import checkResponse
+from sasila.system_normal.utils.decorator import checkResponse
 
 reload(sys)
 sys.setdefaultencoding('utf-8')

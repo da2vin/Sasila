@@ -35,9 +35,9 @@ REDIS_PORT = 6379
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from bs4 import BeautifulSoup as bs
-from sasila.slow_system.base_processor import BaseProcessor
-from sasila.slow_system.downloader.http.spider_request import Request
-from sasila.slow_system.core.request_spider import RequestSpider
+from sasila.system_normal.base_processor import BaseProcessor
+from sasila.system_normal.downloader.http.spider_request import Request
+from sasila.system_normal.spider.request_spider import RequestSpider
 
 class Mzi_Processor(BaseProcessor):
     spider_id = 'mzi_spider'
@@ -66,10 +66,8 @@ class Mzi_Processor(BaseProcessor):
 ```python
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from sasila.slow_system.core.request_spider import RequestSpider
-from sasila.slow_system.pipeline.pic_pipeline import PicPipeline
-from sasila.slow_system.processor.base_processor import BaseProcessor, Rule, LinkExtractor
-from sasila.slow_system.downloader.http.spider_request import Request
+from sasila.system_normal.processor.base_processor import BaseProcessor, Rule, LinkExtractor
+from sasila.system_normal.downloader.http.spider_request import Request
 import os
 import uuid
 
@@ -109,7 +107,7 @@ LinkExtractor(regex_str=None, css_str=None, process_value=None)
 
 ## **构建pipeline**
 ```python
-from sasila.slow_system.pipeline.base_pipeline import ItemPipeline
+from sasila.system_normal.pipeline.base_pipeline import ItemPipeline
 
 class ConsolePipeline(ItemPipeline):
     def process_item(self, item):
@@ -118,7 +116,7 @@ class ConsolePipeline(ItemPipeline):
 ## **构建spider(爬虫对象）**
 * 通过注入 *processor* 生成spider对象
 ```python
-from sasila.slow_system.core.request_spider import RequestSpider
+from sasila.system_normal.spider.request_spider import RequestSpider
 
 spider = RequestSpider(Mzi_Processor())
 ```
@@ -141,7 +139,7 @@ spider.start()
 ```
 * 也可以将spider注入*manager*进行管理
 ```python
-from sasila.slow_system.manager import manager
+from sasila.system_normal.manager import manager
 
 manager.set_spider(spider)
 
@@ -183,7 +181,7 @@ sasila.start()
 ![feijishi](https://github.com/DarkSand/Sasila/blob/master/pic/feijishi.png)
 
 ## **即时爬虫**
-即时爬虫是可以通过api调用，传入需要爬取的页面或者需求，即时爬取数据并返回结果。现阶段开发并不完善。仅提供思路参考。示例核心代码在 *sasila.immediately_system* 中。
+即时爬虫是可以通过api调用，传入需要爬取的页面或者需求，即时爬取数据并返回结果。现阶段开发并不完善。仅提供思路参考。示例核心代码在 *sasila.system_instant* 中。
 
 * 即时爬虫-获取数据流程图
 
