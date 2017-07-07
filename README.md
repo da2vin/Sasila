@@ -35,7 +35,7 @@ REDIS_PORT = 6379
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from bs4 import BeautifulSoup as bs
-from sasila.system_normal.base_processor import BaseProcessor
+from sasila.system_normal.processor.base_processor import BaseProcessor
 from sasila.system_normal.downloader.http.spider_request import Request
 from sasila.system_normal.spider.request_spider import RequestSpider
 
