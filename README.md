@@ -138,6 +138,12 @@ RequestSpider(processor=None, downloader=None, use_proxy=False,scheduler=None,ba
 ```python
 PROXY_PATH_REQUEST = 'proxy/path'
 ```
+* proxy.txt文件中请写入代理IP，格式为：IP,端口号。若该代理IP有账号密码，在末尾追加账号密码即可。
+```text
+127.0.0.1,8080
+127.0.0.2,8080,user,pwd
+127.0.0.3,8080,user,pwd
+```
 * RequestSpider已经默认设置好了 *downloader* 和 *scheduler*，如果不满意，可以自己进行定制。
 * 可以为spider设置 *downloader* 和 *pipeline* 甚至 *scheduler*
 ```python
