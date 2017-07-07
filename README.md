@@ -9,8 +9,8 @@
 * scheduler是调度器。
 * pipeline是数据处理器。
 * 将下载器，解析器，调度器，数据处理器注入核心core成为spider对象。
-* 通过manager管理spider对象
-* manager透过webapi提供外部访问/控制接口
+* 通过manager管理spider对象。
+* manager透过webapi提供外部访问/控制接口。
 
 ## **主要特点**
 
