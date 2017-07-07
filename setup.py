@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
         name='sasila',
-        version='0.0.2',
+        version='0.0.3',
         description=(
             'a simple spider system'
         ),
