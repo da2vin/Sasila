@@ -1,15 +1,24 @@
 # Sasila [![version](https://img.shields.io/badge/version-0.0.3-green.svg)](https://pypi.python.org/pypi/Sasila)
 
-&emsp;&emsp;现在有很多爬虫框架，比如[**scrapy**](https://github.com/scrapy/scrapy)、[**webmagic**](https://github.com/code4craft/webmagic)、[**pyspider**](https://github.com/binux/pyspider)，也可以直接通过[**requests**](https://github.com/requests/requests)+[**beautifulsoup**](https://github.com/il-vladislav/BeautifulSoup4)来写一些个性化的小型爬虫脚本。但是在实际爬取过程当中，爬虫框架各自有各自的优势和缺陷。所以我模仿这些爬虫框架的优势，搭配gevent(实际上是grequests)开发了这套轻量级爬虫框架。
+&emsp;&emsp;现在有很多爬虫框架，比如[**scrapy**](https://github.com/scrapy/scrapy)、[**webmagic**](https://github.com/code4craft/webmagic)、[**pyspider**](https://github.com/binux/pyspider)都可以在爬虫工作中使用，也可以直接通过[**requests**](https://github.com/requests/requests)+[**beautifulsoup**](https://github.com/il-vladislav/BeautifulSoup4)来写一些个性化的小型爬虫脚本。但是在实际爬取过程当中，爬虫框架各自有优势和缺陷。比如scrapy，它的功能强大，但过于强大的功能也许反而让新手无所适从，并且它采用twisted异步框架开发，对新手来说源码难以理解，项目难于调试。所以我模仿这些爬虫框架的优势，以尽量简单的原则，搭配gevent(实际上是grequests)开发了这套轻量级爬虫框架。
 
 ![jiagou](https://github.com/DarkSand/Sasila/blob/master/pic/jigou.png)
 
+* downloader是下载器。
+* processor是解析器。
+* scheduler是调度器。
+* pipeline是数据处理器。
+* 将下载器，解析器，调度器，数据处理器注入核心core成为spider对象。
+* 通过manager管理spider对象
+* manager透过webapi提供外部访问/控制接口
+
 ## **主要特点**
 
-* 框架代码结构简单易用，易于修改。例如针对出现验证码的处理方法。
+* 框架代码结构简单易用，易于修改。新手、老鸟皆可把控。
 * 采用gevent实现并发操作，与scrapy的twisted相比，代码更容易理解。
 * 完全模块化的设计，强大的可扩展性。
 * 使用方式和结构参考了[**scrapy**](https://github.com/scrapy/scrapy)和[**webmagic**](https://github.com/code4craft/webmagic)。对有接触过这两个框架的朋友非常友好。
+* 不采用命令行来启动爬虫，方便调试。
 * 对数据的解析模块并没有集成，可以自由使用[**beautifulsoup**](https://github.com/il-vladislav/BeautifulSoup4)、[**lxml**](https://github.com/lxml/lxml)、[**pyquery**](https://github.com/gawel/pyquery)、[**html5lib**](https://github.com/html5lib/html5lib-python)等等各种解析器进行数据抽取。
 * 集成代理换IP功能。
 * 支持高并发抓取数据。
@@ -106,6 +115,7 @@ LinkExtractor(regex_str=None, css_str=None, process_value=None)
 
 
 ## **构建pipeline**
+该pipeline获取数据后将数据转为json格式，并输出到屏幕
 ```python
 from sasila.system_normal.pipeline.base_pipeline import ItemPipeline
 
