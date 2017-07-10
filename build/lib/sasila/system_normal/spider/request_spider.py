@@ -33,7 +33,7 @@ class RequestSpider(object):
             if batch_size:
                 self._batch_size = batch_size - 1
             else:
-                self._batch_size = 99
+                self._batch_size = 9
         self._spider_name = processor.spider_name
         self._spider_id = processor.spider_id
         self._process_count = 0

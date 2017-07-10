@@ -156,10 +156,11 @@ spider.start()
 * 也可以将spider注入*manager*进行管理
 ```python
 from sasila.system_normal.manager import manager
+from sasila import system_web
 
 manager.set_spider(spider)
 
-sasila.start()
+web.start()
 ```
 
 访问 http://127.0.0.1:5000/slow_spider/start?spider_id=mzi_spider 来启动爬虫。

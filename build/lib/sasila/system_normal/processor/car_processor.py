@@ -7,7 +7,7 @@ from sasila.system_normal.spider.request_spider import RequestSpider
 from sasila.system_normal.pipeline.console_pipeline import ConsolePipeline
 from sasila.system_normal.pipeline.text_pipeline import TextPipelineCar
 
-from base_processor import BaseProcessor
+from sasila.system_normal.processor.base_processor import BaseProcessor
 from sasila.system_normal.downloader.http.spider_request import Request
 from sasila.system_normal.utils.decorator import checkResponse
 import json

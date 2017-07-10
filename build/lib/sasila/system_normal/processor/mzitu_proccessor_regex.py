@@ -38,4 +38,4 @@ class MezituProcessor(BaseProcessor):
 
 
 if __name__ == '__main__':
-    spider = RequestSpider(MezituProcessor()).set_pipeline(PicPipeline()).start()
+    spider = RequestSpider(MezituProcessor(), batch_size=10).set_pipeline(PicPipeline()).start()

@@ -80,3 +80,4 @@ sasila/system_normal/utils/kafka_utils.py
 sasila/system_normal/utils/progress_bar.py
 sasila/system_normal/utils/python.py
 sasila/system_normal/utils/reqser.py
+sasila/system_web/__init__.py
