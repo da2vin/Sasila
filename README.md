@@ -1,4 +1,4 @@
-# Sasila [![version](https://img.shields.io/badge/version-0.0.3-green.svg)](https://pypi.python.org/pypi/Sasila)
+# Sasila [![version](https://img.shields.io/badge/version-0.0.3-green.svg)](https://pypi.python.org/pypi/Sasila) [![Build Status]][Travis CI] [![Coverage Status]][Coverage]
 
 &emsp;&emsp;现在有很多爬虫框架，比如[**scrapy**](https://github.com/scrapy/scrapy)、[**webmagic**](https://github.com/code4craft/webmagic)、[**pyspider**](https://github.com/binux/pyspider)都可以在爬虫工作中使用，也可以直接通过[**requests**](https://github.com/requests/requests)+[**beautifulsoup**](https://github.com/il-vladislav/BeautifulSoup4)来写一些个性化的小型爬虫脚本。但是在实际爬取过程当中，爬虫框架各自有优势和缺陷。比如scrapy，它的功能强大，但过于强大的功能也许反而让新手无所适从，并且它采用twisted异步框架开发，对新手来说源码难以理解，项目难于调试。所以我模仿这些爬虫框架的优势，以尽量简单的原则，搭配gevent(实际上是grequests)开发了这套轻量级爬虫框架。
 
@@ -217,4 +217,9 @@ web.start()
 ## **联系方式**
 
 如果对使用有疑问，或者有想法，欢迎加QQ642811191讨论~
+
+[Build Status]:         https://img.shields.io/travis/darksand/sasila/master.svg?style=flat
+[Travis CI]:            https://travis-ci.org/darksand/sasila
+[Coverage Status]:      https://img.shields.io/coveralls/darksand/sasila.svg?branch=master&style=flat
+[Coverage]:             https://coveralls.io/r/darksand/sasila
 
