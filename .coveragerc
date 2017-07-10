@@ -1,2 +1,5 @@
 [run]
-include = sasila/system_normal/processor/car_processor.py
+source =
+    sasila
+parallel = True
+
