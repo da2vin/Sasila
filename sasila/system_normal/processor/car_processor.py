@@ -5,7 +5,6 @@ import sys
 from bs4 import BeautifulSoup as bs
 from sasila.system_normal.spider.request_spider import RequestSpider
 from sasila.system_normal.pipeline.console_pipeline import ConsolePipeline
-from sasila.system_normal.pipeline.text_pipeline import TextPipelineCar
 
 from sasila.system_normal.processor.base_processor import BaseProcessor
 from sasila.system_normal.downloader.http.spider_request import Request
@@ -125,4 +124,4 @@ class Car_Processor(BaseProcessor):
 
 
 if __name__ == '__main__':
-    RequestSpider(Car_Processor()).set_pipeline(ConsolePipeline()).start()
+    RequestSpider(Car_Processor(), test=True).set_pipeline(ConsolePipeline()).start()

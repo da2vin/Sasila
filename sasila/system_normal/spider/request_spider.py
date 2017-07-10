@@ -21,7 +21,9 @@ def _priority_compare(r1, r2):
 
 class RequestSpider(object):
     def __init__(self, processor=None, downloader=None, use_proxy=False, scheduler=None, batch_size=None,
-                 time_sleep=None):
+                 time_sleep=None, test=False):
+        # 用于测试,爬取成功第一个以后结束
+        self.test = test
         self._processor = processor
         self._host_regex = self._get_host_regex()
         self._spider_status = 'stopped'
@@ -88,6 +90,9 @@ class RequestSpider(object):
             for batch in self._batch_requests():
                 if len(batch) > 0:
                     self._crawl(batch)
+                    if self.test:
+                        if self._process_count > 0:
+                            return
                 if self._spider_status == 'stopping':
                     break
             self._spider_status = 'stopped'
@@ -135,6 +140,9 @@ class RequestSpider(object):
                             self._process_count += 1
                             for pipeline in self._pipelines:
                                 pipeline.process_item(item)
+                            if self.test:
+                                if self._process_count > 0:
+                                    return
                     pipe.execute()
                 else:
                     if isinstance(callback, Request):
