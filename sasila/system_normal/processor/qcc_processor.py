@@ -168,7 +168,7 @@ class QccProcessor(BaseProcessor):
                 print traceback.format_exc()
 
 
-qcc_spider = RequestSpider(QccProcessor(), time_sleep=1).set_pipeline(KafkaPipeline()).set_pipeline(
-        TextPipeline()).set_pipeline(ConsolePipeline())
-if __name__ == '__main__':
-    qcc_spider.start()
+# qcc_spider = RequestSpider(QccProcessor(), time_sleep=1).set_pipeline(KafkaPipeline()).set_pipeline(
+#         TextPipeline()).set_pipeline(ConsolePipeline())
+# if __name__ == '__main__':
+#     qcc_spider.start()

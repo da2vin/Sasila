@@ -85,6 +85,6 @@ class PriorityQueue(Base):
         return self._server.zcard(self.task_id)
 
 
-if __name__ == '__main__':
-    queue = PriorityQueue("test")
-    print queue
+# if __name__ == '__main__':
+#     queue = PriorityQueue("test")
+#     print queue

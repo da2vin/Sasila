@@ -26,10 +26,10 @@ class ProgressBar:
         sys.stdout.flush()
 
 
-if __name__ == '__main__':
-    import time
-    bar = ProgressBar(total=10)
-    for i in range(10):
-        # bar.move('We have arrived at: ' + str(i + 1))
-        bar.move()
-        time.sleep(0.2)
+# if __name__ == '__main__':
+#     import time
+#     bar = ProgressBar(total=10)
+#     for i in range(10):
+#         # bar.move('We have arrived at: ' + str(i + 1))
+#         bar.move()
+#         time.sleep(0.2)

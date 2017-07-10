@@ -94,5 +94,5 @@ class Fang_Processor(BaseProcessor):
             yield request
 
 
-if __name__ == '__main__':
-    spider = RequestSpider(Fang_Processor()).set_pipeline(ConsolePipeline()).set_pipeline(TextPipelineFang()).start()
+# if __name__ == '__main__':
+#     spider = RequestSpider(Fang_Processor()).set_pipeline(ConsolePipeline()).set_pipeline(TextPipelineFang()).start()

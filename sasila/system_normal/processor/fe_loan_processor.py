@@ -30,6 +30,6 @@ class FeProcessor(BaseProcessor):
             print bs(response.m_response.content, 'lxml').title.string
 
 
-fe_spider = RequestSpider(FeProcessor()).set_pipeline(PicPipeline())
-if __name__ == '__main__':
-    fe_spider.start()
+# fe_spider = RequestSpider(FeProcessor()).set_pipeline(PicPipeline())
+# if __name__ == '__main__':
+#     fe_spider.start()
