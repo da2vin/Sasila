@@ -49,6 +49,6 @@ class CityLocationProcessor(BaseProcessor):
                 print data
 
 
-fe_spider = RequestSpider(CityLocationProcessor())
-if __name__ == '__main__':
-    fe_spider.start()
+# fe_spider = RequestSpider(CityLocationProcessor())
+# if __name__ == '__main__':
+#     fe_spider.start()

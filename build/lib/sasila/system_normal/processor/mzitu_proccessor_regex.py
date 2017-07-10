@@ -37,5 +37,5 @@ class MezituProcessor(BaseProcessor):
                 print("download success!")
 
 
-if __name__ == '__main__':
-    spider = RequestSpider(MezituProcessor(), batch_size=10).set_pipeline(PicPipeline()).start()
+# if __name__ == '__main__':
+#     spider = RequestSpider(MezituProcessor(), batch_size=10).set_pipeline(PicPipeline()).start()

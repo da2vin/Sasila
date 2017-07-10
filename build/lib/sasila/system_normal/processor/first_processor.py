@@ -42,5 +42,5 @@ class FirstProcessor(BaseProcessor):
             print response.request.url
 
 
-if __name__ == '__main__':
-    spider = RequestSpider(FirstProcessor()).set_pipeline(ConsolePipeline()).start()
+# if __name__ == '__main__':
+#     spider = RequestSpider(FirstProcessor()).set_pipeline(ConsolePipeline()).start()
