@@ -219,8 +219,9 @@ web.start()
 如果对使用有疑问，或者有想法，欢迎加QQ642811191讨论~
 
 
-[Build Status]:         https://img.shields.io/travis/DarkSand/Sasila.svg?style=flat
+[Build Status]:         https://img.shields.io/travis/DarkSand/Sasila.svg?branch=master&style=flat
 [Travis CI]:            https://travis-ci.org/DarkSand/Sasila
 [Coverage Status]:      https://img.shields.io/coveralls/DarkSand/Sasila.svg?branch=master&style=flat
-[Coverage]:             https://coveralls.io/r/darksand/sasila
+[Coverage]:             https://coveralls.io/github/DarkSand/Sasila
+
 
