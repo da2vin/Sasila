@@ -1,11 +1,11 @@
 [run]
 source =
-    pyspider
+    sasila
 parallel = True
 
 [report]
 omit =
-    sasila-example/main.py
+    tests/*
 
 exclude_lines =
     pragma: no cover
