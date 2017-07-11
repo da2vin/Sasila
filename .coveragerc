@@ -4,6 +4,10 @@ source =
 parallel = True
 
 [report]
+omit =
+    sasila/system_instant/*
+    sasila/system_normal/processor/*
+
 exclude_lines =
     pragma: no cover
     def __repr__
