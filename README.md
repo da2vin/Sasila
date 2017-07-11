@@ -220,7 +220,7 @@ web.start()
 
 ## **联系方式**
 
-如果对使用有疑问，或者有想法，欢迎加QQ642811191讨论~
+如果对使用有疑问，或者有想法，欢迎加入讨论群:602909155交流~
 
 
 [Build Status]:         https://img.shields.io/travis/DarkSand/Sasila.svg?branch=master&style=flat
