@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import sys
 
-from sasila.system_normal.spider.request_spider import RequestSpider
+from sasila.system_normal.spider.spider_core import SpiderCore
 from sasila.system_normal.pipeline.pic_pipeline import PicPipeline
 
 from base_processor import BaseProcessor, Rule, LinkExtractor
@@ -38,4 +38,4 @@ class MezituProcessor(BaseProcessor):
 
 
 # if __name__ == '__main__':
-#     spider = RequestSpider(MezituProcessor(), batch_size=10).set_pipeline(PicPipeline()).start()
+#     spider = SpiderCore(MezituProcessor(), batch_size=10).set_pipeline(PicPipeline()).start()

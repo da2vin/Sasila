@@ -3,7 +3,7 @@
 import sys
 
 from sasila.system_normal.pipeline.kafa_pipeline import KafkaPipeline
-from sasila.system_normal.spider.request_spider import RequestSpider
+from sasila.system_normal.spider.spider_core import SpiderCore
 from sasila.system_normal.pipeline.console_pipeline import ConsolePipeline
 from sasila.system_normal.pipeline.text_pipeline import TextPipeline
 from base_processor import BaseProcessor
@@ -168,7 +168,7 @@ class QccProcessor(BaseProcessor):
                 print traceback.format_exc()
 
 
-# qcc_spider = RequestSpider(QccProcessor(), time_sleep=1).set_pipeline(KafkaPipeline()).set_pipeline(
+# qcc_spider = SpiderCore(QccProcessor(), time_sleep=1).set_pipeline(KafkaPipeline()).set_pipeline(
 #         TextPipeline()).set_pipeline(ConsolePipeline())
 # if __name__ == '__main__':
 #     qcc_spider.start()

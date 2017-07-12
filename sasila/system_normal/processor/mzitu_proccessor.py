@@ -3,7 +3,7 @@
 import sys
 
 from bs4 import BeautifulSoup as bs
-from sasila.system_normal.spider.request_spider import RequestSpider
+from sasila.system_normal.spider.spider_core import SpiderCore
 from sasila.system_normal.pipeline.pic_pipeline import PicPipeline
 
 from base_processor import BaseProcessor
@@ -53,7 +53,7 @@ class MezituProcessor(BaseProcessor):
                 yield response.m_response.content
 
 
-# mzitu_spider = RequestSpider(MezituProcessor()).set_pipeline(PicPipeline())
+# mzitu_spider = SpiderCore(MezituProcessor()).set_pipeline(PicPipeline())
 #
 # if __name__ == '__main__':
-#     spider = RequestSpider(MezituProcessor()).set_pipeline(PicPipeline()).start()
+#     spider = SpiderCore(MezituProcessor()).set_pipeline(PicPipeline()).start()

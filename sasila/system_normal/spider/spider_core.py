@@ -19,7 +19,7 @@ def _priority_compare(r1, r2):
     return r2.priority - r1.priority
 
 
-class RequestSpider(object):
+class SpiderCore(object):
     def __init__(self, processor=None, downloader=None, use_proxy=False, scheduler=None, batch_size=None,
                  time_sleep=None, test=False):
         # 用于测试,爬取成功第一个以后结束

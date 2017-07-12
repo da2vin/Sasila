@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import sys
 
-from sasila.system_normal.spider.request_spider import RequestSpider
+from sasila.system_normal.spider.spider_core import SpiderCore
 
 from base_processor import BaseProcessor, Rule, LinkExtractor
 from sasila.system_normal.downloader.http.spider_request import Request
@@ -49,6 +49,6 @@ class CityLocationProcessor(BaseProcessor):
                 print data
 
 
-# fe_spider = RequestSpider(CityLocationProcessor())
+# fe_spider = SpiderCore(CityLocationProcessor())
 # if __name__ == '__main__':
 #     fe_spider.start()

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import sys
 
-from sasila.system_normal.spider.request_spider import RequestSpider
+from sasila.system_normal.spider.spider_core import SpiderCore
 from sasila.system_normal.pipeline.pic_pipeline import PicPipeline
 
 from base_processor import BaseProcessor, Rule, LinkExtractor
@@ -30,6 +30,6 @@ class FeProcessor(BaseProcessor):
             print bs(response.m_response.content, 'lxml').title.string
 
 
-# fe_spider = RequestSpider(FeProcessor()).set_pipeline(PicPipeline())
+# fe_spider = SpiderCore(FeProcessor()).set_pipeline(PicPipeline())
 # if __name__ == '__main__':
 #     fe_spider.start()

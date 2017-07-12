@@ -6,6 +6,7 @@ from posixpath import normpath
 from urlparse import urljoin
 from urlparse import urlparse
 from urlparse import urlunparse
+from requests.models import Response
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -17,11 +18,14 @@ class Response(object):
         self.m_response = m_response
 
     def __str__(self):
-        if self.m_response:
-            return "<Response [%s] [%s] [%.2f KB]>" % (
-                self.m_response.status_code, self.m_response.url, (float(len(self.m_response.content)) / 1000))
+        if isinstance(self.m_response, Response):
+            if self.m_response:
+                return "<Response [%s] [%s] [%.2f KB]>" % (
+                    self.m_response.status_code, self.m_response.url, (float(len(self.m_response.content)) / 1000))
+            else:
+                return "<Response failed: %s>" % self.request.url
         else:
-            return "<Response failed: %s>" % self.request.url
+            return "<Selenium Response: %s>" % self.request.url
 
     def nice_join(self, url):
         url1 = urljoin(self.request.url, url)

@@ -1,4 +1,4 @@
-# Sasila [![version](https://img.shields.io/badge/version-0.0.5-green.svg)](https://pypi.python.org/pypi/Sasila) [![Build Status]][Travis CI] [![Coverage Status]][Coverage]
+# Sasila [![version](https://img.shields.io/badge/version-0.0.6-green.svg)](https://pypi.python.org/pypi/Sasila) [![Build Status]][Travis CI] [![Coverage Status]][Coverage]
 
 &emsp;&emsp;现在有很多爬虫框架，比如[**scrapy**](https://github.com/scrapy/scrapy)、[**webmagic**](https://github.com/code4craft/webmagic)、[**pyspider**](https://github.com/binux/pyspider)都可以在爬虫工作中使用，也可以直接通过[**requests**](https://github.com/requests/requests)+[**beautifulsoup**](https://github.com/il-vladislav/BeautifulSoup4)来写一些个性化的小型爬虫脚本。但是在实际爬取过程当中，爬虫框架各自有优势和缺陷。比如scrapy，它的功能强大，但过于强大的功能也许反而让新手无所适从，并且它采用twisted异步框架开发，对新手来说源码难以理解，项目难于调试。所以我模仿这些爬虫框架的优势，以尽量简单的原则，搭配gevent(实际上是grequests)开发了这套轻量级爬虫框架。
 
@@ -46,7 +46,7 @@ REDIS_PORT = 6379
 from bs4 import BeautifulSoup as bs
 from sasila.system_normal.processor.base_processor import BaseProcessor
 from sasila.system_normal.downloader.http.spider_request import Request
-from sasila.system_normal.spider.request_spider import RequestSpider
+from sasila.system_normal.spider.spider_core import SpiderCore
 
 class Mzi_Processor(BaseProcessor):
     spider_id = 'mzi_spider'
@@ -126,13 +126,13 @@ class ConsolePipeline(ItemPipeline):
 ## **构建spider(爬虫对象）**
 * 通过注入 *processor* 生成spider对象
 ```python
-from sasila.system_normal.spider.request_spider import RequestSpider
+from sasila.system_normal.spider.spider_core import SpiderCore
 
-spider = RequestSpider(Mzi_Processor())
+spider = SpiderCore(Mzi_Processor())
 ```
 * RequestSpider对象包含批下载数量 *batch_size*，下载间隔 *time_sleep*，使用代理 *use_proxy* 等一切必要的属性
 ```python
-RequestSpider(processor=None, downloader=None, use_proxy=False,scheduler=None,batch_size=None,time_sleep=None)
+SpiderCore(processor=None, downloader=None, use_proxy=False,scheduler=None,batch_size=None,time_sleep=None)
 ```
 * 本项目集成使用代理IP的功能，只要在构建RequestSpider时将  *use_proxy* 设置为 *True*,并在脚本同级目录下放置proxy.txt文件即可。你也可以在settings.py文件中写入代理IP文件路径。
 ```python

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from sasila.system_normal.spider.request_spider import RequestSpider
+from sasila.system_normal.spider.spider_core import SpiderCore
 from sasila.system_normal.pipeline.console_pipeline import ConsolePipeline
 from sasila.system_normal.pipeline.text_pipeline import TextPipelineCar
 from sasila.system_normal.processor.base_processor import BaseProcessor
@@ -124,4 +124,4 @@ class Car_Processor(BaseProcessor):
 
 
 if __name__ == '__main__':
-    spider = RequestSpider(Car_Processor()).set_pipeline(ConsolePipeline()).set_pipeline(TextPipelineCar()).start()
+    spider = SpiderCore(Car_Processor()).set_pipeline(ConsolePipeline()).set_pipeline(TextPipelineCar()).start()

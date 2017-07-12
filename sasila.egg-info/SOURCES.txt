@@ -59,7 +59,7 @@ sasila/system_normal/scheduler/__init__.py
 sasila/system_normal/scheduler/bloom_filter.py
 sasila/system_normal/scheduler/queue.py
 sasila/system_normal/spider/__init__.py
-sasila/system_normal/spider/request_spider.py
+sasila/system_normal/spider/spider_core.py
 sasila/system_normal/spider/selenium_spider.py
 sasila/system_normal/utils/__init__.py
 sasila/system_normal/utils/cookie.py
