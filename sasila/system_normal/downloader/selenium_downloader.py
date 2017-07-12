@@ -30,7 +30,7 @@ class SeleniumDownLoader(BaseDownLoader):
         m_response.content = web.execute_script("return document.documentElement.outerHTML")
         response = Response(m_response=m_response, request=request)
         self.web_driver_pool.put(web)
-        logger.info("selenium download success:【%s】" % request.url)
+        # logger.info("selenium download success:【%s】" % request.url)
         return response
 
     def download(self, batch):
@@ -50,7 +50,7 @@ class SeleniumDownLoader(BaseDownLoader):
         for result in results:
             true_response = result.get()
             true_responses.append(true_response)
-            logger.info(result)
+            logger.info(true_response)
 
         return true_responses
 
