@@ -18,7 +18,7 @@ dcap["phantomjs.page.settings.loadImages"] = True
 dcap["phantomjs.page.settings.userAgent"] = default_settings.USER_AGENT
 
 
-def _get_base_ali_driver():
+def _get_base_driver():
     if default_settings.PHANTOMJS_SERVICE:
         web = webdriver.PhantomJS(service_args=default_settings.PHANTOMJS_SERVICE, executable_path=default_settings.PHANTOMJS_PATH
                                   , desired_capabilities=dcap)
@@ -32,7 +32,7 @@ def get_web_driver_pool(num):
     driver_queue = Queue.Queue()
     i = 0
     while i < num:
-        web = _get_base_ali_driver()
+        web = _get_base_driver()
         driver_queue.put(web)
         i += 1
     return driver_queue
