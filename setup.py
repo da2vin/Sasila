@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 from setuptools import setup, find_packages
 import sasila
+import os
+
+path = os.getcwd() + '\README-SETUP.rst'
 
 extras_require_all = [
     'Flask>=0.11.1',
@@ -21,7 +24,7 @@ setup(
         description=(
             'a simple spider system'
         ),
-        long_description=open('README-SETUP.rst').read(),
+        long_description=open(path).read(),
         author='DaVinciDW',
         author_email='darkwings_love@163.com',
         maintainer='DaVinciDW',
