@@ -19,7 +19,6 @@ deploy:
   provider: pypi
   skip_cleanup: true
   distributions: "sdist bdist_wheel"
-  server: https://pypi.python.org/pypi
   user: DaVinciDW
   password:
     secure: mM8AvmUtR7kMRSzX3A910dy8prowEzMEx3f0E1wH6pyjwvd5AiJUjEznR2o7ZW0YVsXxelAWO1fqoKtwZ44/XHxwSxTejAxEBIPS0jdT0tg1Q8iIZ2KxHYiWRIQCERhg+JGGOqVcrWlAQrZcbOyU5iLPsH6rI2KF0qaavvKrfgkHrivj+sjeqOrSbCnN9DAUVWBaNpTxscW6WgRSMgC4Xidi8ZdSnzXpgkTX/9zb5L/0H0CDS2cTpegTbk1lzNIYKPiNkfGAckmNIZDyjcNDnM68Ep4N9rIf5u8e9u8Ozuxi1gBpG4uKL4WmQX/lHi1uVmyVQ4+tv7xaxVIGvI8UdQMhlDxnkBxegF3qTGolpqRgHsO7nMjnqV1+ndYLq72fFzUGvlEM+VNsuIUXfwj8/T4aFAqwY+4hI5Y+QHNZMyTYxOU+L1/AfoC04hRHz5y0ytN6rKBCbBzfFOtcmJnC3w6bH4TobFo7IbKgUshEmXHwXZ079CvPdVzC+UVhA8SpqVzGAFQ6Vbn7/jip6sc=
