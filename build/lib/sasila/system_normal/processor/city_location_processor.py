@@ -3,13 +3,13 @@
 import sys
 
 from sasila.system_normal.spider.spider_core import SpiderCore
-
-from base_processor import BaseProcessor, Rule, LinkExtractor
+from sasila.system_normal.processor.base_processor import BaseProcessor, Rule, LinkExtractor
 from sasila.system_normal.downloader.http.spider_request import Request
 from bs4 import BeautifulSoup as bs
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 
 class CityLocationProcessor(BaseProcessor):
@@ -42,11 +42,11 @@ class CityLocationProcessor(BaseProcessor):
             lo = soup.select("div.cdiv p")[1].select("span")[0].string.strip()
             la = soup.select("div.cdiv p")[1].select("span")[1].string.strip()
             data = province + ',' + city + ',' + area + ',' + lo + ',' + la
-            print data
+            print(data)
             with open('city.txt', 'a+') as fs:
                 data = province + ',' + city + ',' + area + ',' + lo + ',' + la
                 fs.write(data + '\n')
-                print data
+                print(data)
 
 
 # fe_spider = SpiderCore(CityLocationProcessor())

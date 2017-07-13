@@ -1,9 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import imp
+import sys
 import os
 
-import default_settings
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
+
+import sasila.settings.default_settings
 
 setting_path = os.path.join(os.getcwd(), 'settings.py')
 
@@ -15,6 +20,9 @@ if os.path.exists(setting_path):
     for key in dir(new_settings):
         if key.isupper():
             new_settings_dict[key] = getattr(new_settings, key)
-
-    for key, value in new_settings_dict.iteritems():
-        setattr(default_settings, key, value)
+    if sys.version_info < (3, 0):
+        for key, value in new_settings_dict.iteritems():
+            setattr(default_settings, key, value)
+    else:
+        for key, value in new_settings_dict.items():
+            setattr(default_settings, key, value)

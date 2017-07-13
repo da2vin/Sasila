@@ -11,12 +11,17 @@ import re
 import time
 import traceback
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 
 def _priority_compare(r1, r2):
     return r2.priority - r1.priority
+
+
+def _priority_compare_key(item):
+    return item.priority, item.priority
 
 
 class SpiderCore(object):
@@ -112,7 +117,10 @@ class SpiderCore(object):
         while True:
             count += 1
             if len(batch) > self._batch_size or count > self._batch_size:
-                batch.sort(_priority_compare)
+                if sys.version_info < (3, 0):
+                    batch.sort(_priority_compare)
+                else:
+                    batch.sort(key=_priority_compare_key)
                 yield batch
                 batch = []
                 count = 0

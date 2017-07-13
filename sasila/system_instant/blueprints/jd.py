@@ -6,8 +6,9 @@ from flask import Blueprint
 from flask import request
 from sasila.system_instant.manager.jd_manager import JdManager
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 im_jd = Blueprint('im_jd', __name__)
 

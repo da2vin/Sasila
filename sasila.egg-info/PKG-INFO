@@ -1,6 +1,6 @@
 Metadata-Version: 1.1
 Name: sasila
-Version: 0.0.6
+Version: 0.0.7
 Summary: a simple spider system
 Home-page: https://github.com/DarkSand/Sasila
 Author: DaVinciDW
@@ -192,3 +192,4 @@ Classifier: Topic :: Utilities
 Classifier: Topic :: Internet
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.4

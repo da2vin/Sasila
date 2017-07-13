@@ -9,8 +9,9 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 from sasila.settings import default_settings
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 dcap = dict(DesiredCapabilities.PHANTOMJS)
 dcap["phantomjs.page.settings.resourceTimeout"] = 10

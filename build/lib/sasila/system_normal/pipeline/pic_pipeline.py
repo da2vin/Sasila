@@ -5,8 +5,9 @@ import sys
 import uuid
 from sasila.system_normal.pipeline.base_pipeline import ItemPipeline
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 
 class PicPipeline(ItemPipeline):
@@ -16,4 +17,4 @@ class PicPipeline(ItemPipeline):
                 os.mkdir("img")
             with open("img/" + str(uuid.uuid1()) + ".jpg", 'wb') as fs:
                 fs.write(item)
-                print "download success!"
+                print("download success!")

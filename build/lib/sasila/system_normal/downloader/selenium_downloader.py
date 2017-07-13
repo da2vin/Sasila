@@ -9,8 +9,9 @@ from sasila.system_normal.downloader.web_driver_pool import get_web_driver_pool
 from sasila.system_normal.utils import logger
 from multiprocessing.pool import ThreadPool as Pool
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 
 class SeleniumDownLoader(BaseDownLoader):

@@ -4,8 +4,9 @@ import sys
 from flask import Flask
 from sasila.system_normal.blueprints.slow_spiders import slow_spider
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 app = Flask(__name__)
 

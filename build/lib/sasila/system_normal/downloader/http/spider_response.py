@@ -3,13 +3,15 @@
 import sys
 import re
 from posixpath import normpath
-from urlparse import urljoin
-from urlparse import urlparse
-from urlparse import urlunparse
-from requests.models import Response
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+from requests.models import Response as Response_name
+
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
+    from urlparse import urljoin, urlparse, urlunparse
+else:
+    from urllib.parse import urljoin, urlparse, urlunparse
 
 
 class Response(object):
@@ -18,7 +20,7 @@ class Response(object):
         self.m_response = m_response
 
     def __str__(self):
-        if isinstance(self.m_response, Response):
+        if isinstance(self.m_response, Response_name):
             if self.m_response:
                 return "<Response [%s] [%s] [%.2f KB]>" % (
                     self.m_response.status_code, self.m_response.url, (float(len(self.m_response.content)) / 1000))

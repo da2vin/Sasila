@@ -5,8 +5,9 @@ import six
 from sasila.system_normal.downloader.http.spider_request import Request
 from sasila.system_normal.utils.python import to_unicode, to_native_str
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 
 def request_to_dict(request, processor=None):

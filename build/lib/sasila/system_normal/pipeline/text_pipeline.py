@@ -6,8 +6,9 @@ from sasila.system_normal.utils import logger
 import traceback
 import codecs
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 
 class TextPipeline(ItemPipeline):

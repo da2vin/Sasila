@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 import sys
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 
 class ProgressBar:
@@ -17,7 +18,7 @@ class ProgressBar:
         sys.stdout.write(' ' * (self.width + 9) + '\r')
         sys.stdout.flush()
         if log_str:
-            print log_str
+            print(log_str)
         progress = self.width * self.count / self.total
         sys.stdout.write('{0:3}/{1:3}: '.format(self.count, self.total))
         sys.stdout.write('#' * progress + '-' * (self.width - progress) + '\r')

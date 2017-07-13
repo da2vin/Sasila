@@ -5,12 +5,13 @@ import sys
 from sasila.system_normal.spider.spider_core import SpiderCore
 from sasila.system_normal.pipeline.pic_pipeline import PicPipeline
 
-from base_processor import BaseProcessor, Rule, LinkExtractor
+from sasila.system_normal.processor.base_processor import BaseProcessor, Rule, LinkExtractor
 from sasila.system_normal.downloader.http.spider_request import Request
 from bs4 import BeautifulSoup as bs
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 
 class FeProcessor(BaseProcessor):
@@ -27,7 +28,7 @@ class FeProcessor(BaseProcessor):
 
     def save(self, response):
         if response.m_response:
-            print bs(response.m_response.content, 'lxml').title.string
+            print(bs(response.m_response.content, 'lxml').title.string)
 
 
 # fe_spider = SpiderCore(FeProcessor()).set_pipeline(PicPipeline())

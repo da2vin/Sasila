@@ -10,8 +10,9 @@ from sasila.system_normal.downloader.proxy.proxy_pool import ProxyPool
 
 from sasila.system_normal.utils import logger
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 
 class RequestsDownLoader(BaseDownLoader):

@@ -12,8 +12,9 @@ from sasila.system_normal.downloader.http.spider_request import Request
 import time
 from sasila.system_normal.utils.decorator import checkResponse
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 
 class Fang_Processor(BaseProcessor):

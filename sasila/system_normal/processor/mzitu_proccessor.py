@@ -6,11 +6,12 @@ from bs4 import BeautifulSoup as bs
 from sasila.system_normal.spider.spider_core import SpiderCore
 from sasila.system_normal.pipeline.pic_pipeline import PicPipeline
 
-from base_processor import BaseProcessor
+from sasila.system_normal.processor.base_processor import BaseProcessor
 from sasila.system_normal.downloader.http.spider_request import Request
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 
 class MezituProcessor(BaseProcessor):

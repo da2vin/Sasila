@@ -12,8 +12,9 @@ from sasila.system_normal.utils.decorator import checkResponse
 import json
 import time
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 
 class Car_Processor(BaseProcessor):

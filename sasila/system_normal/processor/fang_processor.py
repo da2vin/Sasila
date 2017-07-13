@@ -7,13 +7,14 @@ from sasila.system_normal.spider.spider_core import SpiderCore
 from sasila.system_normal.pipeline.console_pipeline import ConsolePipeline
 from sasila.system_normal.pipeline.text_pipeline import TextPipelineFang
 
-from base_processor import BaseProcessor
+from sasila.system_normal.processor.base_processor import BaseProcessor
 from sasila.system_normal.downloader.http.spider_request import Request
 import time
 from sasila.system_normal.utils.decorator import checkResponse
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 
 class Fang_Processor(BaseProcessor):

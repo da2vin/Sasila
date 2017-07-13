@@ -6,11 +6,12 @@ from bs4 import BeautifulSoup as bs
 from sasila.system_normal.spider.spider_core import SpiderCore
 from sasila.system_normal.pipeline.console_pipeline import ConsolePipeline
 
-from base_processor import BaseProcessor
+from sasila.system_normal.processor.base_processor import BaseProcessor
 from sasila.system_normal.downloader.http.spider_request import Request
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 
 class FirstProcessor(BaseProcessor):
@@ -39,7 +40,7 @@ class FirstProcessor(BaseProcessor):
                     if response.is_url(url):
                         yield Request(url=url, callback=self.procces2)
         else:
-            print response.request.url
+            print(response.request.url)
 
 
 # if __name__ == '__main__':

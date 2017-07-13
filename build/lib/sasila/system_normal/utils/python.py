@@ -3,8 +3,9 @@
 import sys
 import six
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 
 def to_unicode(text, encoding=None, errors='strict'):

@@ -3,10 +3,12 @@
 import sys
 import weakref
 # from six.moves.urllib.parse import urlparse
-from urlparse import urlparse
-
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
+    from urlparse import urlparse
+else:
+    from urllib.parse import urlparse
 
 _urlparse_cache = weakref.WeakKeyDictionary()
 

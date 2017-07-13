@@ -3,8 +3,9 @@
 import sys
 from sasila.system_normal.pipeline.base_pipeline import ItemPipeline
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 
 class TestPipeline(ItemPipeline):

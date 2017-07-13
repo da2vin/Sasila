@@ -23,4 +23,4 @@
 # REDIS_HOST = 'localhost'
 
 # redis port
-# REDIS_PORT = 6379
+REDIS_PORT = 6379

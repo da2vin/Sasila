@@ -10,8 +10,9 @@ from sasila.system_normal.utils.cookie import formart_selenium_cookies
 from sasila.system_normal.utils import logger
 from sasila.system_normal.utils import jd_code
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 
 def abstract(text, start, end):

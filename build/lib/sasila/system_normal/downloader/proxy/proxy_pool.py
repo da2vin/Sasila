@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import Queue
 import sys
 
 from sasila.settings.default_settings import PROXY_PATH_REQUEST
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    import Queue
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
+else:
+    from queue import Queue
 
 
 class ProxyPool(object):

@@ -5,8 +5,9 @@ import redis
 from hashlib import md5
 from sasila.settings import default_settings
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 
 class SimpleHash(object):

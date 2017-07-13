@@ -4,8 +4,9 @@ import sys
 import json
 import threading
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 
 class SpiderManager(object):

@@ -5,7 +5,7 @@ import sys
 from sasila.system_normal.spider.spider_core import SpiderCore
 from sasila.system_normal.pipeline.console_pipeline import ConsolePipeline
 from sasila.system_normal.pipeline.text_pipeline import TextPipeline
-from base_processor import BaseProcessor
+from sasila.system_normal.processor.base_processor import BaseProcessor
 from sasila.system_normal.downloader.http.spider_request import Request
 from bs4 import BeautifulSoup as bs
 import time
@@ -13,8 +13,9 @@ from sasila.system_normal.utils import logger
 
 import traceback
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 
 class QccProcessor(BaseProcessor):
@@ -164,7 +165,7 @@ class QccProcessor(BaseProcessor):
                 result_item["update_time"] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
                 yield result_item
             except Exception:
-                print traceback.format_exc()
+                print(traceback.format_exc())
 
 
 # qcc_spider = SpiderCore(QccProcessor(), time_sleep=1).set_pipeline(KafkaPipeline()).set_pipeline(

@@ -2,13 +2,16 @@
 # -*- coding: utf-8 -*-
 import sys
 import redis
-import cPickle
-from bloom_filter import BloomFilter
+from sasila.system_normal.scheduler.bloom_filter import BloomFilter
 from sasila.system_normal.utils.reqser import request_to_dict, request_from_dict
 from sasila.settings import default_settings
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
+    import cPickle
+else:
+    import pickle as cPickle
 
 
 class Base(object):

@@ -6,8 +6,9 @@ import json
 from sasila.system_instant.crawler.jd.request import JdRequest
 from sasila.system_instant.database.jd_database import *
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 
 class JdResponse(object):

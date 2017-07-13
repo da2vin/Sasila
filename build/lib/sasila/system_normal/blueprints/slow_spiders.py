@@ -5,8 +5,9 @@ from flask import Blueprint, request
 from sasila.system_normal.manager import manager
 import json
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 slow_spider = Blueprint('slow_spider', __name__)
 

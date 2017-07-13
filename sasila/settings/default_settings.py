@@ -3,8 +3,9 @@
 import sys
 import os
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 BASE_DIR = os.getcwd()
 

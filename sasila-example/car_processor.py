@@ -12,8 +12,9 @@ import json
 import time
 import sys
 
-reload(sys)
-sys.setdefaultencoding('utf-8')
+if sys.version_info < (3, 0):
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 
 class Car_Processor(BaseProcessor):
@@ -90,7 +91,7 @@ class Car_Processor(BaseProcessor):
 
     @checkResponse
     def process_page_4(self, response):
-        soup = bs(response.m_response.content, 'lxml')
+        soup = bs(response.m_response.content.decode('gb2312', 'ignore'), 'lxml')
         # <html><head><title>Object moved</title></head><body>
         # <h2>Object moved to <a href="/CarDetail/wrong.aspx?errorcode=5&amp;backurl=/&amp;infoid=21415515">here</a>.</h2>
         # </body></html>
@@ -124,4 +125,4 @@ class Car_Processor(BaseProcessor):
 
 
 if __name__ == '__main__':
-    spider = SpiderCore(Car_Processor()).set_pipeline(ConsolePipeline()).set_pipeline(TextPipelineCar()).start()
+    SpiderCore(Car_Processor()).set_pipeline(ConsolePipeline()).set_pipeline(TextPipelineCar()).start()
