@@ -21,7 +21,7 @@ def _priority_compare(r1, r2):
 
 
 def _priority_compare_key(item):
-    return item.priority, item.priority
+    return item.priority
 
 
 class SpiderCore(object):
@@ -120,7 +120,7 @@ class SpiderCore(object):
                 if sys.version_info < (3, 0):
                     batch.sort(_priority_compare)
                 else:
-                    batch.sort(key=_priority_compare_key)
+                    batch.sort(key=_priority_compare_key, reverse=True)
                 yield batch
                 batch = []
                 count = 0
@@ -175,3 +175,18 @@ class SpiderCore(object):
             return re.compile('')  # allow all by default
         regex = r'^(.*\.)?(%s)$' % '|'.join(re.escape(d) for d in allowed_domains if d is not None)
         return re.compile(regex)
+
+
+# if __name__ == '__main__':
+#     batch = [Request(priority=0),
+#              Request(priority=2),
+#              Request(priority=4),
+#              Request(priority=8),
+#              Request(priority=6),
+#              Request(priority=1),
+#              Request(priority=10)]
+#
+#     # batch.sort(key=_priority_compare_key, reverse=True)
+#     batch.sort(_priority_compare)
+#     for b in batch:
+#         print(b.priority)

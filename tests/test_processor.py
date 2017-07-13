@@ -11,4 +11,4 @@ class TestProcessor(unittest.TestCase):
     def test_car_processor(self):
         test_pipeline = TestPipeline()
         SpiderCore(Car_Processor(), test=True).set_pipeline(ConsolePipeline()).set_pipeline(test_pipeline).start()
-        self.assertEqual(test_pipeline.result['province'], '上海', '爬取结果，省份为上海')
+        self.assertEqual(len(test_pipeline.result), 11, '爬取结果，11个字段')
