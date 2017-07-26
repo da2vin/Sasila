@@ -8,7 +8,8 @@ if sys.version_info < (3, 0):
 
 
 class Request(object):
-    def __init__(self, url=None, data=None, json=None, headers=None, method="GET", cookies=None, meta={}, callback=None,
+    def __init__(self, url=None, data=None, json=None, headers=None, method="GET", cookies=None, meta=None,
+                 callback=None,
                  errback=None, priority=0, allow_redirects=True, timeout=5, duplicate_remove=True):
         self.url = url
         self.data = data
@@ -16,7 +17,7 @@ class Request(object):
         self.headers = headers
         self.method = method
         self.allow_redirects = allow_redirects
-        self.meta = meta
+        self.meta = {}
         self.cookies = cookies
         self.callback = callback
         self.priority = priority
