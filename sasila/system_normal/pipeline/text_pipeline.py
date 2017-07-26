@@ -88,3 +88,18 @@ class TextPipelineFangShop(ItemPipeline):
                 )
         except:
             logger.error(traceback.format_exc())
+
+
+class TextPipelineBendibao(ItemPipeline):
+    def process_item(self, item):
+        try:
+            with codecs.open("bendibao.csv", 'a', 'gbk') as f:
+                f.write(
+                        item["city_name"] + ',' +
+                        item["category1_name"] + ',' +
+                        item["category2_name"] + ',' +
+                        item["result_name"] + ',' +
+                        item["result_mobile"] + "\n"
+                )
+        except:
+            logger.error(traceback.format_exc())
