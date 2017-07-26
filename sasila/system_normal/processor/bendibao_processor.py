@@ -62,6 +62,16 @@ class Bendibao_Processor(BaseProcessor):
                 m_result['category1_name'] = response.request.meta['category1_name']
                 m_result['category2_name'] = response.request.meta['city_name']
                 yield m_result
+            next_page = soup.find(lambda tag: tag.name == 'a' and '下一页' in tag.text)
+            if next_page:
+                url_splits = response.request.url.split('/')
+                url_splits[-1] = next_page['href']
+                url = '/'.join(url_splits)
+                request = Request(url=url, priority=1, callback=self.process_page_1)
+                request.meta['city_name'] = response.request.meta['city_name']
+                request.meta['category1_name'] = response.request.meta['category1_name']
+                request.meta['category2_name'] = response.request.meta['category2_name']
+                yield request
 
 
 if __name__ == '__main__':
