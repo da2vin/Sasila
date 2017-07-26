@@ -17,7 +17,10 @@ class Request(object):
         self.headers = headers
         self.method = method
         self.allow_redirects = allow_redirects
-        self.meta = {}
+        if not meta:
+            self.meta = {}
+        else:
+            self.meta = meta
         self.cookies = cookies
         self.callback = callback
         self.priority = priority

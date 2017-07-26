@@ -22,7 +22,6 @@ with open(name='city.txt', mode='r') as fs:
     lines = fs.readlines()
     for line in lines:
         request_temp = Request(url=line.strip().split(',')[0] + 'wangdian/', priority=0)
-        request_temp.meta = {}
         request_temp.meta["city_name"] = line.strip().split(',')[1]
         start_requests_temp.append(request_temp)
 
@@ -148,5 +147,5 @@ class Bendibao_Processor(BaseProcessor):
 #             yield item
 #
 #
-# if __name__ == '__main__':
-#     SpiderCore(Bendibao_Processor()).set_pipeline(ConsolePipeline()).start()
+if __name__ == '__main__':
+    SpiderCore(Bendibao_Processor()).set_pipeline(ConsolePipeline()).start()
