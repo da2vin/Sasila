@@ -9,4 +9,4 @@ if sys.version_info < (3, 0):
 
 class ItemPipeline(object):
     def process_item(self, item):
-        pass
+        raise NotImplementedError
