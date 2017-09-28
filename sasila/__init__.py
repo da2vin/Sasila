@@ -2,4 +2,4 @@
 # -*- coding: utf-8 -*-
 import sasila.settings
 
-__version__ = '0.0.17'
+__version__ = '0.0.18'
