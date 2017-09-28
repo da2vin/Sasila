@@ -20,7 +20,7 @@ def checkResponse(func):
                     if response.m_response.content is None:
                         content = 'null'
                     else:
-                        content = response.m_response.content.decode("gbk")
+                        content = response.m_response.content.decode("gb2312")
                     logger.error(
                             'response.m_response is failed 【' + str(
                                     response.m_response.status_code) + '】 and url : ' + response.request.url + ' content:' + content + ' and request has been push to queue again!')
@@ -34,8 +34,13 @@ def checkResponse(func):
                     for callback in process:
                         yield callback
                 except Exception:
+                    content = None
+                    if response.m_response.content is None:
+                        content = 'null'
+                    else:
+                        content = response.m_response.content.decode("gb2312")
                     logger.error(
-                            'process error: ' + response.request.url + '\r\n' + response.m_response.content + '\r\n' + traceback.format_exc())
+                            'process error: ' + response.request.url + '\r\n' + content + '\r\n' + traceback.format_exc())
 
     return wrapper
 
