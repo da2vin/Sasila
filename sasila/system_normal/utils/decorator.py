@@ -16,11 +16,14 @@ def checkResponse(func):
                     logger.error(
                             'response.m_response is None and url : ' + response.request.url + ' and request has been push to queue again!')
                 else:
+                    content = None
+                    if response.m_response.content is None:
+                        content = 'null'
+                    else:
+                        content = response.m_response.content.decode("gbk")
                     logger.error(
                             'response.m_response is failed 【' + str(
-                                    response.m_response.status_code) + '】 and url : ' + response.request.url + ' content:' + str(
-                                response.m_response.content,
-                                encoding="utf-8") + ' and request has been push to queue again!')
+                                    response.m_response.status_code) + '】 and url : ' + response.request.url + ' content:' + content + ' and request has been push to queue again!')
                 yield response.request
             except Exception:
                 pass
