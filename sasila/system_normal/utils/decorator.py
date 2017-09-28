@@ -11,22 +11,17 @@ def checkResponse(func):
     @functools.wraps(func)
     def wrapper(self, response):
         if not response.m_response:
-            try:
-                if response.m_response is None:
-                    logger.error(
-                            'response.m_response is None and url : ' + response.request.url + ' and request has been push to queue again!')
-                else:
-                    content = None
-                    if response.m_response.content is None:
-                        content = 'null'
-                    else:
-                        content = response.m_response.content.decode("gb2312")
-                    logger.error(
-                            'response.m_response is failed 【' + str(
-                                    response.m_response.status_code) + '】 and url : ' + response.request.url + ' content:' + content + ' and request has been push to queue again!')
-                yield response.request
-            except Exception:
-                pass
+            if response.m_response is None:
+                logger.error(
+                        'response.m_response is None and url : ' + response.request.url + ' and request has been push to queue again!')
+            else:
+                # logger.error(
+                #         'response.m_response is failed 【' + str(
+                #                 response.m_response.status_code) + '】 and url : ' + response.request.url + ' content:' + response.m_response.content + ' and request has been push to queue again!')
+                logger.error(
+                        'response.m_response is failed 【' + str(
+                                response.m_response.status_code) + '】 and url : ' + response.request.url + ' and request has been push to queue again!')
+            yield response.request
         else:
             process = func(self, response)
             if process is not None:
@@ -34,13 +29,10 @@ def checkResponse(func):
                     for callback in process:
                         yield callback
                 except Exception:
-                    content = None
-                    if response.m_response.content is None:
-                        content = 'null'
-                    else:
-                        content = response.m_response.content.decode("gb2312")
+                    # logger.error(
+                    #         'process error: ' + response.request.url + '\r\n' + response.m_response.content + '\r\n' + traceback.format_exc())
                     logger.error(
-                            'process error: ' + response.request.url + '\r\n' + content + '\r\n' + traceback.format_exc())
+                            'process error: ' + response.request.url + '\r\n' + traceback.format_exc())
 
     return wrapper
 
