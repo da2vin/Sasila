@@ -160,7 +160,7 @@ from sasila import system_web
 
 manager.set_spider(spider)
 
-web.start()
+system_web.start()
 ```
 
 访问 http://127.0.0.1:5000/slow_spider/start?spider_id=mzi_spider 来启动爬虫。
