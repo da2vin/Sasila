@@ -5,34 +5,51 @@ import functools
 from sasila.system_normal.utils import logger
 import traceback
 import time
+import uuid
+import types
 
 
 def checkResponse(func):
     @functools.wraps(func)
     def wrapper(self, response):
         if not response.m_response:
-            if response.m_response is None:
-                logger.error(
-                        'response.m_response is None and url : ' + response.request.url + ' and request has been push to queue again!')
+            response.request.meta['retry'] += 1
+            # 最多重试3次
+            if response.request.meta['retry'] < 4:
+                retry_str = '\nrequest has been push to queue again!'
+                yield response.request
             else:
-                # logger.error(
-                #         'response.m_response is failed 【' + str(
-                #                 response.m_response.status_code) + '】 and url : ' + response.request.url + ' content:' + response.m_response.content + ' and request has been push to queue again!')
-                logger.error(
-                        'response.m_response is failed 【' + str(
-                                response.m_response.status_code) + '】 and url : ' + response.request.url + ' and request has been push to queue again!')
-            yield response.request
+                retry_str = '\nrequest has been try max times! will not push again!'
+
+            if response.m_response is None:
+                logger.error('response.m_response is None'
+                             + '\nURL : ' + response.request.url
+                             + retry_str)
+            else:
+                # 记录返回数据
+                log_name = 'log/' + str(uuid.uuid1()) + '_log.txt'
+                with open(log_name, 'wb') as f:
+                    f.write(response.m_response.content)
+
+                logger.error('response.m_response is failed 【' + str(response.m_response.status_code) + '】'
+                             + '\nURL : ' + response.request.url
+                             + '\nresponse: ' + log_name
+                             + retry_str)
         else:
-            process = func(self, response)
-            if process is not None:
-                try:
+            try:
+                process = func(self, response)
+                if isinstance(process, types.GeneratorType):
                     for callback in process:
                         yield callback
-                except Exception:
-                    # logger.error(
-                    #         'process error: ' + response.request.url + '\r\n' + response.m_response.content + '\r\n' + traceback.format_exc())
-                    logger.error(
-                            'process error: ' + response.request.url + '\r\n' + traceback.format_exc())
+            except Exception:
+                # 记录返回数据
+                log_name = 'log/' + str(uuid.uuid1()) + '_log.txt'
+                with open(log_name, 'wb') as f:
+                    f.write(response.m_response.content)
+
+                logger.error('process error: ' + response.request.url
+                             + '\nresponse' + log_name
+                             + '\n' + traceback.format_exc())
 
     return wrapper
 

@@ -1,12 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-from collections import Iterator
+import types
 from sasila.system_normal.downloader.http.spider_request import Request
 from sasila.system_normal.downloader.requests_downloader import RequestsDownLoader
 from sasila.system_normal.scheduler.queue import PriorityQueue
 from sasila.system_normal.utils import logger
 from sasila.system_normal.utils.httpobj import urlparse_cached
+from sasila.system_normal.downloader.selenium_downloader import SeleniumDownLoader
+from sasila.system_normal.pipeline.pipe_item import pipeItem
+from sasila.settings import default_settings
+import uuid
 import re
 import time
 import traceback
@@ -32,15 +36,18 @@ class SpiderCore(object):
         self._processor = processor
         self._host_regex = self._get_host_regex()
         self._spider_status = 'stopped'
-        self._pipelines = []
+        self._pipelines = {}
         self._time_sleep = time_sleep
         if time_sleep:
             self._batch_size = 0
         else:
-            if batch_size:
-                self._batch_size = batch_size - 1
+            if isinstance(downloader, SeleniumDownLoader):
+                self._batch_size = default_settings.DRIVER_POOL_SIZE
             else:
-                self._batch_size = 9
+                if batch_size:
+                    self._batch_size = batch_size - 1
+                else:
+                    self._batch_size = 9
         self._spider_name = processor.spider_name
         self._spider_id = processor.spider_id
         self._process_count = 0
@@ -65,8 +72,10 @@ class SpiderCore(object):
         self._downloader = downloader
         return self
 
-    def set_pipeline(self, pipeline):
-        self._pipelines.append(pipeline)
+    def set_pipeline(self, pipeline=None, pipeline_name=None, ):
+        if not pipeline_name:
+            pipeline_name = str(uuid.uuid1())
+        self._pipelines[pipeline_name] = pipeline
         return self
 
     def stop(self):
@@ -136,31 +145,50 @@ class SpiderCore(object):
             time.sleep(self._time_sleep)
         for response in responses:
             callback = response.request.callback(response)
-            if callback is not None:
-                if isinstance(callback, Iterator):
-                    pipe = self._queue.get_pipe()
-                    for item in callback:
-                        if isinstance(item, Request):
-                            # logger.info("push request to queue..." + str(item))
-                            if self._should_follow(item):
-                                self._queue.push_pipe(item, pipe)
-                        else:
+            if isinstance(callback, types.GeneratorType):
+                pipe = self._queue.get_pipe()
+                for item in callback:
+                    if isinstance(item, Request):
+                        # logger.info("push request to queue..." + str(item))
+                        if self._should_follow(item):
+                            self._queue.push_pipe(item, pipe)
+                    else:
+                        if isinstance(item, pipeItem):
+                            # 如果返回对象是pipeItem，则用对应的pipeline处理
                             self._process_count += 1
-                            for pipeline in self._pipelines:
+                            for pipename in item.pipenames:
+                                if pipename in self._pipelines:
+                                    self._pipelines[pipename].process_item(item.result)
+                            if self.test:
+                                if self._process_count > 0:
+                                    return
+                        else:
+                            # 如果返回对象不是pipeItem，则默认用每个pipeline处理
+                            self._process_count += 1
+                            for pipeline in self._pipelines.itervalues():
                                 pipeline.process_item(item)
                             if self.test:
                                 if self._process_count > 0:
                                     return
-                    pipe.execute()
-                else:
-                    if isinstance(callback, Request):
-                        # logger.info("push request to queue..." + str(back))
-                        if self._should_follow(callback):
-                            self._queue.push(callback)
-                    else:
-                        self._process_count += 1
-                        for pipeline in self._pipelines:
-                            pipeline.process_item(callback)
+                pipe.execute()
+            elif isinstance(callback, Request):
+                # logger.info("push request to queue..." + str(back))
+                if self._should_follow(callback):
+                    self._queue.push(callback)
+            elif isinstance(callback, pipeItem):
+                # 如果返回对象是pipeItem，则用对应的pipeline处理
+                self._process_count += 1
+                for pipename in callback.pipenames:
+                    if pipename in self._pipelines:
+                        self._pipelines[pipename].process_item(callback.result)
+            else:
+                # 如果返回对象不是pipeItem，则默认用每个pipeline处理
+                self._process_count += 1
+                for pipeline in self._pipelines.itervalues:
+                    pipeline.process_item(item)
+                if self.test:
+                    if self._process_count > 0:
+                        return
 
     def _should_follow(self, request):
         regex = self._host_regex

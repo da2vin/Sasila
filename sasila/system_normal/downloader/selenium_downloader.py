@@ -4,7 +4,7 @@ import sys
 
 from sasila.settings import default_settings
 from sasila.system_normal.downloader.base_downloder import BaseDownLoader
-from sasila.system_normal.downloader.http.spider_response import Response
+from sasila.system_normal.downloader.http.selenium_response import SeleniumResponse
 from sasila.system_normal.downloader.web_driver_pool import get_web_driver_pool
 from sasila.system_normal.utils import logger
 from multiprocessing.pool import ThreadPool as Pool
@@ -29,9 +29,8 @@ class SeleniumDownLoader(BaseDownLoader):
         web.get(request.url)
         m_response = m_object()
         m_response.content = web.execute_script("return document.documentElement.outerHTML")
-        response = Response(m_response=m_response, request=request)
+        response = SeleniumResponse(m_response=m_response, request=request)
         self.web_driver_pool.put(web)
-        # logger.info("selenium download success:【%s】" % request.url)
         return response
 
     def download(self, batch):
