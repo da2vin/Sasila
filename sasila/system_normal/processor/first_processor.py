@@ -26,22 +26,7 @@ class FirstProcessor(BaseProcessor):
         for a in a_list:
             if "href" in a.attrs:
                 url = response.nice_join(a["href"])
-                if response.is_url(url):
-                    yield Request(url=url, callback=self.procces2)
-
-    def procces2(self, response):
-        if response.m_response:
-            soup = bs(response.m_response.content, 'lxml')
-            yield soup.title
-            a_list = soup.select("a")
-            for a in a_list:
-                if "href" in a.attrs:
-                    url = response.nice_join(a["href"])
-                    if response.is_url(url):
-                        yield Request(url=url, callback=self.procces2)
-        else:
-            print(response.request.url)
-
+                yield {'url': url}
 
 # if __name__ == '__main__':
 #     spider = SpiderCore(FirstProcessor()).set_pipeline(ConsolePipeline()).start()

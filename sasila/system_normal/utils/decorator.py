@@ -48,7 +48,7 @@ def checkResponse(func):
                     f.write(response.m_response.content)
 
                 logger.error('process error: ' + response.request.url
-                             + '\nresponse' + log_name
+                             + '\nresponse: ' + log_name
                              + '\n' + traceback.format_exc())
 
     return wrapper
