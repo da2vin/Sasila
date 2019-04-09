@@ -214,10 +214,6 @@ system_web.start()
 
 作为一个wower,你可以猜到吗ヾ(￣▽￣)
 
-## **联系方式**
-
-如果对使用有疑问，或者有想法，欢迎加入讨论群:602909155交流~
-
 ## **fetchman**
 
 现提供更好用的爬虫框架[**fetchman**](https://github.com/DarkSand/fetchman)，在sasila的基础上做了更多优化和修复并移除web相关功能（个人感觉有点鸡肋）。
