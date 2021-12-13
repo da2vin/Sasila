@@ -5,5 +5,5 @@ six==1.10.0
 SQLAlchemy==1.1.4
 grequests==0.3.0
 selenium==2.53.6
-lxml==3.7.2
+lxml==4.6.5
 beautifulsoup4==4.6.0
